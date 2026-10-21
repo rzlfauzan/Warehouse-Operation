@@ -1,0 +1,254 @@
+<title>Alur Proses Umum MKT</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: tab per proses bisnis; tiap fase = satu baris kartu tahap berurutan (panah), kartu memuat PIC, dokumen masuk, dokumen keluar, dan rujukan ke langkah audit. */
+:root{
+  --bg:#f3f6f9; --surface:#ffffff; --surface2:#e9eef3; --fg:#14232f; --muted:#5a6b78; --line:#cfd8e0;
+  --accent:#0b4a6f; --accent-fg:#ffffff; --in:#8a5a00; --in-bg:#fbf0d6; --out:#0f5c3a; --out-bg:#d7efdf;
+  --nc:#a8261f; --nc-bg:#f8d6d4; --ok:#1f7a45; --sig:#7a3d9e;
+  --a-G:#2563a8; --a-P:#0b8a8c; --a-D:#c2561a; --a-B:#b0247a; --a-K:#6b7280;
+  --f-display:'Barlow Condensed','Arial Narrow',sans-serif; --f-body:'Barlow','Segoe UI',system-ui,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c1a24; --surface:#122533; --surface2:#1a3142; --fg:#e6eef4; --muted:#93a6b4; --line:#27404f;
+  --accent:#6cc0ee; --accent-fg:#06222f; --in:#f0c565; --in-bg:#3a2f12; --out:#8fe0b3; --out-bg:#16402b;
+  --nc:#ff9a93; --nc-bg:#4a1d1c; --ok:#6fd49a; --sig:#c9a0ea;
+  --a-G:#6aa6ec; --a-P:#4fd0d2; --a-D:#f09a62; --a-B:#ee7fc0; --a-K:#a0a8b4; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1a24; --surface:#122533; --surface2:#1a3142; --fg:#e6eef4; --muted:#93a6b4; --line:#27404f;
+  --accent:#6cc0ee; --accent-fg:#06222f; --in:#f0c565; --in-bg:#3a2f12; --out:#8fe0b3; --out-bg:#16402b;
+  --nc:#ff9a93; --nc-bg:#4a1d1c; --ok:#6fd49a; --sig:#c9a0ea;
+  --a-G:#6aa6ec; --a-P:#4fd0d2; --a-D:#f09a62; --a-B:#ee7fc0; --a-K:#a0a8b4; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.4;
+  padding-block:20px 28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1500px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+h1{font-family:var(--f-display);font-weight:700;font-size:34px;line-height:1;margin:0;letter-spacing:.01em}
+.sub{color:var(--muted);margin-top:6px;font-size:13px;max-width:70ch}
+.theme{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:6px 10px;font-size:12px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface);align-self:flex-start;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:8px 16px;font-weight:500;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.intro{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;color:var(--muted);font-size:13px}
+.k{display:inline-flex;align-items:center;gap:7px}
+.k i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.k .i{background:var(--in-bg);border:1.5px solid var(--in)} .k .o{background:var(--out-bg);border:1.5px solid var(--out)}
+.k .s{color:var(--sig);font-style:normal;width:auto;height:auto;font-weight:600}
+.phase{display:flex;flex-direction:column;gap:8px;min-width:0}
+.ph-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.ph-n{font-family:var(--f-display);font-weight:700;font-size:21px;letter-spacing:.02em;text-transform:uppercase}
+.ph-m{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.rowx{display:flex;gap:30px;overflow-x:auto;padding:4px 4px 12px;align-items:stretch}
+.card{flex:0 0 272px;background:var(--surface);border:1px solid var(--line);border-radius:6px;display:flex;flex-direction:column;position:relative;min-width:0}
+.card.seq:not(:last-child)::after{content:"";position:absolute;right:-24px;top:34px;width:18px;height:18px;
+  background:currentColor;color:var(--muted);clip-path:polygon(0 35%,55% 35%,55% 10%,100% 50%,55% 90%,55% 65%,0 65%)}
+.card.cond{border-style:dashed}
+.card{border-top:4px solid var(--ac,var(--line));transition:opacity .15s}
+.card.dim{opacity:.28}
+.areas{display:flex;flex-wrap:wrap;gap:4px}
+.ar{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;border-radius:3px;padding:1px 8px;border:1.5px solid var(--c);color:var(--c)}
+.ar.main{background:var(--c);color:var(--bg)}
+.afilter{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.achip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:13px}
+.achip[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.achip i{width:12px;height:12px;border-radius:3px;background:var(--c);display:inline-block}
+.achip .n{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.lab{font-family:var(--f-display);font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.c-h{padding:10px 12px 8px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:5px}
+.c-t{display:flex;gap:8px;align-items:flex-start}
+.num{flex:none;font-family:var(--f-mono);font-size:12px;background:var(--accent);color:var(--accent-fg);border-radius:3px;padding:2px 7px;margin-top:2px}
+.num.p{background:var(--surface2);color:var(--fg);border:1px solid var(--line)}
+.c-n{font-family:var(--f-display);font-weight:600;font-size:19px;line-height:1.15}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:10.5px;border:1px dashed var(--muted);color:var(--muted);border-radius:3px;padding:0 6px;margin-left:2px}
+.pic{display:flex;flex-wrap:wrap;gap:4px}
+.pic span{font-size:11.5px;background:var(--surface2);border-radius:3px;padding:1px 7px}
+.blk{padding:9px 12px;display:flex;flex-direction:column;gap:5px}
+.blk+.blk{border-top:1px solid var(--line)}
+.bl{font-family:var(--f-display);font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.blk.in .bl{color:var(--in)} .blk.out .bl{color:var(--out)}
+ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+li{font-size:12.5px;line-height:1.3;border-radius:3px;padding:3px 8px;border-left:3px solid;overflow-wrap:anywhere}
+.in li{background:var(--in-bg);border-color:var(--in)} .out li{background:var(--out-bg);border-color:var(--out)}
+li .sg{color:var(--sig);font-weight:600;white-space:nowrap}
+.sys{font-size:12px;color:var(--muted);padding:0 12px 8px}
+.sys b{font-family:var(--f-mono);font-weight:500;color:var(--fg);font-size:11.5px}
+.c-f{margin-top:auto;padding:8px 12px;border-top:1px solid var(--line);background:var(--surface2);border-radius:0 0 5px 5px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.nc{color:var(--nc);background:var(--nc-bg);border-radius:3px;padding:0 6px;font-weight:500}
+.nc.z{color:var(--ok);background:transparent;border:1px solid var(--line)}
+.foot{color:var(--muted);font-size:12.5px;max-width:90ch}
+@media (max-width:760px){h1{font-size:28px}.card{flex-basis:248px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Alur Proses Umum MKT</h1>
+      <div class="sub">Ringkasan alur dari form audit SOP (FRM-OPS-001-0001, Jakarta, Agustus 2026). Satu kartu mewakili satu tahap proses, dengan dokumen yang masuk dan dokumen yang dihasilkan. Detail langkah per langkah ada di <a href="https://claude.ai/artifact/BJT6LtxNaK9XCRtYchj9AT" target="_blank" rel="noopener">Peta Proses Audit SOP</a>.</div>
+    </div>
+    <button class="theme" id="themeBtn" type="button">Tema: otomatis</button>
+  </header>
+  <div class="seg" id="tabs" role="tablist"></div>
+  <div class="afilter" id="afilter"></div>
+  <div class="intro" id="intro"></div>
+  <div id="flow" style="display:flex;flex-direction:column;gap:20px"></div>
+  <div class="foot">Urutan kartu mengikuti alur kerja nyata. Nomor langkah audit di kaki kartu mengikuti nomor di Peta Proses Audit SOP, jadi tidak selalu berurutan. Jumlah NC dihitung dari status as reported tanpa penyesuaian.<span id="footx"></span></div>
+</div>
+
+<script id="st" type="application/json">{"EXPORT": {"1": "COMPLY", "2": "COMPLY", "3": "COMPLY", "4": "COMPLY", "5": "COMPLY", "6": "COMPLY", "7": "NON-COMPLY", "8": "COMPLY", "9": "COMPLY", "10": "COMPLY", "11": "COMPLY", "12": "COMPLY", "13": "COMPLY", "14": "COMPLY", "15": "COMPLY", "16": "COMPLY", "17": "COMPLY", "18": "COMPLY", "19": "COMPLY", "20": "COMPLY", "21": "COMPLY", "22": "COMPLY", "23": "COMPLY", "24": "COMPLY", "25": "COMPLY", "26": "COMPLY", "27": "COMPLY", "28": "COMPLY", "29": "NON-COMPLY", "30": "COMPLY", "31": "COMPLY", "32": "COMPLY", "33": "COMPLY", "34": "COMPLY", "35": "COMPLY", "36": "COMPLY", "45": "COMPLY", "46": "COMPLY", "47": "COMPLY", "48": "COMPLY", "49": "COMPLY", "50": "COMPLY", "51": "NON-COMPLY", "52": "COMPLY", "53": "N/A", "54": "COMPLY", "55": "N/A", "56": "COMPLY", "57": "N/A", "58": "COMPLY", "59": "NON-COMPLY", "60": "COMPLY", "61": "N/A", "62": "NON-COMPLY"}, "IMPORT": {"1": "COMPLY", "2": "COMPLY", "3": "COMPLY", "4": "COMPLY", "5": "COMPLY", "6": "COMPLY", "7": "COMPLY", "8": "COMPLY", "9": "COMPLY", "10": "COMPLY", "11": "COMPLY", "12": "COMPLY", "13": "COMPLY", "14": "NON-COMPLY", "15": "COMPLY", "16": "COMPLY", "17": "COMPLY", "18": "COMPLY", "19": "COMPLY", "20": "COMPLY", "21": "NON-COMPLY", "22": "COMPLY", "23": "NON-COMPLY", "24": "COMPLY", "25": "COMPLY", "26": "COMPLY", "27": "COMPLY", "28": "COMPLY", "29": "COMPLY", "30": "COMPLY", "31": "COMPLY", "32": "NON-COMPLY", "33": "COMPLY", "34": "COMPLY", "35": "COMPLY", "36": "COMPLY", "37": "COMPLY", "38": "COMPLY", "39": "COMPLY", "40": "COMPLY", "41": "COMPLY", "42": "COMPLY", "43": "COMPLY", "44": "COMPLY", "45": "COMPLY", "46": "COMPLY", "47": "COMPLY", "48": "COMPLY", "49": "COMPLY", "50": "COMPLY", "51": "NON-COMPLY", "52": "NON-COMPLY", "53": "N/A", "54": "NON-COMPLY", "55": "NON-COMPLY", "56": "NON-COMPLY", "57": "NON-COMPLY", "58": "NON-COMPLY", "59": "NON-COMPLY", "60": "NON-COMPLY", "61": "N/A", "62": "NON-COMPLY"}, "DC": {"1": ["COMPLY", "COMPLY", "COMPLY"], "2": ["COMPLY", "COMPLY", "COMPLY"], "3": ["NON-COMPLY", "COMPLY", "NON-COMPLY"], "4": ["COMPLY", "NON-COMPLY", "COMPLY"], "5": ["COMPLY", "COMPLY", "COMPLY"], "6": ["COMPLY", "COMPLY", "COMPLY"], "7": ["COMPLY", "COMPLY", "COMPLY"], "8": ["NON-COMPLY", "COMPLY", "COMPLY"], "9": ["NON-COMPLY", "COMPLY", "COMPLY"], "10": ["NON-COMPLY", "COMPLY", "COMPLY"], "11": ["NON-COMPLY", "NON-COMPLY", "NON-COMPLY"], "12": ["COMPLY", "COMPLY", "COMPLY"], "13": ["COMPLY", "COMPLY", "COMPLY"], "14": ["COMPLY", "COMPLY", "COMPLY"], "15": ["COMPLY", "COMPLY", "COMPLY"], "16": ["NON-COMPLY", "NON-COMPLY", "NON-COMPLY"], "17": ["NON-COMPLY", "NON-COMPLY", "NON-COMPLY"], "18": ["NON-COMPLY", "COMPLY", "COMPLY"], "19": ["NON-COMPLY", "NON-COMPLY", "COMPLY"], "20": ["NON-COMPLY", "COMPLY", "COMPLY"], "21": ["COMPLY", "NON-COMPLY", "COMPLY"], "22": ["NON-COMPLY", "NON-COMPLY", "NON-COMPLY"], "23": ["COMPLY", "COMPLY", "COMPLY"], "24": ["COMPLY", "COMPLY", "COMPLY"], "25": ["COMPLY", "COMPLY", "COMPLY"], "26": ["COMPLY", "COMPLY", "COMPLY"], "27": ["COMPLY", "COMPLY", "COMPLY"], "28": ["COMPLY", "COMPLY", "COMPLY"], "29": ["COMPLY", "COMPLY", "COMPLY"], "30": ["NON-COMPLY", "NON-COMPLY", "NON-COMPLY"], "31": ["COMPLY", "COMPLY", "COMPLY"], "32": ["NON-COMPLY", "NON-COMPLY", "NON-COMPLY"], "33": ["COMPLY", "COMPLY", "COMPLY"], "34": ["COMPLY", "COMPLY", "COMPLY"], "35": ["NON-COMPLY", "NON-COMPLY", "NON-COMPLY"], "36": ["N/A", "COMPLY", "COMPLY"], "37": ["NON-COMPLY", "COMPLY", "COMPLY"], "38": ["NON-COMPLY", "COMPLY", "COMPLY"], "39": ["N/A", "COMPLY", "COMPLY"], "40": ["NON-COMPLY", "COMPLY", "COMPLY"], "41": ["NON-COMPLY", "COMPLY", "COMPLY"], "42": ["NON-COMPLY", "NON-COMPLY", "NON-COMPLY"], "43": ["COMPLY", "COMPLY", "COMPLY"], "44": ["COMPLY", "COMPLY", "COMPLY"], "45": ["COMPLY", "COMPLY", "COMPLY"], "46": ["COMPLY", "COMPLY", "COMPLY"], "47": ["COMPLY", "COMPLY", "COMPLY"], "48": ["COMPLY", "COMPLY", "COMPLY"], "49": ["COMPLY", "COMPLY", "COMPLY"], "50": ["COMPLY", "COMPLY", "COMPLY"], "51": ["COMPLY", "COMPLY", "COMPLY"], "52": ["COMPLY", "COMPLY", "COMPLY"], "53": ["NON-COMPLY", "COMPLY", "COMPLY"]}, "TRUCKING": {"1": "COMPLY", "2": "COMPLY", "3": "COMPLY", "4": "COMPLY", "5": "COMPLY", "6": "COMPLY", "7": "COMPLY", "8": "COMPLY", "9": "PENDING", "10": "PENDING", "11": "PENDING", "12": "PENDING", "13": "PENDING", "14": "PENDING", "15": "PENDING", "16": "PENDING", "17": "PENDING", "18": "PENDING", "19": "PENDING", "20": "PENDING", "21": "PENDING", "22": "PENDING"}}</script>
+<script>
+const ST=JSON.parse(document.getElementById('st').textContent);
+const T=n=>({t:n,sig:1});
+const AREAS={G:'Gudang MKT',P:'Port / Pelayaran',D:'Depo',B:'Bea Cukai'};
+// area kerja per tahap; huruf pertama = area utama. Penilaian dari isi langkah audit, bukan dari kolom di form.
+const LOC={'TRUCKING-1':'D','TRUCKING-4':'D','TRUCKING-8':'D','TRUCKING-9':'G','TRUCKING-13':'G','TRUCKING-16':'P','TRUCKING-20':'P','EXPORT-1':'G','EXPORT-5':'G','EXPORT-9':'G','EXPORT-17':'G','EXPORT-20':'G','EXPORT-27':'GB','EXPORT-45':'G','EXPORT-52':'G',
+ 'IMPORT-1':'P','IMPORT-42':'B','IMPORT-5':'P','IMPORT-9':'PB','IMPORT-16':'GB','IMPORT-26':'PB','IMPORT-31':'G','IMPORT-36':'G','IMPORT-45':'G','IMPORT-52':'G',
+ 'DC-1':'G','DC-10':'G','DC-18':'G','DC-23':'G','DC-29':'G','DC-36':'G','DC-43':'G'};
+const locOf=c=>(LOC[c.ref[0]+'-'+c.ref[1]]||'G').split('');
+let AF=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const SUPPORT=(sh,cc,so)=>({name:'Proses pendukung (periodik)',meta:'SOP-OPS-006',cards:[
+  {n:'Cycle Count',sop:'SOP-OPS-006 6.1',ref:[sh,cc[0],cc[1]],pic:['Inventory','Operasional','Account Officer'],
+   in:['Stock balance WMS (harian)','Count Sheet harian'],out:[T('Berita Acara Cycle Count')],sys:'Verifikasi hitung fisik vs stok WMS'},
+  {n:'Stock Opname',sop:'SOP-OPS-006 6.2',ref:[sh,so[0],so[1]],pic:['Inventory','Tim Stock Opname','Operasional'],
+   in:['Jadwal SO dari pelanggan (email)','Count Sheet kosong & ber-qty'],out:[T('Berita Acara Stock Opname (MKT & pelanggan)')],sys:'WMS di-freeze saat hitung, lalu di-unfreeze'}
+]});
+
+const FLOWS={
+EXPORT:{label:'Export',phases:[
+ {name:'Inbound Ekspor',meta:'SOP-OPS-003 6.1',cards:[
+  {n:'Kedatangan & registrasi',sop:'6.1',ref:['EXPORT',1,4],pic:['Security','Admin Warehouse'],
+   in:['Info pengiriman (email)','Surat Jalan','SIM pengemudi'],out:['Catatan waktu tiba','ID Card Visitor']},
+  {n:'Terima dokumen & buat order',sop:'6.1',ref:['EXPORT',5,8],pic:['Account Officer','Admin Warehouse'],
+   in:['BC','Surat Jalan','PEB, NPE','Packing List','Invoice'],out:['Order Inbound','Email konfirmasi overtime (tiba >17:00)'],sys:'<b>WMS MKT</b> Order Inbound'},
+  {n:'Bongkar & tally',sop:'6.1',ref:['EXPORT',9,16],pic:['Account Officer','Checker','Admin Warehouse'],
+   in:['Dokumen inbound','Foto segel & nopol'],out:['Form Tally → Tally Report','BA discrepancy (SOP-OPS-008)','Potongan segel & sticker BC'],sys:'Tally Report diupdate ke <b>WMS</b>'},
+  {n:'Paletisasi & put away',sop:'6.1',ref:['EXPORT',17,19],pic:['Admin Warehouse','Checker','Operator Forklift'],
+   in:['Tally Report'],out:['Label Pallet ID','Lokasi put away'],sys:'Scan Pallet ID di <b>WMS</b>'}]},
+ {name:'Outbound Ekspor',meta:'SOP-OPS-003 6.2',cards:[
+  {n:'Persiapan & picking',sop:'6.2',ref:['EXPORT',20,26],pic:['Account Officer','Admin Warehouse','Picker'],
+   in:['CLP dari pelanggan (email)','Tally Report'],out:['Picking Report','Copy CLP ke Picker']},
+  {n:'Stuffing & penyegelan',sop:'6.2',ref:['EXPORT',27,36],pic:['Surveyor','Checker','TKBM','Admin Warehouse'],
+   in:['Copy CLP','Tally Report','Empty container & EIR (dari Trucking Support)','Hasil periksa kontainer (SOP-OPS-005)'],out:['BA kontainer tidak layak (jika ada)','Dokumentasi muat 25/50/75/100%','Segel Pelayaran & BC','Nomor segel terdokumentasi'],sys:'Scan Pallet ID sebelum masuk kontainer'}]},
+ SUPPORT('EXPORT',[45,51],[52,62])]},
+
+IMPORT:{label:'Import',phases:[
+ {name:'Pengurusan dokumen',meta:'SOP-OPS-004 6.1 · 6.2 · 6.8',cards:[
+  {n:'Ambil DO Pelayaran',sop:'6.1',ref:['IMPORT',1,4],pic:['Account Officer','Pelanggan','Forwarding'],
+   in:['OVBC','MBL','DO','Bukti bayar THC & LOLO'],out:['DO Pelayaran']},
+  {n:'Redress',sop:'6.8',cond:'jika perlu',ref:['IMPORT',42,44],pic:['Account Officer','Pelanggan'],
+   in:['Pemberitahuan kebutuhan redress'],out:['Persetujuan redress dari BC']},
+  {n:'Pindah Lokasi Penimbunan (PLP)',sop:'6.2',ref:['IMPORT',5,8],pic:['Account Officer','Terminal'],
+   in:['Dokumen pengajuan PLP'],out:['Approval PLP dari Terminal']}]},
+ {name:'Penarikan & pembongkaran',meta:'SOP-OPS-004 6.3 · 6.4 · 6.5',cards:[
+  {n:'Tarik container dari pelabuhan',sop:'6.3',ref:['IMPORT',9,15],pic:['Vendor CC','Trucking Support','Pengemudi Truk'],
+   in:['Approval PLP','SP2 (setelah Port Charges)','E-Seal dari TPS','Surat izin stripping dari BC'],out:['E-Seal terpasang','Dokumen BC difiat di gate out'],sys:'Gate in diinput ke <b>sistem</b>'},
+  {n:'Pembongkaran cargo',sop:'6.4',ref:['IMPORT',16,25],pic:['Staff Operasional','Account Officer'],
+   in:['Lampiran izin stripping (disetujui BC)','Manifest'],out:['Label impor / Master BL','Foto & video seal dan bongkar',T('Laporan stripping & BA (TTD BC)'),'BA ketidaksesuaian (SOP-OPS-008)']},
+  {n:'Pengembalian empty container',sop:'6.5',ref:['IMPORT',26,30],pic:['Trucking Support','Pengemudi Truk','Operator RS'],
+   in:['EIR asli','DO','Surat jalan out'],out:[T('Dokumen pemulangan empty (TTD BC)'),'Barcode / gate pass TPS'],sys:'Container out diinput ke <b>sistem</b>'}]},
+ {name:'Gudang',meta:'SOP-OPS-004 6.6 · 6.7',cards:[
+  {n:'Penyimpanan cargo',sop:'6.6',ref:['IMPORT',31,35],pic:['Staple'],
+   in:['Manifest / Tally'],out:['Lokasi barang di WMS','Entri khusus barang DG/OD/OW'],sys:'Input lokasi di <b>WMS</b>'},
+  {n:'Pengeluaran cargo',sop:'6.7',ref:['IMPORT',36,41],pic:['Staple','Staff Operasional','TKBM / Forklift'],
+   in:['SPPB','DO','Surat Jalan'],out:[T('Surat Jalan serah terima (TTD pelanggan)')]}]},
+ SUPPORT('IMPORT',[45,51],[52,62])]},
+
+TRUCKING:{label:'Trucking Support',phases:[
+ {name:'Penarikan empty container',meta:'SOP-OPS-005 6.1 · sudah diaudit (4 Agustus 2026)',cards:[
+  {n:'Terima DO & konfirmasi Depo',sop:'SOP-OPS-005 6.1',ref:['TRUCKING',1,3],pic:['Trucking Support','Account Officer','Depo','Pengemudi'],
+   in:['DO dari Account Officer','Konfirmasi pelanggan (jika DO tidak tersedia di Depo)'],out:['Konfirmasi DO dari Depo','Bon Muat ke pengemudi']},
+  {n:'Pemeriksaan empty bersama Depo',sop:'SOP-OPS-005 6.1',ref:['TRUCKING',4,7],pic:['Trucking Support','Depo'],
+   in:['Bon Muat','Form pemeriksaan empty (10 kriteria)'],out:['Form pemeriksaan empty terisi'],sys:'Periksa luar, pintu, dinding, plafon, lantai, kebersihan, segel, hama. Segel ISO 17712 sesuai EIR. Hanya container <b>BAIK</b> diterima; yang tidak layak dikembalikan.'},
+  {n:'Terbit EIR',sop:'SOP-OPS-005 6.1',ref:['TRUCKING',8,8],pic:['Depo','Trucking Support'],
+   in:['Hasil pemeriksaan bersama'],out:['EIR dari Depo (diteruskan ke tim yang stuffing)']}
+  ]},
+ {name:'Penarikan full container ke UTPK/UTC',meta:'SOP Penarikan Full Container ke UTC Rev.01 · draft dari Pendahuluan, butir Prosedur belum diterima · belum diaudit',cards:[
+  {n:'Terima & cek dokumen',sop:'Ruang Lingkup',ref:['TRUCKING',9,12],pic:['Staff Container & Trucking'],
+   in:['Kartu Ekspor (KE)','PKBE','Survey Pelayaran','Export Summary List'],out:[],sys:'Dokumen keluar tahap ini menunggu butir Prosedur.'},
+  {n:'Periksa segel & kondisi sebelum berangkat',sop:'Uraian 4a, 4b',ref:['TRUCKING',13,15],pic:['Staff Container & Trucking','Gudang'],
+   in:['Export Summary List'],out:['Surat Jalan (SJT)','Bon Muat (perkiraan)'],sys:'Segel terpasang baik dan kondisi container dicatat saat keluar gudang.'},
+  {n:'SPK vendor & penarikan',sop:'Uraian 4c, 4d',ref:['TRUCKING',16,19],pic:['Staff Container & Trucking','Sopir / Vendor'],
+   in:['Surat Jalan (SJT)','Bon Muat (perkiraan)','Closing time pelabuhan'],out:['SPK ke vendor'],sys:'Komunikasi dua arah via HP dengan sopir. Antisipasi <b>closing time</b> agar tidak kena denda.'},
+  {n:'Terima di CY UTPK & bandingkan',sop:'Uraian 4a, 4b',ref:['TRUCKING',20,22],pic:['Staff Container & Trucking','UTPK'],
+   in:['EIR versi UTPK','Surat Jalan gudang'],out:['IK Discrepancies penarikan full container ke UTC (jika ada selisih)'],sys:'Bandingkan segel dan kondisi container saat keluar gudang vs saat diterima UTPK.'}]}]},
+
+DC:{label:'DC (Distribution Center)',phases:[
+ {name:'Inbound DC',meta:'SOP-OPS-002 6.1',cards:[
+  {n:'Info & registrasi',sop:'6.1',ref:['DC',1,9],pic:['Admin','Security'],
+   in:['Info pengiriman (email)','Surat Jalan','Dokumen transporter','Form Pemeriksaan Kabin','SIM pengemudi'],out:['ID Card Visitor','Order Inbound & packing detail','Email konfirmasi overtime (tiba >16:00)'],sys:'<b>WMS</b> Order Inbound / upload template'},
+  {n:'Bongkar & pengecekan',sop:'6.1',ref:['DC',10,17],pic:['Admin','Checker','Ops Section Head'],
+   in:['Dokumen inbound','Form Pemeriksaan Kendaraan','Packing List / Surat Jalan'],out:['Tally Report',T('Good Receipt Report'),T('Surat Jalan (3 pihak)'),'Laporan ketidaksesuaian (SOP-OPS-008)'],sys:'Good Receipt diupdate ke <b>WMS</b>'},
+  {n:'Paletisasi & put away',sop:'6.1',ref:['DC',18,22],pic:['Admin','Checker','Operator Forklift','Ops Section Head'],
+   in:['Good Receipt'],out:['Label Pallet ID','Put Away Report',T('Inbound Confirmation Report')],sys:'Scan put away di <b>WMS</b>'}]},
+ {name:'Outbound DC',meta:'SOP-OPS-002 6.2',cards:[
+  {n:'Persiapan & picking',sop:'6.2',ref:['DC',23,28],pic:['Admin','Picker'],
+   in:['Info pengeluaran (email)'],out:['Job Information Outbound','Outbound Picking Report'],sys:'Alokasi stok di <b>WMS</b>'},
+  {n:'Pemuatan & gate out',sop:'6.2',ref:['DC',29,35],pic:['Security','Admin','Checker','TKBM','Ops Section Head'],
+   in:['Dokumen outbound','Form Pemeriksaan Kabin','Form Pemeriksaan Kendaraan'],out:['Outbound Confirmation Report',T('DO MKT')]}]},
+ SUPPORT('DC',[36,42],[43,53])]}
+};
+
+function pend(c){const m=ST[c.ref[0]];for(let n=c.ref[1];n<=c.ref[2];n++)if(m[n]!=='PENDING')return false;return true}
+function counts(c){
+  const [sh,a,b]=c.ref;const m=ST[sh];
+  if(sh==='DC'){const r=[0,0,0];for(let n=a;n<=b;n++){m[n].forEach((s,i)=>{if(s==='NON-COMPLY')r[i]++})}return r}
+  let r=0;for(let n=a;n<=b;n++)if(m[n]==='NON-COMPLY')r++;return r;
+}
+function badge(v,lab,title){return `<span class="nc${v?'':' z'}" title="${esc(title)}">${lab?lab+' ':''}${v} NC</span>`}
+function docs(list){return list.map(d=>typeof d==='string'?`<li>${esc(d)}</li>`:`<li>${esc(d.t)} <span class="sg" title="Memerlukan tanda tangan">✎ TTD</span></li>`).join('')}
+
+function card(c,idx,seq){
+  if(c.draft){const lc=locOf(c);return `<article class="card seq cond${AF&&!lc.includes(AF)?' dim':''}" style="--ac:var(--a-${lc[0]})"><div class="c-h"><div class="areas"><span class="ar main" style="--c:var(--a-${lc[0]})">${AREAS[lc[0]]}</span></div><div class="c-t"><span class="num">${idx}</span><div class="c-n">${esc(c.n)} <span class="tag">draft menyusul</span></div></div><div class="pic">${c.pic.map(p=>`<span>${esc(p)}</span>`).join('')}</div></div><div class="blk"><div class="sys" style="padding:0">${esc(c.draft)}</div></div></article>`}
+  const cnt=counts(c);
+  const nb=pend(c)?'<span class="nc z" style="color:var(--muted)">belum diaudit</span>':c.ref[0]==='DC'
+    ?badge(cnt[0],'Semper','DC Semper')+badge(cnt[1],'Marcen','DC Marcen')+badge(cnt[2],'Dok','Dokumen')
+    :badge(cnt,'','Temuan NON-COMPLY di langkah audit ini');
+  const lc=locOf(c);
+  const ar=lc.map((a,i)=>`<span class="ar${i?'':' main'}" style="--c:var(--a-${a})" title="${i?'Area terlibat':'Area utama'}">${AREAS[a]}</span>`).join('');
+  return `<article class="card${seq?' seq':''}${c.cond?' cond':''}${AF&&!lc.includes(AF)?' dim':''}" style="--ac:var(--a-${lc[0]})">
+   <div class="c-h"><div class="areas">${ar}</div><div class="c-t"><span class="num${seq?'':' p'}">${seq?idx:'↻'}</span><div class="c-n">${esc(c.n)}${c.cond?` <span class="tag">${esc(c.cond)}</span>`:''}</div></div>
+   <div class="pic">${c.pic.map(p=>`<span>${esc(p)}</span>`).join('')}</div></div>
+   ${c.in.length?`<div class="blk in"><div class="bl">Dokumen masuk</div><ul>${docs(c.in)}</ul></div>`:''}
+   ${c.out.length?`<div class="blk out"><div class="bl">Dokumen keluar</div><ul>${docs(c.out)}</ul></div>`:''}
+   ${c.sys?`<div class="sys">${c.sys}</div>`:''}
+   <div class="c-f"><span>${esc(c.sop)}</span><span>langkah ${c.ref[1]}–${c.ref[2]}</span>${nb}</div></article>`;
+}
+
+let cur='EXPORT';
+function show(key){
+  const f=FLOWS[key];let idx=0;
+  $('flow').innerHTML=f.phases.map(p=>{
+    const seq=!p.name.startsWith('Proses pendukung');
+    return `<section class="phase"><div class="ph-h"><span class="ph-n">${esc(p.name)}</span><span class="ph-m">${esc(p.meta)}</span></div>
+      <div class="rowx">${p.cards.map(c=>card(c,seq?++idx:0,seq)).join('')}</div></section>`}).join('');
+  [...$('tabs').children].forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.k===key)));
+  cur=key;
+  $('footx').textContent=key==='EXPORT'?' Penarikan empty container (SOP-OPS-005) bukan bagian SOP Export. Alur dan langkah auditnya ada di tab Trucking Support.':key==='TRUCKING'?' Penarikan empty sudah diaudit (langkah 1 sampai 8, asalnya Export 37–44). Penarikan full container belum diaudit; tahap dan dokumen di kartu 4 sampai 7 diturunkan dari Pendahuluan SOP dan perlu dikonfirmasi setelah butir Prosedur diterima.':'';
+  const all=f.phases.flatMap(p=>p.cards);
+  const present=Object.keys(AREAS).filter(a=>all.some(c=>locOf(c).includes(a)));
+  if(AF&&!present.includes(AF))AF=null;
+  $('afilter').innerHTML='<span class="lab">Area kerja</span>'+
+    `<button type="button" class="achip" data-a="" aria-pressed="${!AF}">Semua <span class="n">${all.length}</span></button>`+
+    present.map(a=>`<button type="button" class="achip" data-a="${a}" style="--c:var(--a-${a})" aria-pressed="${AF===a}"><i></i>${AREAS[a]} <span class="n">${all.filter(c=>locOf(c).includes(a)).length}</span></button>`).join('')+
+    '<span class="lab" style="text-transform:none;letter-spacing:0;font-family:var(--f-body);font-weight:400;font-size:12.5px">Label penuh = area utama, label garis = area yang ikut terlibat</span>';
+  $('afilter').querySelectorAll('button').forEach(b=>b.onclick=()=>{AF=b.dataset.a||null;show(cur)});
+  $('intro').innerHTML=`<span class="k"><i class="i"></i>Dokumen masuk: harus ada sebelum tahap dimulai</span><span class="k"><i class="o"></i>Dokumen keluar: dihasilkan tahap ini</span><span class="k"><i class="s">✎ TTD</i>perlu tanda tangan</span>`+
+    (key==='DC'?'<span class="k">Badge NC dipisah per lokasi: Semper, Marcen, Dokumen</span>':'');
+  try{history.replaceState(null,'','#'+key.toLowerCase())}catch(e){}
+}
+Object.keys(FLOWS).forEach(k=>{const b=document.createElement('button');b.type='button';b.dataset.k=k;b.textContent=FLOWS[k].label;b.onclick=()=>show(k);$('tabs').appendChild(b)});
+const h=(location.hash||'').slice(1).toUpperCase();
+show(FLOWS[h]?h:'EXPORT');
+
+const modes=[null,'light','dark'],mn=['otomatis','terang','gelap'];let mi=0;
+$('themeBtn').onclick=()=>{mi=(mi+1)%3;const r=document.documentElement;modes[mi]?r.setAttribute('data-theme',modes[mi]):r.removeAttribute('data-theme');$('themeBtn').textContent='Tema: '+mn[mi]};
+</script>

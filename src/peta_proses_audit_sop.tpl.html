@@ -1,0 +1,348 @@
+<title>Peta Proses Audit SOP</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: header + KPI strip, filter bar, then one swimlane band per SOP section (lanes = actor, columns = urutan langkah), detail drawer docked at bottom. */
+:root{
+  --bg:#f3f6f9; --surface:#ffffff; --surface2:#e9eef3; --fg:#14232f; --muted:#5a6b78; --line:#cfd8e0;
+  --accent:#0b4a6f; --accent-fg:#ffffff;
+  --ok-bg:#d7efdf; --ok-bd:#2f9e5b; --ok-fg:#0f4a29;
+  --nc-bg:#f8d6d4; --nc-bd:#d03d36; --nc-fg:#6b1511;
+  --na-bg:#e3e6e9; --na-bd:#8a949c; --na-fg:#3f484f;
+  --flag:#e0a800; --flag-fg:#7a5600;
+  --f-display:'Barlow Condensed','Arial Narrow',sans-serif; --f-body:'Barlow','Segoe UI',system-ui,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c1a24; --surface:#122533; --surface2:#1a3142; --fg:#e6eef4; --muted:#93a6b4; --line:#27404f;
+  --accent:#6cc0ee; --accent-fg:#06222f;
+  --ok-bg:#16402b; --ok-bd:#3fbf78; --ok-fg:#bdf0d0;
+  --nc-bg:#4a1d1c; --nc-bd:#ef6a62; --nc-fg:#ffd0cc;
+  --na-bg:#2a353d; --na-bd:#7d8a94; --na-fg:#c3ccd3;
+  --flag:#f2c230; --flag-fg:#f2c230; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1a24; --surface:#122533; --surface2:#1a3142; --fg:#e6eef4; --muted:#93a6b4; --line:#27404f;
+  --accent:#6cc0ee; --accent-fg:#06222f;
+  --ok-bg:#16402b; --ok-bd:#3fbf78; --ok-fg:#bdf0d0;
+  --nc-bg:#4a1d1c; --nc-bd:#ef6a62; --nc-fg:#ffd0cc;
+  --na-bg:#2a353d; --na-bd:#7d8a94; --na-fg:#c3ccd3;
+  --flag:#f2c230; --flag-fg:#f2c230; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.4;
+  padding-block:20px 12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1500px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+header{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+h1{font-family:var(--f-display);font-weight:700;font-size:34px;line-height:1;margin:0;letter-spacing:.01em;text-wrap:balance}
+.sub{color:var(--muted);margin-top:6px;font-size:13px}
+.sub b{font-family:var(--f-mono);font-weight:500;color:var(--fg)}
+.theme{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:6px 10px;font-size:12px}
+.row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.lab{font-family:var(--f-display);font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:7px 14px;font-weight:500;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.seg button:disabled{color:var(--muted);cursor:not-allowed;opacity:.6}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);padding:10px 12px;border-radius:6px;min-width:0}
+.kpi .v{font-family:var(--f-display);font-weight:700;font-size:30px;line-height:1.05;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:12px;color:var(--muted)}
+.kpi.pair .v small{font-size:13px;font-family:var(--f-body);font-weight:500;color:var(--muted);margin-left:6px}
+.kpi .arrow{color:var(--flag-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:13px}
+.chip[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.sw{width:12px;height:12px;border-radius:3px;border:1.5px solid;display:inline-block;flex:none}
+.sw.ok{background:var(--ok-bg);border-color:var(--ok-bd)} .sw.nc{background:var(--nc-bg);border-color:var(--nc-bd)} .sw.na{background:var(--na-bg);border-color:var(--na-bd)} .sw.pe{background:var(--surface);border-color:var(--muted)}
+.sw.flag{background:var(--surface);border:2px dashed var(--flag)}
+.sw.dev{background:var(--ok-bg);border-color:var(--ok-bd);position:relative}
+.sw.dev::after{content:"";position:absolute;right:-4px;top:-4px;width:7px;height:7px;border-radius:50%;background:var(--flag);border:1px solid var(--surface)}
+.chip .n{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.legend{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 14px;display:flex;flex-wrap:wrap;gap:8px 22px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.section{background:var(--surface);border:1px solid var(--line);border-radius:6px;min-width:0}
+.sec-h{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;padding:10px 14px;border-bottom:1px solid var(--line)}
+.sec-id{font-family:var(--f-mono);font-size:12px;background:var(--accent);color:var(--accent-fg);padding:2px 7px;border-radius:3px}
+.sec-n{font-family:var(--f-display);font-weight:600;font-size:20px;letter-spacing:.01em}
+.sec-m{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.sec-c{margin-left:auto;display:flex;gap:10px;font-family:var(--f-mono);font-size:12px}
+.sec-c .ok{color:var(--ok-bd)} .sec-c .nc{color:var(--nc-bd)} .sec-c .na{color:var(--na-bd)} .sec-c .pe{color:var(--muted)}
+.scroll{overflow-x:auto}
+.board{position:relative}
+.lane{position:absolute;left:0;right:0;border-bottom:1px dashed var(--line)}
+.lane:last-child{border-bottom:0}
+.lane-l{position:sticky;left:0;z-index:3;width:132px;height:100%;background:var(--surface2);border-right:1px solid var(--line);padding:8px 10px;font-weight:600;font-size:12.5px;display:flex;align-items:center;text-wrap:balance}
+.board svg{position:absolute;left:0;top:0;pointer-events:none;color:var(--muted)}
+.node{position:absolute;width:150px;height:68px;border-radius:5px;border:1.5px solid;padding:5px 8px 4px 8px;text-align:left;display:block;overflow:visible;transition:opacity .15s}
+.node .no{font-family:var(--f-mono);font-size:10.5px;opacity:.8;display:block;line-height:1.2}
+.node .t{font-size:11.5px;line-height:1.2;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.node.ok{background:var(--ok-bg);border-color:var(--ok-bd);color:var(--ok-fg)}
+.node.nc{background:var(--nc-bg);border-color:var(--nc-bd);color:var(--nc-fg)}
+.node.na{background:var(--na-bg);border-color:var(--na-bd);color:var(--na-fg)}
+.node.pe{background:var(--surface);border-color:var(--muted);color:var(--muted)}
+.banner{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--muted);border-radius:6px;padding:10px 14px;font-size:13px;color:var(--muted)}
+.node.flag{border:2px dashed var(--flag)}
+.node.dim{opacity:.22}
+.node.sel{box-shadow:0 0 0 3px var(--accent)}
+.node .dev{position:absolute;right:-6px;top:-6px;width:15px;height:15px;border-radius:50%;background:var(--flag);color:#3b2a00;font:700 10px/15px var(--f-mono);text-align:center;border:1.5px solid var(--surface)}
+.node .dots{position:absolute;right:5px;bottom:4px;display:flex;gap:3px}
+.node .dots i{width:7px;height:7px;border-radius:50%;border:1px solid var(--surface)}
+.dots .ok{background:var(--ok-bd)} .dots .nc{background:var(--nc-bd)} .dots .na{background:var(--na-bd)}
+#tip{position:fixed;z-index:30;max-width:320px;background:var(--fg);color:var(--bg);padding:8px 10px;border-radius:5px;font-size:12.5px;pointer-events:none;box-shadow:0 4px 18px rgba(0,0,0,.3)}
+#tip b{font-family:var(--f-mono);font-weight:500}
+#tip .fl{display:block;margin-top:4px;color:var(--flag)}
+#drawer{position:sticky;bottom:0;z-index:20;background:var(--surface);border:1px solid var(--accent);border-radius:6px;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 20px rgba(0,0,0,.18);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:6px 24px}
+#drawer h2{font-family:var(--f-display);font-weight:600;font-size:19px;margin:0 0 6px;line-height:1.2}
+#drawer dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px}
+#drawer dt{color:var(--muted)} #drawer dd{margin:0;min-width:0;overflow-wrap:anywhere}
+#drawer .x{position:absolute;right:8px;top:6px;border:0;background:transparent;font-size:20px;line-height:1;color:var(--muted)}
+.pill{font-family:var(--f-mono);font-size:11px;padding:1px 7px;border-radius:3px;border:1px solid}
+.pill.pe{background:var(--surface);border-color:var(--muted);color:var(--muted)}
+.pill.ok{background:var(--ok-bg);border-color:var(--ok-bd);color:var(--ok-fg)} .pill.nc{background:var(--nc-bg);border-color:var(--nc-bd);color:var(--nc-fg)} .pill.na{background:var(--na-bg);border-color:var(--na-bd);color:var(--na-fg)}
+.fb{border-left:3px solid var(--flag);padding:4px 10px;margin-top:8px;font-size:13px;background:var(--surface2)}
+.fb.plain{border-color:var(--line)}
+.locs{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.locs div{font-size:13px}
+@media (max-width:760px){#drawer{grid-template-columns:1fr}h1{font-size:28px}.sec-c{margin-left:0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Peta Proses Audit SOP</h1>
+      <div class="sub" id="meta"></div>
+    </div>
+    <button class="theme" id="themeBtn" type="button">Tema: otomatis</button>
+  </header>
+
+  <div class="row">
+    <span class="lab">Cabang</span><div class="seg" id="siteSeg"></div>
+    <span class="lab">Proses</span><div class="seg" id="sheetSeg"></div>
+    <span class="lab" id="locLab" hidden>Lokasi</span><div class="seg" id="locSeg" hidden></div>
+    <span class="lab">Status</span><div class="seg" id="viewSeg">
+      <button type="button" data-v="rep" aria-pressed="true">As reported</button>
+      <button type="button" data-v="adj" aria-pressed="false">Adjusted</button></div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+  <div class="banner" id="banner" hidden></div>
+
+  <div class="row">
+    <span class="lab">Sorot</span>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="legend" id="legend">
+    <span><i class="sw ok"></i>COMPLY</span>
+    <span><i class="sw nc"></i>NON-COMPLY</span>
+    <span><i class="sw na"></i>N/A</span>
+    <span><i class="sw pe"></i>Belum diaudit</span>
+    <span><i class="sw flag"></i>Garis putus kuning: temuan berbeda dari SOP, status perlu ditinjau ulang (status_conflict, sop_outdated, sop_inconsistent)</span>
+    <span><i class="sw dev"></i>Titik kuning: COMPLY tetapi praktik menyimpang dari kalimat SOP</span>
+    <span>Panah: urutan langkah. Hover untuk lihat temuan, klik untuk detail.</span>
+  </div>
+
+  <div id="board"></div>
+  <div id="drawer" hidden></div>
+</div>
+<div id="tip" hidden></div>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+const DATA=JSON.parse(document.getElementById('data').textContent);
+const FLAG_TXT={
+  status_conflict_finding_says_not_run:'Status COMPLY, tetapi temuan menyebut kegiatan belum dijalankan. Kemungkinan seharusnya NON-COMPLY.',
+  status_conflict_finding_says_not_received:'Status COMPLY, tetapi temuan menyebut dokumen tidak diterima. Kemungkinan seharusnya NON-COMPLY.',
+  status_conflict_should_be_NA:'Status COMPLY, tetapi proses ini sudah tidak ada di lapangan. Kemungkinan seharusnya N/A.',
+  sop_outdated:'SOP sudah tidak sesuai praktik (gap di SOP, bukan di lapangan).',
+  sop_inconsistent_16_vs_17:'SOP tidak konsisten antar dokumen (batas overtime 16:00 vs 17:00); praktik lapangan 17:00.',
+  deviation_but_comply:'COMPLY, tetapi praktik menyimpang dari kalimat SOP.',
+  form_gap:'Masalah ada di form/dokumen/WMS yang belum menyediakan, bukan kepatuhan petugas.',
+  improvement_note:'Catatan perbaikan; tidak mengubah status.'
+};
+const isDash=f=>f&&(f.startsWith('status_conflict')||f.startsWith('sop_'));
+const isDev=f=>f==='deviation_but_comply';
+const adjOf=f=>!f?null:f==='status_conflict_should_be_NA'?'N/A':f.startsWith('status_conflict')?'NON-COMPLY':null;
+const CLS={'COMPLY':'ok','NON-COMPLY':'nc','N/A':'na','PENDING':'pe'};
+const SHEETN={EXPORT:'Export',IMPORT:'Import',DC:'DC (Distribution Center)',TRUCKING:'Trucking Support'};
+const LOCS=['SEMPER','MARCEN','DOKUMEN'];
+const LOCN={SEMPER:'DC Semper',MARCEN:'DC Marcen',DOKUMEN:'Dokumen'};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const st={site:null,sheet:'EXPORT',loc:'SEMPER',view:'rep',focus:'all',sel:null};
+try{const s=JSON.parse(localStorage.getItem('peta-audit')||'{}');Object.assign(st,{view:s.view||'rep'})}catch(e){}
+
+const sites=[...new Set(DATA.sheets.map(s=>s.site))];
+st.site=sites[0];
+const ALLSITES=['Jakarta','Surabaya','Semarang','Medan','Makassar'];
+
+function sheetNow(){return DATA.sheets.find(s=>s.sheet===st.sheet&&s.site===st.site)}
+function rawStatus(it){return st.sheet==='DC'?it.status[st.loc]:it.status}
+function effStatus(it){if(st.view==='adj'&&rawStatus(it)==='COMPLY'){const a=adjOf(it.qa_flag);if(a)return a}return rawStatus(it)}
+function findingOf(it){
+  if(st.sheet!=='DC')return it.finding;
+  if(st.loc==='SEMPER')return it.finding_semper||it.finding;
+  if(st.loc==='MARCEN')return it.finding_marcen||it.finding;
+  return it.finding;
+}
+function pct(items,fn){
+  let c=0,n=0,na=0,pe=0;items.forEach(i=>{const s=fn(i);if(s==='COMPLY')c++;else if(s==='NON-COMPLY')n++;else if(s==='PENDING')pe++;else na++});
+  return {c,n,na,pe,p:c+n?c/(c+n)*100:0};
+}
+function fmt(x){return x.toFixed(1).replace('.',',')+'%'}
+
+function mkSeg(el,items,cur,cb){
+  el.innerHTML='';
+  items.forEach(([v,label,dis])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.disabled=!!dis;
+    b.setAttribute('aria-pressed',String(v===cur));b.onclick=()=>cb(v);el.appendChild(b)});
+}
+
+function renderControls(){
+  mkSeg($('siteSeg'),ALLSITES.map(s=>[s,s,!sites.includes(s)]),st.site,v=>{st.site=v;st.sel=null;render()});
+  const avail=DATA.sheets.filter(s=>s.site===st.site).map(s=>s.sheet);
+  mkSeg($('sheetSeg'),['EXPORT','IMPORT','DC','TRUCKING'].map(s=>[s,SHEETN[s],!avail.includes(s)]),st.sheet,v=>{st.sheet=v;st.sel=null;render()});
+  const dc=st.sheet==='DC';$('locSeg').hidden=!dc;$('locLab').hidden=!dc;
+  if(dc)mkSeg($('locSeg'),LOCS.map(l=>[l,LOCN[l]]),st.loc,v=>{st.loc=v;render()});
+  [...$('viewSeg').children].forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.v===st.view));b.onclick=()=>{st.view=b.dataset.v;try{localStorage.setItem('peta-audit',JSON.stringify({view:st.view}))}catch(e){}render()}});
+}
+
+function renderKpis(sh){
+  if(sh.items.every(i=>i.status==='PENDING')){
+    $('kpis').innerHTML=`<div class="kpi"><div class="v">${sh.items.length}</div><div class="l">langkah SOP (draft)</div></div>`+
+      `<div class="kpi"><div class="v">${sh.items.length}</div><div class="l">belum diaudit</div></div>`+
+      `<div class="kpi"><div class="v">${sh.items.filter(i=>i.category==='DOC').length}</div><div class="l">langkah berbasis dokumen</div></div>`;
+    return;
+  }
+  const rep=pct(sh.items,rawStatus);
+  // adjusted always computed from the same raw status
+  const adj=pct(sh.items,it=>{const r=rawStatus(it);if(r==='COMPLY'){const a=adjOf(it.qa_flag);if(a)return a}return r});
+  const nflag=sh.items.filter(i=>i.qa_flag).length, nconf=sh.items.filter(i=>i.qa_flag.startsWith('status_conflict')).length;
+  const loc=st.sheet==='DC'?' '+LOCN[st.loc]:'';
+  $('kpis').innerHTML=
+   `<div class="kpi"><div class="v">${sh.items.length}</div><div class="l">langkah SOP${esc(loc?' ·'+loc:'')}</div></div>`+
+   `<div class="kpi pair"><div class="v">${fmt(rep.p)}<small>${rep.c} comply · ${rep.n} NC · ${rep.na} N/A</small></div><div class="l">Compliance as reported</div></div>`+
+   `<div class="kpi pair"><div class="v">${fmt(adj.p)}<small>${adj.c} comply · ${adj.n} NC · ${adj.na} N/A</small></div><div class="l">Compliance adjusted (${nconf} status_conflict diperlakukan ulang)${adj.p!==rep.p?` <span class="arrow">▼ ${(rep.p-adj.p).toFixed(1).replace('.',',')} poin</span>`:''}</div></div>`+
+   `<div class="kpi"><div class="v">${nflag}</div><div class="l">item ber-flag QA</div></div>`+(rep.pe?`<div class="kpi"><div class="v">${rep.pe}</div><div class="l">belum diaudit</div></div>`:'');
+}
+
+function renderChips(sh){
+  const cnt={all:sh.items.length,'NON-COMPLY':0,flag:0};
+  sh.items.forEach(i=>{if(effStatus(i)==='NON-COMPLY')cnt['NON-COMPLY']++;if(i.qa_flag)cnt.flag++});
+  const defs=[['all','Semua','',cnt.all],['NON-COMPLY','Hanya NON-COMPLY','nc',cnt['NON-COMPLY']],['flag','Hanya flag QA','flag',cnt.flag]];
+  $('chips').innerHTML='';
+  defs.forEach(([k,l,c,n])=>{const b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('aria-pressed',String(st.focus===k));
+    b.innerHTML=(c?`<i class="sw ${c}"></i>`:'')+esc(l)+` <span class="n">${n}</span>`;b.onclick=()=>{st.focus=k;applyDim()};$('chips').appendChild(b)});
+}
+
+const NW=150,NH=68,PX=34,PY=14,LANEH=90,LABW=132,GAP=22;
+function renderBoard(sh){
+  const host=$('board');host.innerHTML='';host.style.cssText='display:flex;flex-direction:column;gap:14px';
+  sh.sections.forEach(sec=>{
+    const items=sh.items.filter(i=>i.section===sec.id).sort((a,b)=>a.no-b.no);
+    const actors=[];items.forEach(i=>{if(!actors.includes(i.actor))actors.push(i.actor)});
+    const cs=pct(items,effStatus);
+    const W=LABW+PX+items.length*(NW+GAP)+PX-GAP, H=actors.length*LANEH;
+    const d=document.createElement('section');d.className='section';
+    d.innerHTML=`<div class="sec-h"><span class="sec-id">${esc(sec.id)}</span><span class="sec-n">${esc(sec.name)}</span><span class="sec-m">${esc(sec.sop)} · langkah ${sec.from_no}–${sec.to_no}</span>
+      <span class="sec-c">${cs.pe===items.length?'':`<span class="ok">${cs.c} C</span><span class="nc">${cs.n} NC</span><span class="na">${cs.na} NA</span>`}${cs.pe?`<span class="pe">${cs.pe} belum diaudit</span>`:''}</span></div>
+      <div class="scroll"><div class="board" style="width:${W}px;height:${H}px"></div></div>`;
+    const b=d.querySelector('.board');
+    actors.forEach((a,r)=>{const l=document.createElement('div');l.className='lane';l.style.cssText=`top:${r*LANEH}px;height:${LANEH}px`;
+      l.innerHTML=`<div class="lane-l">${esc(a)}</div>`;b.appendChild(l)});
+    const pos=items.map((it,k)=>({it,x:LABW+PX+k*(NW+GAP),y:actors.indexOf(it.actor)*LANEH+(LANEH-NH)/2}));
+    // connectors
+    let paths='';
+    for(let k=0;k<pos.length-1;k++){
+      const a=pos[k],c=pos[k+1];const x1=a.x+NW,y1=a.y+NH/2,x2=c.x,y2=c.y+NH/2,mx=x1+GAP/2;
+      paths+=`<path d="M${x1} ${y1} H${mx} V${y2} H${x2-1}" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah)"/>`;
+    }
+    b.insertAdjacentHTML('beforeend',`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="currentColor"/></marker></defs>${paths}</svg>`);
+    pos.forEach(({it,x,y})=>{
+      const s=effStatus(it),n=document.createElement('button');n.type='button';
+      n.className=`node ${CLS[s]}${isDash(it.qa_flag)?' flag':''}`;n.style.cssText=`left:${x}px;top:${y}px;width:${NW}px;height:${NH}px`;
+      n.dataset.no=it.no;
+      n.setAttribute('aria-label',`Langkah ${it.no}, ${s}, ${it.criterion}`);
+      n.innerHTML=`<span class="no">#${it.no} · ${esc(it.category)}</span><span class="t">${esc(it.criterion)}</span>`+
+        (isDev(it.qa_flag)?'<span class="dev" title="Menyimpang dari SOP">!</span>':'')+
+        (st.sheet==='DC'?`<span class="dots">${LOCS.map(l=>`<i class="${CLS[it.status[l]]}" title="${LOCN[l]}: ${it.status[l]}"></i>`).join('')}</span>`:'');
+      n.onmouseenter=e=>showTip(e,it);n.onmousemove=moveTip;n.onmouseleave=()=>{$('tip').hidden=true};
+      n.onfocus=e=>showTip(e,it,true);n.onblur=()=>{$('tip').hidden=true};
+      n.onclick=()=>{st.sel=it.no;renderDrawer(sh);markSel()};
+      b.appendChild(n);
+    });
+    host.appendChild(d);
+  });
+}
+
+function tipHtml(it){
+  const s=effStatus(it),f=findingOf(it);
+  let h=`<b>#${it.no}</b> ${esc(it.criterion)}`;
+  if(s==='PENDING')h+='<br><i>Belum diaudit</i>';else if(f)h+=`<br>${esc(f)}`;else if(s==='NON-COMPLY')h+='<br><i>(tidak ada catatan temuan)</i>';
+  if(it.qa_flag)h+=`<span class="fl">⚑ ${esc(FLAG_TXT[it.qa_flag]||it.qa_flag)}</span>`;
+  return h;
+}
+function showTip(e,it,fromFocus){
+  const t=$('tip');t.innerHTML=tipHtml(it);t.hidden=false;
+  if(fromFocus){const r=e.target.getBoundingClientRect();place(r.left,r.bottom+6)}else moveTip(e);
+}
+function place(x,y){const t=$('tip');const w=t.offsetWidth,h=t.offsetHeight;
+  t.style.left=Math.max(8,Math.min(x,innerWidth-w-8))+'px';t.style.top=(y+h>innerHeight-8?Math.max(8,y-h-30):y)+'px'}
+function moveTip(e){place(e.clientX+14,e.clientY+16)}
+
+function applyDim(){
+  const sh=sheetNow();
+  document.querySelectorAll('.node').forEach(n=>{
+    const it=sh.items.find(i=>i.no==n.dataset.no);let show=true;
+    if(st.focus==='NON-COMPLY')show=effStatus(it)==='NON-COMPLY';
+    if(st.focus==='flag')show=!!it.qa_flag;
+    n.classList.toggle('dim',!show);
+  });
+  renderChips(sh);
+}
+function markSel(){document.querySelectorAll('.node').forEach(n=>n.classList.toggle('sel',n.dataset.no==st.sel))}
+
+function pill(s){return `<span class="pill ${CLS[s]}">${s}</span>`}
+function renderDrawer(sh){
+  const d=$('drawer');
+  const it=sh.items.find(i=>i.no===st.sel);
+  if(!it){d.hidden=true;return}
+  const sec=sh.sections.find(s=>s.id===it.section);
+  d.hidden=false;
+  let right='';
+  if(st.sheet==='DC'){
+    right+='<div class="locs">'+LOCS.map(l=>{
+      const f=l==='SEMPER'?it.finding_semper:l==='MARCEN'?it.finding_marcen:it.finding;
+      return `<div>${pill(it.status[l])} <b>${LOCN[l]}</b>${f?': '+esc(f):''}</div>`}).join('')+'</div>';
+    if(it.auditor_note)right+=`<div class="fb plain"><b>Catatan auditor:</b> ${esc(it.auditor_note)}</div>`;
+  }else{
+    right+=`<div>${pill(effStatus(it))} ${it.finding?esc(it.finding):'<i style="color:var(--muted)">'+(effStatus(it)==='PENDING'?'Belum diaudit. Item ini diturunkan dari Pendahuluan SOP, bukan dari langkah Prosedur.':'Tidak ada catatan temuan.')+'</i>'}</div>`;
+  }
+  if(it.qa_flag){
+    right+=`<div class="fb"><b>Flag QA · ${esc(it.qa_flag)}</b><br>${esc(FLAG_TXT[it.qa_flag]||'')}`+
+      (adjOf(it.qa_flag)&&rawStatus(it)==='COMPLY'?`<br>Pada tampilan Adjusted dihitung sebagai <b>${adjOf(it.qa_flag)}</b>.`:'')+`</div>`;
+  }
+  d.innerHTML=`<button class="x" type="button" aria-label="Tutup detail" id="dx">×</button>
+   <div><h2>#${it.no} ${esc(it.criterion)}</h2>
+   <dl><dt>Aktor</dt><dd>${esc(it.actor)}</dd><dt>Kategori</dt><dd>${esc(it.category)}</dd><dt>Acuan SOP</dt><dd>${esc(it.sop_ref)}</dd>${it.orig_no?`<dt>No. di form audit</dt><dd>${esc(it.orig_sheet)} ${it.orig_no}</dd>`:''}<dt>Tahap</dt><dd>${esc(sec.id)} · ${esc(sec.name)}</dd></dl></div>
+   <div>${right}</div>`;
+  $('dx').onclick=()=>{st.sel=null;renderDrawer(sh);markSel()};
+}
+
+function render(){
+  renderControls();
+  const sh=sheetNow();
+  const dt=DATA.meta.dates[sh.sheet==='DC'?'DC':sh.sheet];
+  $('meta').innerHTML=`${esc(DATA.meta.audit_no)} · <b>${esc(st.site)}</b> · ${dt?'audit '+esc(dt):'<b>belum diaudit</b>'} · ${esc(DATA.meta.lead_auditor)}`;
+  $('banner').hidden=!sh.note;$('banner').textContent=sh.note||'';
+  renderKpis(sh);renderBoard(sh);renderChips(sh);applyDim();renderDrawer(sh);markSel();
+}
+
+// theme toggle: otomatis -> terang -> gelap
+const modes=[null,'light','dark'],mn=['otomatis','terang','gelap'];let mi=0;
+$('themeBtn').onclick=()=>{mi=(mi+1)%3;const r=document.documentElement;modes[mi]?r.setAttribute('data-theme',modes[mi]):r.removeAttribute('data-theme');$('themeBtn').textContent='Tema: '+mn[mi]};
+addEventListener('keydown',e=>{if(e.key==='Escape'&&st.sel){st.sel=null;renderDrawer(sheetNow());markSel()}});
+render();
+</script>

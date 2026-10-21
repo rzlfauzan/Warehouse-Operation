@@ -1,0 +1,76 @@
+
+1.
+Tujuan :
+Prosedur ini bertujuan mengarahkan staff dan  manajemen dalam  proses penarikan full container setelah proses stuffing untuk dibawa ke UTC  atau Unit  Terminal Peti  Kemas (UTPK).
+
+2.
+Ruang Lingkup :
+Prosedur ini mencakup  penerimaan dan pengecekan dokumen Kartu Ekspor, PKBE, Survey PElayaran, Ekspor Summary list, pemeriksaan segel container, dan SPK ke vendor untuk penarikan container ke lapangan CY terminal peti kemas ( UTPK)/ UTC 
+
+3.
+Definisi :
+
+a.
+Survey Pelayaran adalah dokumen yang menjelaskan kondisi container yang digunakan serta data mengenai kapal yang akan digunakan beserta tujuannya.
+
+b.
+Ekspor Summary List adalah dokumen yang berisi data data jenis dan jumlah barang yang telah distuffing.
+
+c.
+Surat Jalan adalah dokumen pengantar yg berisi tentang penjelasan ttg container yang akan dibawa oleh supir ke UTPK/UTC
+
+d.
+Closing time adalah batas waktu pengiriman atau penarikan full container ke dalam terminal petikemas pelabuhan.
+
+4.
+Uraian Umum :
+
+a.
+Pemeriksaan segel container apakah dalam kondisi dan terpasang dengan baik dilakukan saat mau diberangkatkan dari gudang dan juga dibandingkan dengan hasil pemeriksaan saat sudah diturunkan di terminal CY UTPK.
+
+b.
+Kondisi container harus dibandingkan dan diperiksa saat keluar dari gudang dan saat diterima oleh UTPK dengan cara membandingkan EIR versi UTPK dan Surat Jalan yang dikeluarkan oleh gudang.
+
+c.
+Saat menarik container full untuk dimasukkan ke terminal peti kemas harus diantisipasi batas closing time di pelabuhan menghindari adanya denda biaya closing time.
+
+d.
+Selama proses penarikan full container ke UTC, staff container & trucking PT.MKT tetap menjalin komunikasi dua arah dengan sopir (penjemput empty container) dengan menggunakan HP dan sopir berkewajiban haru selalu bisa dihubungi via HP meski saat sedang meninggalkan truck nya
+
+5.
+Dokumen dan Catatan terkait :
+
+a.
+Ekspor Summary List
+e.
+Bon Muat
+
+b.
+KE
+f.
+SJT
+
+c.
+PKBE
+g.
+IK Discrepancies penarikan full container ke UTC
+
+
+d.
+Survey Pelayaran
+
+
+
+6.
+Prosedur :
+Pada halaman selanjutnya
+
+
+
+Dibuat  :
+Bisdev & Service Integrity
+Diperiksa :
+Operational Spv
+Disetujui :
+Warehouse Manager
+

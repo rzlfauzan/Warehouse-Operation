@@ -1,0 +1,1454 @@
+[
+ {
+  "flow": "Export",
+  "phase": "Inbound Ekspor",
+  "phmeta": "SOP-OPS-003 6.1",
+  "no": 1,
+  "name": "Kedatangan & registrasi",
+  "cond": "",
+  "pic": [
+   "Security",
+   "Admin Warehouse"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "6.1",
+  "ref": [
+   "EXPORT",
+   1,
+   4
+  ],
+  "in": [
+   {
+    "t": "Info pengiriman (email)",
+    "sig": 0
+   },
+   {
+    "t": "Surat Jalan",
+    "sig": 0
+   },
+   {
+    "t": "SIM pengemudi",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Catatan waktu tiba",
+    "sig": 0
+   },
+   {
+    "t": "ID Card Visitor",
+    "sig": 0
+   }
+  ],
+  "sys": "",
+  "pending": false,
+  "nc": 0
+ },
+ {
+  "flow": "Export",
+  "phase": "Inbound Ekspor",
+  "phmeta": "SOP-OPS-003 6.1",
+  "no": 2,
+  "name": "Terima dokumen & buat order",
+  "cond": "",
+  "pic": [
+   "Account Officer",
+   "Admin Warehouse"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "6.1",
+  "ref": [
+   "EXPORT",
+   5,
+   8
+  ],
+  "in": [
+   {
+    "t": "BC",
+    "sig": 0
+   },
+   {
+    "t": "Surat Jalan",
+    "sig": 0
+   },
+   {
+    "t": "PEB, NPE",
+    "sig": 0
+   },
+   {
+    "t": "Packing List",
+    "sig": 0
+   },
+   {
+    "t": "Invoice",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Order Inbound",
+    "sig": 0
+   },
+   {
+    "t": "Email konfirmasi overtime (tiba >17:00)",
+    "sig": 0
+   }
+  ],
+  "sys": "WMS MKT Order Inbound",
+  "pending": false,
+  "nc": 1
+ },
+ {
+  "flow": "Export",
+  "phase": "Inbound Ekspor",
+  "phmeta": "SOP-OPS-003 6.1",
+  "no": 3,
+  "name": "Bongkar & tally",
+  "cond": "",
+  "pic": [
+   "Account Officer",
+   "Checker",
+   "Admin Warehouse"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "6.1",
+  "ref": [
+   "EXPORT",
+   9,
+   16
+  ],
+  "in": [
+   {
+    "t": "Dokumen inbound",
+    "sig": 0
+   },
+   {
+    "t": "Foto segel & nopol",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Form Tally → Tally Report",
+    "sig": 0
+   },
+   {
+    "t": "BA discrepancy (SOP-OPS-008)",
+    "sig": 0
+   },
+   {
+    "t": "Potongan segel & sticker BC",
+    "sig": 0
+   }
+  ],
+  "sys": "Tally Report diupdate ke WMS",
+  "pending": false,
+  "nc": 0
+ },
+ {
+  "flow": "Export",
+  "phase": "Inbound Ekspor",
+  "phmeta": "SOP-OPS-003 6.1",
+  "no": 4,
+  "name": "Paletisasi & put away",
+  "cond": "",
+  "pic": [
+   "Admin Warehouse",
+   "Checker",
+   "Operator Forklift"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "6.1",
+  "ref": [
+   "EXPORT",
+   17,
+   19
+  ],
+  "in": [
+   {
+    "t": "Tally Report",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Label Pallet ID",
+    "sig": 0
+   },
+   {
+    "t": "Lokasi put away",
+    "sig": 0
+   }
+  ],
+  "sys": "Scan Pallet ID di WMS",
+  "pending": false,
+  "nc": 0
+ },
+ {
+  "flow": "Export",
+  "phase": "Outbound Ekspor",
+  "phmeta": "SOP-OPS-003 6.2",
+  "no": 5,
+  "name": "Persiapan & picking",
+  "cond": "",
+  "pic": [
+   "Account Officer",
+   "Admin Warehouse",
+   "Picker"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "6.2",
+  "ref": [
+   "EXPORT",
+   20,
+   26
+  ],
+  "in": [
+   {
+    "t": "CLP dari pelanggan (email)",
+    "sig": 0
+   },
+   {
+    "t": "Tally Report",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Picking Report",
+    "sig": 0
+   },
+   {
+    "t": "Copy CLP ke Picker",
+    "sig": 0
+   }
+  ],
+  "sys": "",
+  "pending": false,
+  "nc": 0
+ },
+ {
+  "flow": "Export",
+  "phase": "Outbound Ekspor",
+  "phmeta": "SOP-OPS-003 6.2",
+  "no": 6,
+  "name": "Stuffing & penyegelan",
+  "cond": "",
+  "pic": [
+   "Surveyor",
+   "Checker",
+   "TKBM",
+   "Admin Warehouse"
+  ],
+  "main": "Gudang MKT",
+  "others": [
+   "Bea Cukai"
+  ],
+  "sop": "6.2",
+  "ref": [
+   "EXPORT",
+   27,
+   36
+  ],
+  "in": [
+   {
+    "t": "Copy CLP",
+    "sig": 0
+   },
+   {
+    "t": "Tally Report",
+    "sig": 0
+   },
+   {
+    "t": "Empty container & EIR (dari Trucking Support)",
+    "sig": 0
+   },
+   {
+    "t": "Hasil periksa kontainer (SOP-OPS-005)",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "BA kontainer tidak layak (jika ada)",
+    "sig": 0
+   },
+   {
+    "t": "Dokumentasi muat 25/50/75/100%",
+    "sig": 0
+   },
+   {
+    "t": "Segel Pelayaran & BC",
+    "sig": 0
+   },
+   {
+    "t": "Nomor segel terdokumentasi",
+    "sig": 0
+   }
+  ],
+  "sys": "Scan Pallet ID sebelum masuk kontainer",
+  "pending": false,
+  "nc": 1
+ },
+ {
+  "flow": "Export",
+  "phase": "Proses pendukung (periodik)",
+  "phmeta": "SOP-OPS-006",
+  "no": null,
+  "name": "Cycle Count",
+  "cond": "",
+  "pic": [
+   "Inventory",
+   "Operasional",
+   "Account Officer"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "SOP-OPS-006 6.1",
+  "ref": [
+   "EXPORT",
+   45,
+   51
+  ],
+  "in": [
+   {
+    "t": "Stock balance WMS (harian)",
+    "sig": 0
+   },
+   {
+    "t": "Count Sheet harian",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Berita Acara Cycle Count",
+    "sig": 1
+   }
+  ],
+  "sys": "Verifikasi hitung fisik vs stok WMS",
+  "pending": false,
+  "nc": 1
+ },
+ {
+  "flow": "Export",
+  "phase": "Proses pendukung (periodik)",
+  "phmeta": "SOP-OPS-006",
+  "no": null,
+  "name": "Stock Opname",
+  "cond": "",
+  "pic": [
+   "Inventory",
+   "Tim Stock Opname",
+   "Operasional"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "SOP-OPS-006 6.2",
+  "ref": [
+   "EXPORT",
+   52,
+   62
+  ],
+  "in": [
+   {
+    "t": "Jadwal SO dari pelanggan (email)",
+    "sig": 0
+   },
+   {
+    "t": "Count Sheet kosong & ber-qty",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Berita Acara Stock Opname (MKT & pelanggan)",
+    "sig": 1
+   }
+  ],
+  "sys": "WMS di-freeze saat hitung, lalu di-unfreeze",
+  "pending": false,
+  "nc": 2
+ },
+ {
+  "flow": "Import",
+  "phase": "Pengurusan dokumen",
+  "phmeta": "SOP-OPS-004 6.1 · 6.2 · 6.8",
+  "no": 1,
+  "name": "Ambil DO Pelayaran",
+  "cond": "",
+  "pic": [
+   "Account Officer",
+   "Pelanggan",
+   "Forwarding"
+  ],
+  "main": "Port / Pelayaran",
+  "others": [],
+  "sop": "6.1",
+  "ref": [
+   "IMPORT",
+   1,
+   4
+  ],
+  "in": [
+   {
+    "t": "OVBC",
+    "sig": 0
+   },
+   {
+    "t": "MBL",
+    "sig": 0
+   },
+   {
+    "t": "DO",
+    "sig": 0
+   },
+   {
+    "t": "Bukti bayar THC & LOLO",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "DO Pelayaran",
+    "sig": 0
+   }
+  ],
+  "sys": "",
+  "pending": false,
+  "nc": 0
+ },
+ {
+  "flow": "Import",
+  "phase": "Pengurusan dokumen",
+  "phmeta": "SOP-OPS-004 6.1 · 6.2 · 6.8",
+  "no": 2,
+  "name": "Redress",
+  "cond": "jika perlu",
+  "pic": [
+   "Account Officer",
+   "Pelanggan"
+  ],
+  "main": "Bea Cukai",
+  "others": [],
+  "sop": "6.8",
+  "ref": [
+   "IMPORT",
+   42,
+   44
+  ],
+  "in": [
+   {
+    "t": "Pemberitahuan kebutuhan redress",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Persetujuan redress dari BC",
+    "sig": 0
+   }
+  ],
+  "sys": "",
+  "pending": false,
+  "nc": 0
+ },
+ {
+  "flow": "Import",
+  "phase": "Pengurusan dokumen",
+  "phmeta": "SOP-OPS-004 6.1 · 6.2 · 6.8",
+  "no": 3,
+  "name": "Pindah Lokasi Penimbunan (PLP)",
+  "cond": "",
+  "pic": [
+   "Account Officer",
+   "Terminal"
+  ],
+  "main": "Port / Pelayaran",
+  "others": [],
+  "sop": "6.2",
+  "ref": [
+   "IMPORT",
+   5,
+   8
+  ],
+  "in": [
+   {
+    "t": "Dokumen pengajuan PLP",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Approval PLP dari Terminal",
+    "sig": 0
+   }
+  ],
+  "sys": "",
+  "pending": false,
+  "nc": 0
+ },
+ {
+  "flow": "Import",
+  "phase": "Penarikan & pembongkaran",
+  "phmeta": "SOP-OPS-004 6.3 · 6.4 · 6.5",
+  "no": 4,
+  "name": "Tarik container dari pelabuhan",
+  "cond": "",
+  "pic": [
+   "Vendor CC",
+   "Trucking Support",
+   "Pengemudi Truk"
+  ],
+  "main": "Port / Pelayaran",
+  "others": [
+   "Bea Cukai"
+  ],
+  "sop": "6.3",
+  "ref": [
+   "IMPORT",
+   9,
+   15
+  ],
+  "in": [
+   {
+    "t": "Approval PLP",
+    "sig": 0
+   },
+   {
+    "t": "SP2 (setelah Port Charges)",
+    "sig": 0
+   },
+   {
+    "t": "E-Seal dari TPS",
+    "sig": 0
+   },
+   {
+    "t": "Surat izin stripping dari BC",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "E-Seal terpasang",
+    "sig": 0
+   },
+   {
+    "t": "Dokumen BC difiat di gate out",
+    "sig": 0
+   }
+  ],
+  "sys": "Gate in diinput ke sistem",
+  "pending": false,
+  "nc": 1
+ },
+ {
+  "flow": "Import",
+  "phase": "Penarikan & pembongkaran",
+  "phmeta": "SOP-OPS-004 6.3 · 6.4 · 6.5",
+  "no": 5,
+  "name": "Pembongkaran cargo",
+  "cond": "",
+  "pic": [
+   "Staff Operasional",
+   "Account Officer"
+  ],
+  "main": "Gudang MKT",
+  "others": [
+   "Bea Cukai"
+  ],
+  "sop": "6.4",
+  "ref": [
+   "IMPORT",
+   16,
+   25
+  ],
+  "in": [
+   {
+    "t": "Lampiran izin stripping (disetujui BC)",
+    "sig": 0
+   },
+   {
+    "t": "Manifest",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Label impor / Master BL",
+    "sig": 0
+   },
+   {
+    "t": "Foto & video seal dan bongkar",
+    "sig": 0
+   },
+   {
+    "t": "Laporan stripping & BA (TTD BC)",
+    "sig": 1
+   },
+   {
+    "t": "BA ketidaksesuaian (SOP-OPS-008)",
+    "sig": 0
+   }
+  ],
+  "sys": "",
+  "pending": false,
+  "nc": 2
+ },
+ {
+  "flow": "Import",
+  "phase": "Penarikan & pembongkaran",
+  "phmeta": "SOP-OPS-004 6.3 · 6.4 · 6.5",
+  "no": 6,
+  "name": "Pengembalian empty container",
+  "cond": "",
+  "pic": [
+   "Trucking Support",
+   "Pengemudi Truk",
+   "Operator RS"
+  ],
+  "main": "Port / Pelayaran",
+  "others": [
+   "Bea Cukai"
+  ],
+  "sop": "6.5",
+  "ref": [
+   "IMPORT",
+   26,
+   30
+  ],
+  "in": [
+   {
+    "t": "EIR asli",
+    "sig": 0
+   },
+   {
+    "t": "DO",
+    "sig": 0
+   },
+   {
+    "t": "Surat jalan out",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Dokumen pemulangan empty (TTD BC)",
+    "sig": 1
+   },
+   {
+    "t": "Barcode / gate pass TPS",
+    "sig": 0
+   }
+  ],
+  "sys": "Container out diinput ke sistem",
+  "pending": false,
+  "nc": 0
+ },
+ {
+  "flow": "Import",
+  "phase": "Gudang",
+  "phmeta": "SOP-OPS-004 6.6 · 6.7",
+  "no": 7,
+  "name": "Penyimpanan cargo",
+  "cond": "",
+  "pic": [
+   "Staple"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "6.6",
+  "ref": [
+   "IMPORT",
+   31,
+   35
+  ],
+  "in": [
+   {
+    "t": "Manifest / Tally",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Lokasi barang di WMS",
+    "sig": 0
+   },
+   {
+    "t": "Entri khusus barang DG/OD/OW",
+    "sig": 0
+   }
+  ],
+  "sys": "Input lokasi di WMS",
+  "pending": false,
+  "nc": 1
+ },
+ {
+  "flow": "Import",
+  "phase": "Gudang",
+  "phmeta": "SOP-OPS-004 6.6 · 6.7",
+  "no": 8,
+  "name": "Pengeluaran cargo",
+  "cond": "",
+  "pic": [
+   "Staple",
+   "Staff Operasional",
+   "TKBM / Forklift"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "6.7",
+  "ref": [
+   "IMPORT",
+   36,
+   41
+  ],
+  "in": [
+   {
+    "t": "SPPB",
+    "sig": 0
+   },
+   {
+    "t": "DO",
+    "sig": 0
+   },
+   {
+    "t": "Surat Jalan",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Surat Jalan serah terima (TTD pelanggan)",
+    "sig": 1
+   }
+  ],
+  "sys": "",
+  "pending": false,
+  "nc": 0
+ },
+ {
+  "flow": "Import",
+  "phase": "Proses pendukung (periodik)",
+  "phmeta": "SOP-OPS-006",
+  "no": null,
+  "name": "Cycle Count",
+  "cond": "",
+  "pic": [
+   "Inventory",
+   "Operasional",
+   "Account Officer"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "SOP-OPS-006 6.1",
+  "ref": [
+   "IMPORT",
+   45,
+   51
+  ],
+  "in": [
+   {
+    "t": "Stock balance WMS (harian)",
+    "sig": 0
+   },
+   {
+    "t": "Count Sheet harian",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Berita Acara Cycle Count",
+    "sig": 1
+   }
+  ],
+  "sys": "Verifikasi hitung fisik vs stok WMS",
+  "pending": false,
+  "nc": 1
+ },
+ {
+  "flow": "Import",
+  "phase": "Proses pendukung (periodik)",
+  "phmeta": "SOP-OPS-006",
+  "no": null,
+  "name": "Stock Opname",
+  "cond": "",
+  "pic": [
+   "Inventory",
+   "Tim Stock Opname",
+   "Operasional"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "SOP-OPS-006 6.2",
+  "ref": [
+   "IMPORT",
+   52,
+   62
+  ],
+  "in": [
+   {
+    "t": "Jadwal SO dari pelanggan (email)",
+    "sig": 0
+   },
+   {
+    "t": "Count Sheet kosong & ber-qty",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Berita Acara Stock Opname (MKT & pelanggan)",
+    "sig": 1
+   }
+  ],
+  "sys": "WMS di-freeze saat hitung, lalu di-unfreeze",
+  "pending": false,
+  "nc": 9
+ },
+ {
+  "flow": "Trucking Support",
+  "phase": "Penarikan empty container",
+  "phmeta": "SOP-OPS-005 6.1 · sudah diaudit (4 Agustus 2026)",
+  "no": 1,
+  "name": "Terima DO & konfirmasi Depo",
+  "cond": "",
+  "pic": [
+   "Trucking Support",
+   "Account Officer",
+   "Depo",
+   "Pengemudi"
+  ],
+  "main": "Depo",
+  "others": [],
+  "sop": "SOP-OPS-005 6.1",
+  "ref": [
+   "TRUCKING",
+   1,
+   3
+  ],
+  "in": [
+   {
+    "t": "DO dari Account Officer",
+    "sig": 0
+   },
+   {
+    "t": "Konfirmasi pelanggan (jika DO tidak tersedia di Depo)",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Konfirmasi DO dari Depo",
+    "sig": 0
+   },
+   {
+    "t": "Bon Muat ke pengemudi",
+    "sig": 0
+   }
+  ],
+  "sys": "",
+  "pending": false,
+  "nc": 0
+ },
+ {
+  "flow": "Trucking Support",
+  "phase": "Penarikan empty container",
+  "phmeta": "SOP-OPS-005 6.1 · sudah diaudit (4 Agustus 2026)",
+  "no": 2,
+  "name": "Pemeriksaan empty bersama Depo",
+  "cond": "",
+  "pic": [
+   "Trucking Support",
+   "Depo"
+  ],
+  "main": "Depo",
+  "others": [],
+  "sop": "SOP-OPS-005 6.1",
+  "ref": [
+   "TRUCKING",
+   4,
+   7
+  ],
+  "in": [
+   {
+    "t": "Bon Muat",
+    "sig": 0
+   },
+   {
+    "t": "Form pemeriksaan empty (10 kriteria)",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Form pemeriksaan empty terisi",
+    "sig": 0
+   }
+  ],
+  "sys": "Periksa luar, pintu, dinding, plafon, lantai, kebersihan, segel, hama. Segel ISO 17712 sesuai EIR. Hanya container BAIK diterima; yang tidak layak dikembalikan.",
+  "pending": false,
+  "nc": 0
+ },
+ {
+  "flow": "Trucking Support",
+  "phase": "Penarikan empty container",
+  "phmeta": "SOP-OPS-005 6.1 · sudah diaudit (4 Agustus 2026)",
+  "no": 3,
+  "name": "Terbit EIR",
+  "cond": "",
+  "pic": [
+   "Depo",
+   "Trucking Support"
+  ],
+  "main": "Depo",
+  "others": [],
+  "sop": "SOP-OPS-005 6.1",
+  "ref": [
+   "TRUCKING",
+   8,
+   8
+  ],
+  "in": [
+   {
+    "t": "Hasil pemeriksaan bersama",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "EIR dari Depo (diteruskan ke tim yang stuffing)",
+    "sig": 0
+   }
+  ],
+  "sys": "",
+  "pending": false,
+  "nc": 0
+ },
+ {
+  "flow": "Trucking Support",
+  "phase": "Penarikan full container ke UTPK/UTC",
+  "phmeta": "SOP Penarikan Full Container ke UTC Rev.01 · draft dari Pendahuluan, butir Prosedur belum diterima · belum diaudit",
+  "no": 4,
+  "name": "Terima & cek dokumen",
+  "cond": "",
+  "pic": [
+   "Staff Container & Trucking"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "Ruang Lingkup",
+  "ref": [
+   "TRUCKING",
+   9,
+   12
+  ],
+  "in": [
+   {
+    "t": "Kartu Ekspor (KE)",
+    "sig": 0
+   },
+   {
+    "t": "PKBE",
+    "sig": 0
+   },
+   {
+    "t": "Survey Pelayaran",
+    "sig": 0
+   },
+   {
+    "t": "Export Summary List",
+    "sig": 0
+   }
+  ],
+  "out": [],
+  "sys": "Dokumen keluar tahap ini menunggu butir Prosedur.",
+  "pending": true,
+  "nc": null
+ },
+ {
+  "flow": "Trucking Support",
+  "phase": "Penarikan full container ke UTPK/UTC",
+  "phmeta": "SOP Penarikan Full Container ke UTC Rev.01 · draft dari Pendahuluan, butir Prosedur belum diterima · belum diaudit",
+  "no": 5,
+  "name": "Periksa segel & kondisi sebelum berangkat",
+  "cond": "",
+  "pic": [
+   "Staff Container & Trucking",
+   "Gudang"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "Uraian 4a, 4b",
+  "ref": [
+   "TRUCKING",
+   13,
+   15
+  ],
+  "in": [
+   {
+    "t": "Export Summary List",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Surat Jalan (SJT)",
+    "sig": 0
+   },
+   {
+    "t": "Bon Muat (perkiraan)",
+    "sig": 0
+   }
+  ],
+  "sys": "Segel terpasang baik dan kondisi container dicatat saat keluar gudang.",
+  "pending": true,
+  "nc": null
+ },
+ {
+  "flow": "Trucking Support",
+  "phase": "Penarikan full container ke UTPK/UTC",
+  "phmeta": "SOP Penarikan Full Container ke UTC Rev.01 · draft dari Pendahuluan, butir Prosedur belum diterima · belum diaudit",
+  "no": 6,
+  "name": "SPK vendor & penarikan",
+  "cond": "",
+  "pic": [
+   "Staff Container & Trucking",
+   "Sopir / Vendor"
+  ],
+  "main": "Port / Pelayaran",
+  "others": [],
+  "sop": "Uraian 4c, 4d",
+  "ref": [
+   "TRUCKING",
+   16,
+   19
+  ],
+  "in": [
+   {
+    "t": "Surat Jalan (SJT)",
+    "sig": 0
+   },
+   {
+    "t": "Bon Muat (perkiraan)",
+    "sig": 0
+   },
+   {
+    "t": "Closing time pelabuhan",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "SPK ke vendor",
+    "sig": 0
+   }
+  ],
+  "sys": "Komunikasi dua arah via HP dengan sopir. Antisipasi closing time agar tidak kena denda.",
+  "pending": true,
+  "nc": null
+ },
+ {
+  "flow": "Trucking Support",
+  "phase": "Penarikan full container ke UTPK/UTC",
+  "phmeta": "SOP Penarikan Full Container ke UTC Rev.01 · draft dari Pendahuluan, butir Prosedur belum diterima · belum diaudit",
+  "no": 7,
+  "name": "Terima di CY UTPK & bandingkan",
+  "cond": "",
+  "pic": [
+   "Staff Container & Trucking",
+   "UTPK"
+  ],
+  "main": "Port / Pelayaran",
+  "others": [],
+  "sop": "Uraian 4a, 4b",
+  "ref": [
+   "TRUCKING",
+   20,
+   22
+  ],
+  "in": [
+   {
+    "t": "EIR versi UTPK",
+    "sig": 0
+   },
+   {
+    "t": "Surat Jalan gudang",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "IK Discrepancies penarikan full container ke UTC (jika ada selisih)",
+    "sig": 0
+   }
+  ],
+  "sys": "Bandingkan segel dan kondisi container saat keluar gudang vs saat diterima UTPK.",
+  "pending": true,
+  "nc": null
+ },
+ {
+  "flow": "DC (Distribution Center)",
+  "phase": "Inbound DC",
+  "phmeta": "SOP-OPS-002 6.1",
+  "no": 1,
+  "name": "Info & registrasi",
+  "cond": "",
+  "pic": [
+   "Admin",
+   "Security"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "6.1",
+  "ref": [
+   "DC",
+   1,
+   9
+  ],
+  "in": [
+   {
+    "t": "Info pengiriman (email)",
+    "sig": 0
+   },
+   {
+    "t": "Surat Jalan",
+    "sig": 0
+   },
+   {
+    "t": "Dokumen transporter",
+    "sig": 0
+   },
+   {
+    "t": "Form Pemeriksaan Kabin",
+    "sig": 0
+   },
+   {
+    "t": "SIM pengemudi",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "ID Card Visitor",
+    "sig": 0
+   },
+   {
+    "t": "Order Inbound & packing detail",
+    "sig": 0
+   },
+   {
+    "t": "Email konfirmasi overtime (tiba >16:00)",
+    "sig": 0
+   }
+  ],
+  "sys": "WMS Order Inbound / upload template",
+  "pending": false,
+  "nc": [
+   3,
+   1,
+   1
+  ]
+ },
+ {
+  "flow": "DC (Distribution Center)",
+  "phase": "Inbound DC",
+  "phmeta": "SOP-OPS-002 6.1",
+  "no": 2,
+  "name": "Bongkar & pengecekan",
+  "cond": "",
+  "pic": [
+   "Admin",
+   "Checker",
+   "Ops Section Head"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "6.1",
+  "ref": [
+   "DC",
+   10,
+   17
+  ],
+  "in": [
+   {
+    "t": "Dokumen inbound",
+    "sig": 0
+   },
+   {
+    "t": "Form Pemeriksaan Kendaraan",
+    "sig": 0
+   },
+   {
+    "t": "Packing List / Surat Jalan",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Tally Report",
+    "sig": 0
+   },
+   {
+    "t": "Good Receipt Report",
+    "sig": 1
+   },
+   {
+    "t": "Surat Jalan (3 pihak)",
+    "sig": 1
+   },
+   {
+    "t": "Laporan ketidaksesuaian (SOP-OPS-008)",
+    "sig": 0
+   }
+  ],
+  "sys": "Good Receipt diupdate ke WMS",
+  "pending": false,
+  "nc": [
+   4,
+   3,
+   3
+  ]
+ },
+ {
+  "flow": "DC (Distribution Center)",
+  "phase": "Inbound DC",
+  "phmeta": "SOP-OPS-002 6.1",
+  "no": 3,
+  "name": "Paletisasi & put away",
+  "cond": "",
+  "pic": [
+   "Admin",
+   "Checker",
+   "Operator Forklift",
+   "Ops Section Head"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "6.1",
+  "ref": [
+   "DC",
+   18,
+   22
+  ],
+  "in": [
+   {
+    "t": "Good Receipt",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Label Pallet ID",
+    "sig": 0
+   },
+   {
+    "t": "Put Away Report",
+    "sig": 0
+   },
+   {
+    "t": "Inbound Confirmation Report",
+    "sig": 1
+   }
+  ],
+  "sys": "Scan put away di WMS",
+  "pending": false,
+  "nc": [
+   4,
+   3,
+   1
+  ]
+ },
+ {
+  "flow": "DC (Distribution Center)",
+  "phase": "Outbound DC",
+  "phmeta": "SOP-OPS-002 6.2",
+  "no": 4,
+  "name": "Persiapan & picking",
+  "cond": "",
+  "pic": [
+   "Admin",
+   "Picker"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "6.2",
+  "ref": [
+   "DC",
+   23,
+   28
+  ],
+  "in": [
+   {
+    "t": "Info pengeluaran (email)",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Job Information Outbound",
+    "sig": 0
+   },
+   {
+    "t": "Outbound Picking Report",
+    "sig": 0
+   }
+  ],
+  "sys": "Alokasi stok di WMS",
+  "pending": false,
+  "nc": [
+   0,
+   0,
+   0
+  ]
+ },
+ {
+  "flow": "DC (Distribution Center)",
+  "phase": "Outbound DC",
+  "phmeta": "SOP-OPS-002 6.2",
+  "no": 5,
+  "name": "Pemuatan & gate out",
+  "cond": "",
+  "pic": [
+   "Security",
+   "Admin",
+   "Checker",
+   "TKBM",
+   "Ops Section Head"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "6.2",
+  "ref": [
+   "DC",
+   29,
+   35
+  ],
+  "in": [
+   {
+    "t": "Dokumen outbound",
+    "sig": 0
+   },
+   {
+    "t": "Form Pemeriksaan Kabin",
+    "sig": 0
+   },
+   {
+    "t": "Form Pemeriksaan Kendaraan",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Outbound Confirmation Report",
+    "sig": 0
+   },
+   {
+    "t": "DO MKT",
+    "sig": 1
+   }
+  ],
+  "sys": "",
+  "pending": false,
+  "nc": [
+   3,
+   3,
+   3
+  ]
+ },
+ {
+  "flow": "DC (Distribution Center)",
+  "phase": "Proses pendukung (periodik)",
+  "phmeta": "SOP-OPS-006",
+  "no": null,
+  "name": "Cycle Count",
+  "cond": "",
+  "pic": [
+   "Inventory",
+   "Operasional",
+   "Account Officer"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "SOP-OPS-006 6.1",
+  "ref": [
+   "DC",
+   36,
+   42
+  ],
+  "in": [
+   {
+    "t": "Stock balance WMS (harian)",
+    "sig": 0
+   },
+   {
+    "t": "Count Sheet harian",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Berita Acara Cycle Count",
+    "sig": 1
+   }
+  ],
+  "sys": "Verifikasi hitung fisik vs stok WMS",
+  "pending": false,
+  "nc": [
+   5,
+   1,
+   1
+  ]
+ },
+ {
+  "flow": "DC (Distribution Center)",
+  "phase": "Proses pendukung (periodik)",
+  "phmeta": "SOP-OPS-006",
+  "no": null,
+  "name": "Stock Opname",
+  "cond": "",
+  "pic": [
+   "Inventory",
+   "Tim Stock Opname",
+   "Operasional"
+  ],
+  "main": "Gudang MKT",
+  "others": [],
+  "sop": "SOP-OPS-006 6.2",
+  "ref": [
+   "DC",
+   43,
+   53
+  ],
+  "in": [
+   {
+    "t": "Jadwal SO dari pelanggan (email)",
+    "sig": 0
+   },
+   {
+    "t": "Count Sheet kosong & ber-qty",
+    "sig": 0
+   }
+  ],
+  "out": [
+   {
+    "t": "Berita Acara Stock Opname (MKT & pelanggan)",
+    "sig": 1
+   }
+  ],
+  "sys": "WMS di-freeze saat hitung, lalu di-unfreeze",
+  "pending": false,
+  "nc": [
+   1,
+   0,
+   0
+  ]
+ }
+]

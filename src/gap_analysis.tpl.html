@@ -1,0 +1,409 @@
+<title>Gap Analysis Audit SOP</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: filter bar di atas, lalu tujuh bagian berurutan dari ringkasan ke daftar temuan; klik di heatmap, peringkat, atau tema menyaring daftar temuan di bagian akhir. */
+:root{
+  --bg:#f3f6f9; --surface:#ffffff; --surface2:#e9eef3; --fg:#14232f; --muted:#5a6b78; --line:#cfd8e0;
+  --accent:#0b4a6f; --accent-fg:#ffffff; --s1:#2a78d6; --grid:#dbe3ea;
+  --ok:#2f9e5b; --ok-bg:#d7efdf; --ok-fg:#0f4a29; --nc:#d03d36; --nc-bg:#f8d6d4; --nc-fg:#6b1511; --na:#8a949c; --na-bg:#e3e6e9; --na-fg:#3f484f;
+  --flag:#e0a800; --flag-fg:#7a5600; --ta:#0b4a6f; --tb:#6250d6; --tc:#8a6d00;
+  --f-display:'Barlow Condensed','Arial Narrow',sans-serif; --f-body:'Barlow','Segoe UI',system-ui,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c1a24; --surface:#122533; --surface2:#1a3142; --fg:#e6eef4; --muted:#93a6b4; --line:#27404f;
+  --accent:#6cc0ee; --accent-fg:#06222f; --s1:#3987e5; --grid:#233a4a;
+  --ok:#3fbf78; --ok-bg:#16402b; --ok-fg:#bdf0d0; --nc:#ef6a62; --nc-bg:#4a1d1c; --nc-fg:#ffd0cc; --na:#7d8a94; --na-bg:#2a353d; --na-fg:#c3ccd3;
+  --flag:#f2c230; --flag-fg:#f2c230; --ta:#6cc0ee; --tb:#9085e9; --tc:#eda100; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1a24; --surface:#122533; --surface2:#1a3142; --fg:#e6eef4; --muted:#93a6b4; --line:#27404f;
+  --accent:#6cc0ee; --accent-fg:#06222f; --s1:#3987e5; --grid:#233a4a;
+  --ok:#3fbf78; --ok-bg:#16402b; --ok-fg:#bdf0d0; --nc:#ef6a62; --nc-bg:#4a1d1c; --nc-fg:#ffd0cc; --na:#7d8a94; --na-bg:#2a353d; --na-fg:#c3ccd3;
+  --flag:#f2c230; --flag-fg:#f2c230; --ta:#6cc0ee; --tb:#9085e9; --tc:#eda100; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.4;
+  padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1300px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+header{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+h1{font-family:var(--f-display);font-weight:700;font-size:34px;line-height:1;margin:0}
+.sub{color:var(--muted);margin-top:6px;font-size:13px}
+.theme{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:6px 10px;font-size:12px}
+.lab{font-family:var(--f-display);font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface);flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:7px 14px;font-weight:500;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.seg button:disabled{color:var(--muted);cursor:not-allowed;opacity:.6}
+section.blk{display:flex;flex-direction:column;gap:12px;min-width:0}
+h2{font-family:var(--f-display);font-weight:700;font-size:24px;margin:0;letter-spacing:.01em}
+.lead{color:var(--muted);max-width:80ch;margin:0;font-size:13.5px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;min-width:0}
+.mono{font-family:var(--f-mono)}
+/* compliance dumbbell */
+.cmp{display:grid;grid-template-columns:minmax(150px,210px) minmax(220px,1fr) minmax(140px,190px);gap:6px 16px;align-items:center}
+.cmp .h{font-size:12px;color:var(--muted)}
+.cn{font-weight:600}.cn small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.trk{position:relative;height:26px}
+.trk::before{content:"";position:absolute;left:0;right:0;top:12px;height:2px;background:var(--grid)}
+.tick{position:absolute;top:4px;bottom:4px;width:1px;background:var(--grid)}
+.tl{position:absolute;top:100%;font-size:10.5px;color:var(--muted);transform:translateX(-50%);font-family:var(--f-mono)}
+.mk{position:absolute;top:6px;width:14px;height:14px;border-radius:50%;transform:translateX(-50%);border:2px solid var(--surface);box-shadow:0 0 0 2px var(--muted);background:var(--surface)}
+.mk.adj{background:var(--s1);box-shadow:0 0 0 2px var(--s1)}
+.link{position:absolute;top:12px;height:3px;background:var(--s1);opacity:.5}
+.cv{font-family:var(--f-mono);font-size:12.5px;font-variant-numeric:tabular-nums}
+.cv .dn{color:var(--nc)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid var(--muted)}
+.dot.a{background:var(--s1);border-color:var(--s1)}
+/* gap type cards */
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.gc{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:6px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-width:0;text-align:left}
+.gc:hover{border-color:var(--c)}
+.gc.on{box-shadow:0 0 0 2px var(--c)}
+.gh{display:flex;gap:10px;align-items:center}
+.tp{flex:none;width:26px;height:26px;border-radius:5px;background:var(--c);color:var(--surface);font:700 14px/26px var(--f-mono);text-align:center}
+.gn{font-family:var(--f-display);font-weight:600;font-size:19px;line-height:1.1}
+.gv{font-family:var(--f-display);font-weight:700;font-size:34px;line-height:1;margin-left:auto}
+.gv small{font-size:12px;font-family:var(--f-body);font-weight:400;color:var(--muted);display:block;text-align:right}
+.gc p{margin:0;font-size:13px}
+.gc dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12.5px}
+.gc dt{color:var(--muted)} .gc dd{margin:0}
+.ta{--c:var(--ta)}.tb{--c:var(--tb)}.tc{--c:var(--tc)}
+/* heatmap */
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+.hm th,.hm td{padding:6px 10px;font-size:13px;border-bottom:1px solid var(--line);text-align:left}
+.hm th{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
+.hm td.n{text-align:center;font-family:var(--f-mono);font-variant-numeric:tabular-nums;min-width:74px}
+.hm tr.sh td{background:var(--surface2);font-family:var(--f-display);font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.hm tbody tr:not(.sh){cursor:pointer}
+.hm tbody tr:not(.sh):hover td:first-child{text-decoration:underline}
+.hm .sid{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);margin-right:8px}
+.hm td.pe{background:repeating-linear-gradient(45deg,transparent 0 5px,var(--grid) 5px 6px)}
+/* ranking */
+.rk{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.rkh{font-family:var(--f-display);font-weight:600;font-size:16px;margin-bottom:8px}
+.br{display:grid;grid-template-columns:minmax(90px,150px) 1fr;gap:3px 10px;align-items:center;padding:3px 0;border:0;background:none;width:100%;text-align:left}
+.br:hover .bn{text-decoration:underline}
+.bn{font-size:12.5px;overflow-wrap:anywhere}
+.bt{position:relative;height:16px;display:block}
+.bf{display:block;height:100%;background:var(--s1);border-radius:0 4px 4px 0;min-width:2px}
+.bv{position:absolute;top:0;left:0;height:100%;display:flex;align-items:center;padding-left:6px;font-family:var(--f-mono);font-size:11px;white-space:nowrap}
+.bv.out{color:var(--fg)}
+.bs{grid-column:2;font-size:11px;color:var(--muted);margin-top:-2px;padding-bottom:3px}
+/* themes */
+details.th{background:var(--surface);border:1px solid var(--line);border-radius:6px}
+details.th>summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+details.th>summary::-webkit-details-marker{display:none}
+details.th>summary::before{content:"▸";color:var(--muted);transition:transform .15s}
+details.th[open]>summary::before{transform:rotate(90deg)}
+.tt{font-family:var(--f-display);font-weight:600;font-size:19px;line-height:1.15;flex:1 1 280px;min-width:0}
+.tps{display:flex;gap:4px}
+.tp.s{width:22px;height:22px;font-size:12px;line-height:22px}
+.tcnt{font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.tcnt b{color:var(--nc);font-weight:500}
+.tb2{padding:0 14px 14px;display:flex;flex-direction:column;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.rc{display:inline-flex;align-items:center;gap:6px;border:1.5px solid;border-radius:4px;padding:1px 7px;font-family:var(--f-mono);font-size:11.5px;background:var(--surface)}
+.rc.ok{border-color:var(--ok);background:var(--ok-bg);color:var(--ok-fg)} .rc.nc{border-color:var(--nc);background:var(--nc-bg);color:var(--nc-fg)} .rc.na{border-color:var(--na);background:var(--na-bg);color:var(--na-fg)} .rc.pe{border-color:var(--muted);color:var(--muted)}
+.rc.fl{border-style:dashed;border-color:var(--flag)}
+.rc i{width:6px;height:6px;border-radius:50%;display:inline-block}
+.rc i.ok{background:var(--ok)}.rc i.nc{background:var(--nc)}.rc i.na{background:var(--na)}
+.tb2 dl{margin:0;display:grid;grid-template-columns:130px 1fr;gap:6px 14px;font-size:13px}
+.tb2 dt{color:var(--muted)} .tb2 dd{margin:0;min-width:0}
+.btn{border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:6px;padding:5px 12px;font-size:12.5px;align-self:flex-start}
+/* quality */
+.q table td,.q table th{padding:7px 10px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top;text-align:left}
+.q table th{font-size:12px;color:var(--muted)}
+.fcode{font-family:var(--f-mono);font-size:11.5px}
+/* list */
+.fb{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.fc{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:2px 4px 2px 10px;font-size:12.5px;background:var(--surface)}
+.fc button{border:0;background:transparent;color:inherit;font-size:15px;line-height:1;padding:0 6px}
+.lt td,.lt th{padding:6px 8px;border-bottom:1px solid var(--line);font-size:12.5px;text-align:left;vertical-align:top}
+.lt th{font-size:11.5px;color:var(--muted);position:sticky;top:0;background:var(--surface)}
+.st{font-family:var(--f-mono);font-size:11px;border:1px solid;border-radius:3px;padding:0 6px;white-space:nowrap}
+.st.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok-fg)}.st.nc{background:var(--nc-bg);border-color:var(--nc);color:var(--nc-fg)}.st.na{background:var(--na-bg);border-color:var(--na);color:var(--na-fg)}
+.fgl{font-family:var(--f-mono);font-size:11px;color:var(--flag-fg)}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px}
+@media (max-width:760px){h1{font-size:28px}.cmp{grid-template-columns:1fr}.cmp .h{display:none}.tb2 dl{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Gap Analysis Audit SOP</h1>
+      <div class="sub" id="meta"></div>
+      <div class="sub">Alur dan langkah per proses: <a href="https://claude.ai/artifact/NhcRGKS439K5Zp3t4hSCoB" target="_blank" rel="noopener">Alur Proses Umum MKT</a> · <a href="https://claude.ai/artifact/BJT6LtxNaK9XCRtYchj9AT" target="_blank" rel="noopener">Peta Proses Audit SOP</a></div>
+    </div>
+    <button class="theme" id="themeBtn" type="button">Tema: otomatis</button>
+  </header>
+
+  <div class="row">
+    <span class="lab">Cabang</span><div class="seg" id="siteSeg"></div>
+    <span class="lab">Status</span><div class="seg" id="viewSeg">
+      <button type="button" data-v="rep" aria-pressed="true">As reported</button><button type="button" data-v="adj" aria-pressed="false">Adjusted</button></div>
+    <span class="lab">Lokasi DC (bagian 2 sampai 7)</span><div class="seg" id="locSeg"></div>
+  </div>
+  <p class="lead" style="margin-top:-14px">Satuan hitung adalah <b>temuan</b>: satu langkah di satu proses, dan untuk DC satu langkah di satu lokasi (Semper, Marcen, Dokumen). Jadi satu langkah DC yang NC di tiga lokasi dihitung tiga kali. Status Adjusted menghitung ulang item bertanda <span class="mono">status_conflict</span> (NON-COMPLY atau N/A). Langkah yang belum diaudit tidak ikut perhitungan.</p>
+
+  <section class="blk" id="s1"><h2>Compliance per proses</h2>
+    <p class="lead">Compliance = COMPLY dibagi (COMPLY + NON-COMPLY), N/A tidak dihitung. Bagian ini selalu menampilkan semua lokasi DC.</p>
+    <div class="panel"><div class="legend" style="margin-bottom:12px"><span><i class="dot"></i>As reported</span><span><i class="dot a"></i>Adjusted</span><span>Garis penghubung menunjukkan selisih</span></div><div class="cmp" id="cmp"></div></div>
+  </section>
+
+  <section class="blk" id="s2"><h2>Jenis gap dan pemiliknya</h2>
+    <p class="lead">Satu temuan masuk ke satu jenis. Klasifikasi ini usulan awal dari isi temuan dan catatan auditor, jadi perlu dikonfirmasi auditor. Klik kartu untuk menyaring daftar temuan di bagian 7.</p>
+    <div class="g3" id="g3"></div>
+  </section>
+
+  <section class="blk" id="s3"><h2>Heatmap tahap proses x status</h2>
+    <p class="lead">Intensitas warna adalah porsi status itu dalam tahap. Klik baris untuk melihat temuannya.</p>
+    <div class="panel scroll"><table class="hm" id="hm"></table></div>
+  </section>
+
+  <section class="blk" id="s4"><h2>Peringkat NON-COMPLY</h2>
+    <p class="lead">Jumlah temuan NON-COMPLY, dengan porsinya terhadap seluruh langkah aktor, kategori, atau SOP itu. Klik batang untuk menyaring daftar temuan.</p>
+    <div class="rk" id="rk"></div>
+  </section>
+
+  <section class="blk" id="s5"><h2>Tema gap lintas proses</h2>
+    <p class="lead">Sembilan tema dari prompt dan satu tambahan dari data (SOP tidak sesuai praktik). Tiap tema sudah dicocokkan dengan data. Catatan "Verifikasi" memuat selisih dengan prompt jika ada.</p>
+    <div id="themes" style="display:flex;flex-direction:column;gap:8px"></div>
+  </section>
+
+  <section class="blk q" id="s6"><h2>Kualitas data</h2>
+    <p class="lead">Flag QA tidak mengubah data sumber. Bagian ini juga memuat hal yang saya temukan saat verifikasi dan belum ada di prompt, sebagai bahan tinjau ulang auditor.</p>
+    <div class="panel scroll"><table id="qf"></table></div>
+    <div class="panel scroll"><table id="qx"></table></div>
+  </section>
+
+  <section class="blk" id="s7"><h2>Daftar temuan</h2>
+    <div class="fb" id="fb"></div>
+    <div class="panel scroll" style="max-height:640px;overflow-y:auto"><table class="lt" id="lt"></table></div>
+  </section>
+</div>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+const DATA=JSON.parse(document.getElementById('data').textContent);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const LOCS=['SEMPER','MARCEN','DOKUMEN'],LOCN={SEMPER:'Semper',MARCEN:'Marcen',DOKUMEN:'Dokumen'};
+const SHN={EXPORT:'Export',IMPORT:'Import',DC:'DC',TRUCKING:'Trucking'};
+const CLS={'COMPLY':'ok','NON-COMPLY':'nc','N/A':'na','PENDING':'pe'};
+const CATN={DOC:'Dokumen',COMP:'Compliance',SYS:'Sistem / WMS',OPS:'Operasional'};
+const adjOf=f=>!f?null:f==='status_conflict_should_be_NA'?'N/A':f.startsWith('status_conflict')?'NON-COMPLY':null;
+const FLAGTXT={status_conflict_finding_says_not_run:'COMPLY, tetapi temuan menyebut belum dijalankan',status_conflict_finding_says_not_received:'COMPLY, tetapi temuan menyebut dokumen tidak diterima',status_conflict_should_be_NA:'COMPLY, tetapi proses sudah tidak ada di lapangan',sop_outdated:'SOP tidak sesuai praktik',sop_inconsistent_16_vs_17:'SOP tidak konsisten antar dokumen',deviation_but_comply:'COMPLY dengan penyimpangan dari kalimat SOP',form_gap:'Form/dokumen/WMS belum menyediakan',improvement_note:'Catatan perbaikan'};
+
+/* klasifikasi manual (usulan) dan item N/A yang tetap dihitung sebagai temuan karena temuannya gap sistem */
+const GT={'IMPORT-51':'b','IMPORT-62':'b','IMPORT-55':'b','EXPORT-55':'b','EXPORT-61':'b','IMPORT-61':'b','DC-17':'b','IMPORT-26':'b'};
+const FORCE=new Set(['EXPORT-55','EXPORT-61','IMPORT-61']);
+
+const OBS=[];
+DATA.sheets.forEach(s=>{
+  const secs=Object.fromEntries(s.sections.map(x=>[x.id,x]));
+  s.items.forEach(it=>{
+    const mk=(raw,loc,finding)=>OBS.push({sheet:s.sheet,no:it.no,loc,sec:it.section,secName:secs[it.section].name,actor:it.actor,cat:it.category,sop:it.sop_ref,crit:it.criterion,raw,flag:it.qa_flag||'',finding:finding||'',note:it.auditor_note||'',orig:it.orig_no?`Export ${it.orig_no}`:''});
+    if(s.sheet==='DC')LOCS.forEach(l=>mk(it.status[l],l,l==='SEMPER'?it.finding_semper:l==='MARCEN'?it.finding_marcen:it.finding));
+    else mk(it.status,null,it.finding);
+  });
+});
+const key=o=>o.sheet+'-'+o.no;
+const st={view:'rep',dcloc:'ALL',f:{sheet:'',gt:'',sec:'',actor:'',cat:'',sop:'',theme:'',all:false}};
+function eff(o){if(st.view==='adj'&&o.raw==='COMPLY'){const a=adjOf(o.flag);if(a)return a}return o.raw}
+function gtype(o){
+  const g=GT[key(o)];if(g)return g;const f=o.flag;
+  if(f==='form_gap'||f==='improvement_note')return 'b';
+  if(f.startsWith('sop_')||f==='status_conflict_should_be_NA')return 'c';
+  if(f)return 'a';
+  return eff(o)==='NON-COMPLY'?'a':null;
+}
+const isTem=o=>eff(o)==='NON-COMPLY'||!!o.flag||FORCE.has(key(o));
+const vis=()=>OBS.filter(o=>o.sheet!=='DC'||st.dcloc==='ALL'||o.loc===st.dcloc);
+const grpOf=o=>o.sheet==='DC'?'DC '+LOCN[o.loc]:o.sheet==='TRUCKING'?(o.sec==='T1'?'Trucking: penarikan empty':'Trucking: penarikan full'):SHN[o.sheet];
+const procOf=o=>o.sheet==='DC'?'DC '+LOCN[o.loc]:SHN[o.sheet];
+const pct=(c,n)=>c+n?c/(c+n)*100:null;
+const fmt=x=>x==null?'-':x.toFixed(1).replace('.',',')+'%';
+
+/* ---------- 1 compliance ---------- */
+function renderCmp(){
+  const groups=['Export','Import','DC Semper','DC Marcen','DC Dokumen','Trucking: penarikan empty','Trucking: penarikan full'];
+  let h='<div class="h">Proses</div><div class="h">Compliance (0 sampai 100%)</div><div class="h">As reported → adjusted</div>';
+  groups.forEach(g=>{
+    const os=OBS.filter(o=>grpOf(o)===g);
+    const cnt=f=>{let c=0,n=0,na=0,pe=0;os.forEach(o=>{const s=f(o);if(s==='COMPLY')c++;else if(s==='NON-COMPLY')n++;else if(s==='PENDING')pe++;else na++});return{c,n,na,pe}};
+    const r=cnt(o=>o.raw),a=cnt(o=>{if(o.raw==='COMPLY'&&adjOf(o.flag))return adjOf(o.flag);return o.raw});
+    const pr=pct(r.c,r.n),pa=pct(a.c,a.n);
+    const sub=pr==null?`${os.length} langkah, belum diaudit`:`${r.c} comply · ${r.n} NC · ${r.na} N/A`;
+    let trk='<div class="trk">'+[0,25,50,75,100].map(t=>`<span class="tick" style="left:${t}%"></span><span class="tl" style="left:${t}%">${t}</span>`).join('');
+    let val;
+    if(pr==null){trk+='';val='<span style="color:var(--muted)">belum diaudit</span>'}
+    else{
+      if(pa!==pr)trk+=`<span class="link" style="left:${Math.min(pa,pr)}%;width:${Math.abs(pr-pa)}%"></span>`;
+      trk+=`<span class="mk" style="left:${pr}%" title="As reported ${fmt(pr)}"></span><span class="mk adj" style="left:${pa}%" title="Adjusted ${fmt(pa)}"></span>`;
+      val=`${fmt(pr)} → ${fmt(pa)}`+(pa!==pr?` <span class="dn">▼${(pr-pa).toFixed(1).replace('.',',')}</span>`:'');
+    }
+    trk+='</div>';
+    h+=`<div class="cn">${esc(g)}<small>${sub}</small></div>${trk}<div class="cv">${val}</div>`;
+  });
+  $('cmp').innerHTML=h;
+}
+
+/* ---------- 2 jenis gap ---------- */
+const GTYPES=[
+ {k:'a',n:'Kepatuhan petugas',d:'Petugas tidak menjalankan langkah yang sudah ada di SOP, form, atau sistem.',own:'Ops Section Head dan Warehouse Manager di tiap lokasi',act:'Briefing ulang, supervisi harian, cek berkala (mis. audit mendadak), penugasan PIC yang jelas.'},
+ {k:'b',n:'Form, dokumen, atau WMS belum menyediakan',d:'Petugas tidak bisa patuh karena form, kolom TTD, atau fitur WMS belum ada.',own:'Bisdev & Service Integrity (pemilik form dan SOP) bersama tim WMS',act:'Buat atau revisi form (BA, kolom TTD), minta fitur WMS (freeze, surat jalan inbound), terbitkan revisi form.'},
+ {k:'c',n:'SOP tidak sesuai praktik',d:'Praktik di lapangan sudah berubah atau SOP saling bertentangan, jadi yang perlu diperbaiki adalah SOP-nya.',own:'Bisdev & Service Integrity (pembuat SOP), disetujui Warehouse Manager',act:'Revisi SOP agar sesuai proses terkini atau putuskan bahwa praktik lapangan yang harus dikembalikan.'}];
+function renderG3(){
+  const v=vis().filter(isTem);
+  $('g3').innerHTML=GTYPES.map(t=>{
+    const os=v.filter(o=>gtype(o)===t.k),nc=os.filter(o=>eff(o)==='NON-COMPLY').length,fl=os.length-nc;
+    const by={};os.forEach(o=>by[procOf(o).split(' ')[0]]=(by[procOf(o).split(' ')[0]]||0)+1);
+    return `<button class="gc t${t.k}${st.f.gt===t.k?' on':''}" data-gt="${t.k}" type="button"><div class="gh"><span class="tp">${t.k.toUpperCase()}</span><span class="gn">${t.n}</span><span class="gv">${os.length}<small>temuan</small></span></div>
+     <p>${t.d}</p><dl><dt>NON-COMPLY</dt><dd class="mono">${nc}</dd><dt>Bertanda atau N/A</dt><dd class="mono">${fl}</dd><dt>Sebaran</dt><dd>${Object.entries(by).map(([k,n])=>k+' '+n).join(' · ')||'-'}</dd><dt>Owner usulan</dt><dd>${t.own}</dd><dt>Tindakan</dt><dd>${t.act}</dd></dl></button>`}).join('');
+  $('g3').querySelectorAll('.gc').forEach(b=>b.onclick=()=>setF('gt',b.dataset.gt));
+}
+
+/* ---------- 3 heatmap ---------- */
+function renderHm(){
+  const v=vis(),shs=['EXPORT','IMPORT','DC','TRUCKING'];
+  let h='<thead><tr><th>Tahap</th><th class="n">COMPLY</th><th class="n">NON-COMPLY</th><th class="n">N/A</th><th class="n">Belum diaudit</th><th class="n">NC %</th></tr></thead><tbody>';
+  shs.forEach(sh=>{
+    const secs=DATA.sheets.find(s=>s.sheet===sh).sections;
+    h+=`<tr class="sh"><td colspan="6">${sh==='DC'&&st.dcloc!=='ALL'?'DC '+LOCN[st.dcloc]:SHN[sh]}</td></tr>`;
+    secs.forEach(sec=>{
+      const os=v.filter(o=>o.sheet===sh&&o.sec===sec.id),n=os.length,c={};
+      os.forEach(o=>{const s=eff(o);c[s]=(c[s]||0)+1});
+      const cell=(k,col)=>{const x=c[k]||0,p=n?x/n:0;return `<td class="n${k==='PENDING'&&x?' pe':''}" style="${k!=='PENDING'&&x?`background:color-mix(in srgb,var(${col}) ${Math.round(p*55)}%,var(--surface))`:''}" title="${x} dari ${n} (${Math.round(p*100)}%)">${x||'·'}</td>`};
+      const rate=pct(c['COMPLY']||0,c['NON-COMPLY']||0);
+      h+=`<tr data-sec="${sh}|${sec.id}"><td><span class="sid">${sec.id}</span>${esc(sec.name)}</td>${cell('COMPLY','--ok')}${cell('NON-COMPLY','--nc')}${cell('N/A','--na')}${cell('PENDING','--na')}<td class="n">${rate==null?'-':fmt(100-rate)}</td></tr>`;
+    });
+  });
+  $('hm').innerHTML=h+'</tbody>';
+  $('hm').querySelectorAll('tr[data-sec]').forEach(r=>r.onclick=()=>setF('sec',r.dataset.sec));
+}
+
+/* ---------- 4 peringkat ---------- */
+function rankPanel(title,keyFn,labelFn,fkey,limit){
+  const v=vis().filter(o=>eff(o)!=='PENDING'),tot={},nc={};
+  v.forEach(o=>{const k=keyFn(o);tot[k]=(tot[k]||0)+1;if(eff(o)==='NON-COMPLY')nc[k]=(nc[k]||0)+1});
+  const list=Object.keys(nc).sort((a,b)=>nc[b]-nc[a]||tot[b]-tot[a]).slice(0,limit),mx=Math.max(1,...list.map(k=>nc[k]));
+  return `<div class="panel"><div class="rkh">${title}</div>`+(list.length?list.map(k=>`<button class="br" type="button" data-k="${esc(fkey)}" data-v="${esc(k)}"><span class="bn">${esc(labelFn(k))}</span><span class="bt"><span class="bf" style="width:${nc[k]/mx*100}%"></span><span class="bv ${nc[k]/mx<.18?'':'in'}" style="${nc[k]/mx<.18?`left:${nc[k]/mx*100}%`:'color:#fff'}">${nc[k]}</span></span><span class="bs">${nc[k]} dari ${tot[k]} langkah (${fmt(nc[k]/tot[k]*100)})</span></button>`).join(''):'<div class="lead">Tidak ada temuan NON-COMPLY.</div>')+'</div>';
+}
+function renderRk(){
+  $('rk').innerHTML=rankPanel('Per aktor (12 teratas)',o=>o.actor,x=>x,'actor',12)+rankPanel('Per kategori',o=>o.cat,x=>CATN[x]||x,'cat',4)+rankPanel('Per acuan SOP (10 teratas)',o=>o.sop,x=>x,'sop',10);
+  $('rk').querySelectorAll('.br').forEach(b=>b.onclick=()=>setF(b.dataset.k,b.dataset.v));
+}
+
+/* ---------- 5 tema ---------- */
+const R=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
+const THEMES=[
+ {id:'ba-cc',t:'BA Cycle Count tidak digunakan di semua area',ty:['b'],refs:[['EXPORT',[51]],['IMPORT',[51]],['DC',[42]]],
+  ver:'Terverifikasi: 5 dari 5 temuan NON-COMPLY (Export, Import, DC Semper, Marcen, Dokumen).',root:'Belum ada form BA Cycle Count (Import 51, DC 42 bertanda form_gap). Hasil cycle count hanya dilaporkan lewat email ke PIC dan atasan.',own:'Bisdev & Service Integrity (form), Inventory (pengguna)',act:'Buat form BA Cycle Count standar, masukkan ke SOP-OPS-006, lalu sosialisasikan.'},
+ {id:'ba-so',t:'BA Stock Opname belum digunakan',ty:['b','a'],refs:[['EXPORT',[62]],['IMPORT',[62]],['DC',[53]]],
+  ver:'Terverifikasi: Export 62 dan Import 62 NON-COMPLY; DC 53 NON-COMPLY hanya di Semper (Marcen dan Dokumen COMPLY). Import 62 menyebut "tidak ada form BA", Export 62 dan DC 53 hanya "belum digunakan", jadi akar masalahnya belum tentu sama.',root:'Import: form BA tidak ada. Export dan DC Semper: BA belum dipakai setelah SO selesai (sebab belum dicatat auditor).',own:'Bisdev & Service Integrity (form), Inventory dan Ops (pelaksana)',act:'Pastikan form BA SO tersedia di semua lokasi, wajibkan penandatanganan MKT dan pelanggan, lalu cek di SO berikutnya.'},
+ {id:'komunikasi',t:'Komunikasi formal lewat WA atau telepon, bukan email atau BA',ty:['a','c'],refs:[['EXPORT',[6,7,29]],['IMPORT',[14,21]],['DC',[6,31]]],
+  ver:'Terverifikasi sebagian: 4 NON-COMPLY (Export 7, 29; Import 14, 21) dan 3 COMPLY dengan penyimpangan (Export 6, DC 6, DC 31: konfirmasi WA atau telepon dulu, baru email). Import 21 menyebut belum ada standar komunikasi, bukan WA atau telepon secara eksplisit.',root:'SOP meminta email resmi, praktiknya WA atau telepon dengan email menyusul. Belum ada kanal yang disepakati sebagai resmi.',own:'Operational Spv dan Bisdev & Service Integrity',act:'Putuskan kanal resmi: tegakkan email, atau akui WA group resmi di SOP dengan rekap email harian.'},
+ {id:'ttd-osh',t:'Tanda tangan Ops Section Head tidak ada',ty:['b','a'],refs:[['DC',[16,17,22,35]]],
+  ver:'Terverifikasi: 4 langkah, status NON-COMPLY di ketiga lokasi (12 temuan). DC 22 dan 35 bertanda form_gap (kolom TTD tidak ada di dokumen atau WMS). DC 17: WMS belum mengakomodasi surat jalan inbound. DC 16 tidak bertanda: contoh GR bertanda tangan ada di Marcen, jadi form tersedia.',root:'Dokumen dan WMS tidak punya kolom TTD Ops Section Head, kecuali Good Receipt yang contohnya sudah ada.',own:'Bisdev & Service Integrity dan tim WMS (22, 35, 17); Ops Section Head (16)',act:'Tambah kolom TTD di dokumen inbound, DO MKT, dan WMS; untuk GR terapkan contoh dari Marcen ke Semper.'},
+ {id:'kabin',t:'Form pemeriksaan kabin atau kendaraan tidak dipakai',ty:['a'],refs:[['DC',[3,11,30,32]]],
+  ver:'Terverifikasi: 11 dari 12 temuan NON-COMPLY. DC 3 Marcen berstatus COMPLY padahal temuannya "dilakukan tetapi tanpa form standar", sama dengan DC 11 dan 32 yang NON-COMPLY (lihat bagian 6).',root:'Pernah disosialisasikan dan sempat jalan (dari QHSE saat ada PASI), lalu berhenti.',own:'Security Supervisor dan Ops Section Head; QHSE',act:'Sosialisasi ulang, taruh form di pos dan di titik bongkar muat, cek berkala oleh QHSE.'},
+ {id:'cc-harian',t:'Cycle count harian belum berjalan (baru mingguan)',ty:['a','c'],refs:[['EXPORT',R(45,51)],['IMPORT',R(45,46)],['DC',R(37,41)]],
+  ver:'Terverifikasi dengan catatan: Export 45 sampai 50 dan Import 45 sampai 46 berstatus COMPLY padahal temuannya "belum dijalankan" (bertanda status_conflict). DC Semper 37, 38, 40, 41 NON-COMPLY dan 39 N/A (dilakukan Inventory HO). Marcen dan Dokumen COMPLY.',root:'Tidak ada stockkeeper in-charge di DC Export; cycle count baru mingguan.',own:'Warehouse Manager dan Inventory',act:'Tetapkan stockkeeper in-charge, atau jika mingguan memang realistis, revisi frekuensi di SOP-OPS-006.'},
+ {id:'so-import',t:'Stock Opname belum berkala dan tuntas; WMS tanpa fitur freeze',ty:['a','b'],refs:[['IMPORT',R(52,62)],['EXPORT',[55,61]]],
+  ver:'Terverifikasi: Import 52, 54 sampai 60, dan 62 NON-COMPLY (9 langkah); Import 53 dan 61 N/A. Export 55 dan 61 N/A karena "tidak ada menu freeze di WMS". Catatan: Import 59 dan 60 NON-COMPLY padahal temuannya "tidak ditemukan selisih" (lihat bagian 6).',root:'SO berkala belum dilakukan; saat SO sistem tidak pernah di-lock karena WMS tidak punya menu freeze.',own:'Inventory (jadwal SO), tim WMS (freeze)',act:'Jadwalkan SO berkala Import, minta fitur freeze di WMS, dan input hasil SO ke WMS bukan ke drive tim.'},
+ {id:'pallet',t:'Disiplin Pallet ID, scanning, dan lokasi',ty:['a'],refs:[['EXPORT',[18]],['IMPORT',[23,32]],['DC',R(18,21)]],
+  ver:'Terverifikasi: Import 23, 32 NON-COMPLY; DC 18 sampai 21 NON-COMPLY terutama di Semper (21 hanya di Marcen). Export 18 COMPLY dengan catatan perbaikan posisi Pallet ID.',root:'Pallet ID tidak konsisten diserahkan dan ditempel, put away tanpa scan, forklift langsung ke lokasi kosong.',own:'Ops Section Head dan Checker',act:'Wajibkan scan saat put away, standar posisi Pallet ID, dan pemeriksaan lokasi oleh supervisor.'},
+ {id:'input',t:'Input sistem terlambat atau salah',ty:['a'],refs:[['IMPORT',[14,33,58]],['DC',[8,9,10]]],
+  ver:'Terverifikasi: Import 14 NON-COMPLY (salah input gate in) dan DC 8, 9, 10 NON-COMPLY di Semper (Job Order dibuat setelah selesai bongkar). Tambahan dari saya: Import 33 (input lokasi setelah barang masuk lokasi, COMPLY dengan penyimpangan) dan Import 58 (hasil SO diinput di drive, bukan WMS).',root:'Input dilakukan setelah pekerjaan fisik selesai, bukan sebelumnya.',own:'Admin dan Trucking Support; Ops Section Head',act:'Tetapkan batas waktu input (sebelum bongkar), dan cek keterlambatan lewat laporan WMS.'},
+ {id:'sop-usang',t:'SOP tidak sesuai praktik (tambahan dari data)',ty:['c'],refs:[['EXPORT',[27]],['IMPORT',[25,27,42]],['DC',[7]]],
+  ver:'Dari flag QA: Export 27 (peran surveyor sudah tidak ada) dan Import 42 (MKT tidak melakukan redress) seharusnya N/A; Import 25 dan 27 sop_outdated (BC tidak lagi menandatangani, hanya stempel); DC 7 sop_inconsistent (overtime 16:00 vs 17:00, praktik 17:00).',root:'SOP belum diperbarui mengikuti perubahan peran dan proses.',own:'Bisdev & Service Integrity, disetujui Warehouse Manager',act:'Revisi SOP: hapus peran surveyor di langkah stuffing, ubah tanda tangan BC menjadi stempel, keluarkan redress, samakan batas overtime.'}
+];
+function chipFor(sh,no){
+  const os=OBS.filter(o=>o.sheet===sh&&o.no===no);if(!os.length)return '';
+  const dc=sh==='DC',main=dc?'':CLS[eff(os[0])],fl=os.some(o=>o.flag&&(o.flag.startsWith('status_conflict')||o.flag.startsWith('sop_')));
+  const dots=dc?os.map(o=>`<i class="${CLS[eff(o)]}" title="${LOCN[o.loc]}: ${eff(o)}"></i>`).join(''):'';
+  return `<span class="rc ${main}${fl?' fl':''}" title="${esc(os[0].crit)}">${SHN[sh]} ${no}${dots}</span>`;
+}
+function renderThemes(){
+  const open=[...document.querySelectorAll('details.th[open]')].map(d=>d.dataset.id);
+  $('themes').innerHTML=THEMES.map(t=>{
+    const os=OBS.filter(o=>t.refs.some(([s,ns])=>o.sheet===s&&ns.includes(o.no))&&(o.sheet!=='DC'||st.dcloc==='ALL'||o.loc===st.dcloc));
+    const nc=os.filter(o=>eff(o)==='NON-COMPLY').length;
+    return `<details class="th" data-id="${t.id}"${open.includes(t.id)?' open':''}><summary><span class="tt">${esc(t.t)}</span><span class="tps">${t.ty.map(k=>`<span class="tp s t${k}" title="Jenis gap ${k.toUpperCase()}">${k.toUpperCase()}</span>`).join('')}</span><span class="tcnt"><b>${nc}</b> NC dari ${os.length} temuan</span></summary>
+    <div class="tb2"><div class="chips">${t.refs.map(([s,ns])=>ns.map(n=>chipFor(s,n)).join('')).join('')}</div>
+    <dl><dt>Verifikasi data</dt><dd>${esc(t.ver)}</dd><dt>Akar masalah</dt><dd>${esc(t.root)}</dd><dt>Owner usulan</dt><dd>${esc(t.own)}</dd><dt>Tindakan usulan</dt><dd>${esc(t.act)}</dd></dl>
+    <button class="btn" type="button" data-th="${t.id}">Lihat temuan tema ini</button></div></details>`}).join('');
+  $('themes').querySelectorAll('.btn').forEach(b=>b.onclick=()=>setF('theme',b.dataset.th));
+}
+
+/* ---------- 6 kualitas data ---------- */
+function renderQ(){
+  const fl={};OBS.filter(o=>o.flag&&(o.sheet!=='DC'||o.loc==='SEMPER')).forEach(o=>{(fl[o.flag]=fl[o.flag]||[]).push(o)});
+  let h='<thead><tr><th>Flag QA</th><th>Arti</th><th>Item</th><th>Pengaruh ke compliance</th></tr></thead><tbody>';
+  Object.keys(FLAGTXT).forEach(f=>{
+    const os=fl[f]||[];if(!os.length)return;
+    const eft=f==='status_conflict_should_be_NA'?'Dikeluarkan dari perhitungan (N/A) di Adjusted':f.startsWith('status_conflict')?'Dihitung NON-COMPLY di Adjusted':'Tidak mengubah angka; hanya ditandai';
+    h+=`<tr><td class="fcode">${f}</td><td>${FLAGTXT[f]}</td><td>${os.map(o=>`${SHN[o.sheet]} ${o.no}`).join(', ')}</td><td>${eft}</td></tr>`;
+  });
+  $('qf').innerHTML=h+'</tbody>';
+  const X=[
+   ['Import 16','Bertanda status_conflict_finding_says_not_received dan dihitung NON-COMPLY di Adjusted. Tidak ada di prompt; saya tambahkan karena pola flag-nya sama.','COMPLY, temuan "tidak menerima lampiran izin stripping"'],
+   ['DC 3 (Marcen)','COMPLY, padahal temuannya "dilakukan tetapi tanpa form standar". DC 11 dan 32 dengan temuan serupa NON-COMPLY.','Penilaian tidak konsisten antar langkah'],
+   ['Import 59, 60','NON-COMPLY, padahal temuannya "tidak ditemukan selisih kargo". Kemungkinan seharusnya N/A karena SO berkala belum dilakukan.','Meninjau ulang status'],
+   ['Export 55, 61; Import 61','N/A karena WMS tidak punya menu freeze. Itu gap sistem, jadi N/A menyembunyikannya. Sebaliknya Import 55 dengan alasan serupa berstatus NON-COMPLY.','Samakan perlakuan N/A vs NON-COMPLY untuk gap WMS'],
+   ['DC 39 (Semper)','N/A karena cycle count dilakukan Inventory HO. Aman, tapi berarti compliance Semper bergantung pada HO.','Catatan']];
+  $('qx').innerHTML='<thead><tr><th>Item</th><th>Observasi</th><th>Saran</th></tr></thead><tbody>'+X.map(r=>`<tr><td class="fcode">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')+'</tbody>';
+}
+
+/* ---------- 7 daftar ---------- */
+const THEME_OF=id=>THEMES.find(t=>t.id===id);
+function matches(o){
+  const f=st.f;
+  if(f.sheet&&procOf(o)!==f.sheet&&SHN[o.sheet]!==f.sheet)return false;
+  if(f.gt&&gtype(o)!==f.gt)return false;
+  if(f.sec){const[s,i]=f.sec.split('|');if(o.sheet!==s||o.sec!==i)return false}
+  if(f.actor&&o.actor!==f.actor)return false;
+  if(f.cat&&o.cat!==f.cat)return false;
+  if(f.sop&&o.sop!==f.sop)return false;
+  if(f.theme){const t=THEME_OF(f.theme);if(!t.refs.some(([s,ns])=>o.sheet===s&&ns.includes(o.no)))return false}
+  if(!f.all&&!isTem(o))return false;
+  return true;
+}
+const FN={sheet:'Proses',gt:'Jenis',sec:'Tahap',actor:'Aktor',cat:'Kategori',sop:'SOP',theme:'Tema'};
+function fval(k,v){return k==='gt'?'Jenis '+v.toUpperCase():k==='cat'?CATN[v]:k==='theme'?THEME_OF(v).t:k==='sec'?v.replace('|',' '):v}
+function setF(k,v){st.f[k]=st.f[k]===v?'':v;if(k==='sec'||k==='theme')renderAll();else renderAll();$('s7').scrollIntoView({behavior:'smooth',block:'start'})}
+function renderList(){
+  const rows=vis().filter(matches),shown=rows.slice(0,300);
+  let fb=Object.keys(FN).filter(k=>st.f[k]).map(k=>`<span class="fc">${FN[k]}: ${esc(fval(k,st.f[k]))}<button type="button" data-clear="${k}" aria-label="Hapus filter">×</button></span>`).join('');
+  fb+=`<label class="chk"><input type="checkbox" id="allchk" ${st.f.all?'checked':''}> Tampilkan semua langkah (bukan hanya temuan)</label><span class="lead mono">${rows.length} baris${rows.length>shown.length?', 300 pertama':''}</span>`;
+  $('fb').innerHTML=fb;
+  $('fb').querySelectorAll('[data-clear]').forEach(b=>b.onclick=()=>{st.f[b.dataset.clear]='';renderAll()});
+  $('allchk').onchange=e=>{st.f.all=e.target.checked;renderAll()};
+  $('lt').innerHTML='<thead><tr><th>Proses</th><th>No</th><th>Tahap</th><th>Aktor</th><th>Kat</th><th>Status</th><th>Jenis</th><th>Langkah dan temuan</th></tr></thead><tbody>'+
+   shown.map(o=>{const s=eff(o),g=gtype(o);
+     return `<tr><td>${esc(procOf(o))}</td><td class="mono">${o.no}${o.orig?`<br><small style="color:var(--muted)">${o.orig}</small>`:''}</td><td>${esc(o.sec)}</td><td>${esc(o.actor)}</td><td>${o.cat}</td><td><span class="st ${CLS[s]}">${s}</span>${st.view==='adj'&&s!==o.raw?`<br><small class="fgl">awal ${o.raw}</small>`:''}</td><td>${g?`<span class="tp s t${g}">${g.toUpperCase()}</span>`:''}</td>
+     <td>${esc(o.crit)}${o.finding?`<br><b>Temuan:</b> ${esc(o.finding)}`:''}${o.note&&o.loc!==null?`<br><small style="color:var(--muted)">Auditor: ${esc(o.note)}</small>`:''}${o.flag?`<br><span class="fgl">⚑ ${esc(FLAGTXT[o.flag]||o.flag)}</span>`:''}</td></tr>`}).join('')+'</tbody>';
+}
+
+function renderAll(){
+  $('meta').innerHTML=`${esc(DATA.meta.audit_no)} · <b>${esc(DATA.meta.site)}</b> · audit ${DATA.meta.dates.EXPORT}, ${DATA.meta.dates.IMPORT}, ${DATA.meta.dates.DC} · ${esc(DATA.meta.lead_auditor)}`;
+  [...$('viewSeg').children].forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===st.view)));
+  [...$('locSeg').children].forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===st.dcloc)));
+  renderCmp();renderG3();renderHm();renderRk();renderThemes();renderQ();renderList();
+}
+$('siteSeg').innerHTML=['Jakarta','Surabaya','Semarang','Medan','Makassar'].map(s=>`<button type="button" ${s==='Jakarta'?'aria-pressed="true"':'disabled'}>${s}</button>`).join('');
+[...$('viewSeg').children].forEach(b=>b.onclick=()=>{st.view=b.dataset.v;renderAll()});
+$('locSeg').innerHTML=[['ALL','Semua lokasi'],['SEMPER','Semper'],['MARCEN','Marcen'],['DOKUMEN','Dokumen']].map(([v,l])=>`<button type="button" data-v="${v}" aria-pressed="false">${l}</button>`).join('');
+[...$('locSeg').children].forEach(b=>b.onclick=()=>{st.dcloc=b.dataset.v;renderAll()});
+const modes=[null,'light','dark'],mn=['otomatis','terang','gelap'];let mi=0;
+$('themeBtn').onclick=()=>{mi=(mi+1)%3;const r=document.documentElement;modes[mi]?r.setAttribute('data-theme',modes[mi]):r.removeAttribute('data-theme');$('themeBtn').textContent='Tema: '+mn[mi]};
+renderAll();
+</script>
