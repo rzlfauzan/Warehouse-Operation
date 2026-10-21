@@ -25,7 +25,13 @@ def status_map(d):
             st[sh['sheet']] = {i['no']: i['status'] for i in sh['items']}
     return st
 
+def app_payload():
+    flows = json.loads((ROOT / 'data/flows.json').read_text(encoding='utf-8'))
+    gap = json.loads((ROOT / 'data/gap_config.json').read_text(encoding='utf-8'))
+    return embed({'audit': DATA, 'flows': flows, 'gap': gap}, True)
+
 OUT = {
+    'mkt_audit_sop.html':         ('src/app.tpl.html',                   '__PAYLOAD__', app_payload),
     'peta_proses_audit_sop.html': ('src/peta_proses_audit_sop.tpl.html', '__DATA__', lambda: embed(DATA, False)),
     'alur_proses_umum.html':      ('src/alur_proses_umum.tpl.html',      '__ST__',   lambda: json.dumps(status_map(DATA))),
     'gap_analysis.html':          ('src/gap_analysis.tpl.html',          '__DATA__', lambda: embed(DATA, True)),

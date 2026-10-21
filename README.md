@@ -11,11 +11,15 @@ dengan tiga tab (Alur Proses Umum, Peta Proses Audit SOP, Gap Analysis).
 | `data/audit_dataset_jkt_source.json` | Dataset asli dari auditor (62 Export, 62 Import, 53 DC). Jangan diubah. |
 | `data/audit_dataset_jkt_v2.json` | Dataset kerja. Perubahan dari source: sheet `EXPORT` kehilangan seksi E6 (langkah 37-44); sheet `TRUCKING` baru berisi E6 (langkah 1-8, sudah diaudit, `orig_no` menyimpan nomor asli) dan draf penarikan full container (langkah 9-22, status `PENDING`). Setiap sheet punya field `site`. |
 | `data/flow_rows_snapshot.json` | Hasil ekstraksi 32 tahap dari Alur Proses Umum (PIC, dokumen masuk/keluar, area). Dipakai untuk Excel. |
-| `src/*.tpl.html` | Template tiga halaman. Placeholder data: `__DATA__` atau `__ST__`. |
+| `data/flows.json` | Definisi 32 tahap alur (PIC, area kerja, dokumen masuk/keluar, rentang langkah audit, catatan per proses). Sumber untuk tab Alur. |
+| `data/gap_config.json` | Klasifikasi gap A/B/C (`GT`, `FORCE`), jenis gap, sepuluh tema, teks flag QA, dan catatan kualitas data. Sumber untuk tab Gap. |
+| `src/app.tpl.html` | **Halaman gabungan** dengan tiga tab (Alur, Peta, Gap), filter bersama, dan tautan antar tab. Placeholder `__PAYLOAD__`. |
+| `src/*.tpl.html` (lainnya) | Template tiga halaman terpisah yang lama (dipertahankan karena masih diterbitkan). Placeholder `__DATA__` atau `__ST__`. |
 | `scripts/build.py` | Membangun `dist/*.html` dari data dan template. `--check` membandingkan tanpa menulis. |
 | `scripts/make_xlsx_peta.py` | Membangun `dist/Peta_Proses_Audit_SOP_Review.xlsx` (butuh openpyxl). |
 | `scripts/export_flow_rows.js` | Mengekstrak `flow_rows_snapshot.json` dari halaman Alur memakai Playwright. |
-| `dist/` | Hasil build, sama persis dengan yang diterbitkan. |
+| `dist/mkt_audit_sop.html` | Halaman gabungan (yang dipakai ke depan). |
+| `dist/` (lainnya) | Tiga halaman lama dan dua file Excel. |
 | `docs/` | Prompt asli dan Pendahuluan SOP Penarikan Full Container ke UTC Rev.01 (butir 6 Prosedur belum diterima). |
 
 ## Membangun ulang
@@ -41,8 +45,14 @@ python3 scripts/make_xlsx_peta.py
 - **Temuan kualitas data belum diputuskan:** Import 59 dan 60 (NC tetapi temuan "tidak ada selisih"),
   Export 55/61 dan Import 61 (N/A padahal gap WMS), DC 3 Marcen (COMPLY tetapi "tanpa form standar").
 
+## Halaman gabungan
+
+Satu file, tiga tab, satu data. Filter bersama di header: cabang, as reported/adjusted, lokasi DC (muncul di Gap atau saat proses DC).
+Tautan antar tab: Alur ke Peta (tombol "langkah"), Alur ke Gap (badge NC), Peta ke Alur dan Gap (panel detail), Gap ke Peta (chip tema dan nomor langkah), Gap ke Alur (tombol "Alur" di heatmap dan kolom Tahap).
+Navigasi di dalam halaman memakai fungsi `go(tab, opsi)`; URL hanya membawa nama tab (`#alur`, `#peta`, `#gap`).
+Menambah cabang: tambahkan sheet dengan field `site` ke `audit_dataset_jkt_v2.json`; tombol cabang aktif otomatis.
+
 ## Rencana berikutnya
 
-Satukan tiga halaman menjadi satu dengan tiga tab, header filter bersama (cabang, as reported/adjusted,
-lokasi DC), data bersama, dan tautan antar tab (Alur ke Peta, Alur ke Gap, Peta ke Gap, Gap ke Peta, Gap ke Alur).
-Tab pembuka: Alur Proses Umum. Cabang lain (Surabaya, Semarang, Medan, Makassar) menyusul setelah penyatuan.
+Cabang lain (Surabaya, Semarang, Medan, Makassar), butir 6 Prosedur penarikan full container, dan keputusan
+atas temuan kualitas data di atas. Badge NC di Alur perlu aturan agregasi saat ada banyak cabang.

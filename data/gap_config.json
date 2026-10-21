@@ -1,0 +1,406 @@
+{
+ "GT": {
+  "IMPORT-51": "b",
+  "IMPORT-62": "b",
+  "IMPORT-55": "b",
+  "EXPORT-55": "b",
+  "EXPORT-61": "b",
+  "IMPORT-61": "b",
+  "DC-17": "b",
+  "IMPORT-26": "b"
+ },
+ "FORCE": [
+  "EXPORT-55",
+  "EXPORT-61",
+  "IMPORT-61"
+ ],
+ "GTYPES": [
+  {
+   "k": "a",
+   "n": "Kepatuhan petugas",
+   "d": "Petugas tidak menjalankan langkah yang sudah ada di SOP, form, atau sistem.",
+   "own": "Ops Section Head dan Warehouse Manager di tiap lokasi",
+   "act": "Briefing ulang, supervisi harian, cek berkala (mis. audit mendadak), penugasan PIC yang jelas."
+  },
+  {
+   "k": "b",
+   "n": "Form, dokumen, atau WMS belum menyediakan",
+   "d": "Petugas tidak bisa patuh karena form, kolom TTD, atau fitur WMS belum ada.",
+   "own": "Bisdev & Service Integrity (pemilik form dan SOP) bersama tim WMS",
+   "act": "Buat atau revisi form (BA, kolom TTD), minta fitur WMS (freeze, surat jalan inbound), terbitkan revisi form."
+  },
+  {
+   "k": "c",
+   "n": "SOP tidak sesuai praktik",
+   "d": "Praktik di lapangan sudah berubah atau SOP saling bertentangan, jadi yang perlu diperbaiki adalah SOP-nya.",
+   "own": "Bisdev & Service Integrity (pembuat SOP), disetujui Warehouse Manager",
+   "act": "Revisi SOP agar sesuai proses terkini atau putuskan bahwa praktik lapangan yang harus dikembalikan."
+  }
+ ],
+ "THEMES": [
+  {
+   "id": "ba-cc",
+   "t": "BA Cycle Count tidak digunakan di semua area",
+   "ty": [
+    "b"
+   ],
+   "refs": [
+    [
+     "EXPORT",
+     [
+      51
+     ]
+    ],
+    [
+     "IMPORT",
+     [
+      51
+     ]
+    ],
+    [
+     "DC",
+     [
+      42
+     ]
+    ]
+   ],
+   "ver": "Terverifikasi: 5 dari 5 temuan NON-COMPLY (Export, Import, DC Semper, Marcen, Dokumen).",
+   "root": "Belum ada form BA Cycle Count (Import 51, DC 42 bertanda form_gap). Hasil cycle count hanya dilaporkan lewat email ke PIC dan atasan.",
+   "own": "Bisdev & Service Integrity (form), Inventory (pengguna)",
+   "act": "Buat form BA Cycle Count standar, masukkan ke SOP-OPS-006, lalu sosialisasikan."
+  },
+  {
+   "id": "ba-so",
+   "t": "BA Stock Opname belum digunakan",
+   "ty": [
+    "b",
+    "a"
+   ],
+   "refs": [
+    [
+     "EXPORT",
+     [
+      62
+     ]
+    ],
+    [
+     "IMPORT",
+     [
+      62
+     ]
+    ],
+    [
+     "DC",
+     [
+      53
+     ]
+    ]
+   ],
+   "ver": "Terverifikasi: Export 62 dan Import 62 NON-COMPLY; DC 53 NON-COMPLY hanya di Semper (Marcen dan Dokumen COMPLY). Import 62 menyebut \"tidak ada form BA\", Export 62 dan DC 53 hanya \"belum digunakan\", jadi akar masalahnya belum tentu sama.",
+   "root": "Import: form BA tidak ada. Export dan DC Semper: BA belum dipakai setelah SO selesai (sebab belum dicatat auditor).",
+   "own": "Bisdev & Service Integrity (form), Inventory dan Ops (pelaksana)",
+   "act": "Pastikan form BA SO tersedia di semua lokasi, wajibkan penandatanganan MKT dan pelanggan, lalu cek di SO berikutnya."
+  },
+  {
+   "id": "komunikasi",
+   "t": "Komunikasi formal lewat WA atau telepon, bukan email atau BA",
+   "ty": [
+    "a",
+    "c"
+   ],
+   "refs": [
+    [
+     "EXPORT",
+     [
+      6,
+      7,
+      29
+     ]
+    ],
+    [
+     "IMPORT",
+     [
+      14,
+      21
+     ]
+    ],
+    [
+     "DC",
+     [
+      6,
+      31
+     ]
+    ]
+   ],
+   "ver": "Terverifikasi sebagian: 4 NON-COMPLY (Export 7, 29; Import 14, 21) dan 3 COMPLY dengan penyimpangan (Export 6, DC 6, DC 31: konfirmasi WA atau telepon dulu, baru email). Import 21 menyebut belum ada standar komunikasi, bukan WA atau telepon secara eksplisit.",
+   "root": "SOP meminta email resmi, praktiknya WA atau telepon dengan email menyusul. Belum ada kanal yang disepakati sebagai resmi.",
+   "own": "Operational Spv dan Bisdev & Service Integrity",
+   "act": "Putuskan kanal resmi: tegakkan email, atau akui WA group resmi di SOP dengan rekap email harian."
+  },
+  {
+   "id": "ttd-osh",
+   "t": "Tanda tangan Ops Section Head tidak ada",
+   "ty": [
+    "b",
+    "a"
+   ],
+   "refs": [
+    [
+     "DC",
+     [
+      16,
+      17,
+      22,
+      35
+     ]
+    ]
+   ],
+   "ver": "Terverifikasi: 4 langkah, status NON-COMPLY di ketiga lokasi (12 temuan). DC 22 dan 35 bertanda form_gap (kolom TTD tidak ada di dokumen atau WMS). DC 17: WMS belum mengakomodasi surat jalan inbound. DC 16 tidak bertanda: contoh GR bertanda tangan ada di Marcen, jadi form tersedia.",
+   "root": "Dokumen dan WMS tidak punya kolom TTD Ops Section Head, kecuali Good Receipt yang contohnya sudah ada.",
+   "own": "Bisdev & Service Integrity dan tim WMS (22, 35, 17); Ops Section Head (16)",
+   "act": "Tambah kolom TTD di dokumen inbound, DO MKT, dan WMS; untuk GR terapkan contoh dari Marcen ke Semper."
+  },
+  {
+   "id": "kabin",
+   "t": "Form pemeriksaan kabin atau kendaraan tidak dipakai",
+   "ty": [
+    "a"
+   ],
+   "refs": [
+    [
+     "DC",
+     [
+      3,
+      11,
+      30,
+      32
+     ]
+    ]
+   ],
+   "ver": "Terverifikasi: 11 dari 12 temuan NON-COMPLY. DC 3 Marcen berstatus COMPLY padahal temuannya \"dilakukan tetapi tanpa form standar\", sama dengan DC 11 dan 32 yang NON-COMPLY (lihat bagian 6).",
+   "root": "Pernah disosialisasikan dan sempat jalan (dari QHSE saat ada PASI), lalu berhenti.",
+   "own": "Security Supervisor dan Ops Section Head; QHSE",
+   "act": "Sosialisasi ulang, taruh form di pos dan di titik bongkar muat, cek berkala oleh QHSE."
+  },
+  {
+   "id": "cc-harian",
+   "t": "Cycle count harian belum berjalan (baru mingguan)",
+   "ty": [
+    "a",
+    "c"
+   ],
+   "refs": [
+    [
+     "EXPORT",
+     [
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+     ]
+    ],
+    [
+     "IMPORT",
+     [
+      45,
+      46
+     ]
+    ],
+    [
+     "DC",
+     [
+      37,
+      38,
+      39,
+      40,
+      41
+     ]
+    ]
+   ],
+   "ver": "Terverifikasi dengan catatan: Export 45 sampai 50 dan Import 45 sampai 46 berstatus COMPLY padahal temuannya \"belum dijalankan\" (bertanda status_conflict). DC Semper 37, 38, 40, 41 NON-COMPLY dan 39 N/A (dilakukan Inventory HO). Marcen dan Dokumen COMPLY.",
+   "root": "Tidak ada stockkeeper in-charge di DC Export; cycle count baru mingguan.",
+   "own": "Warehouse Manager dan Inventory",
+   "act": "Tetapkan stockkeeper in-charge, atau jika mingguan memang realistis, revisi frekuensi di SOP-OPS-006."
+  },
+  {
+   "id": "so-import",
+   "t": "Stock Opname belum berkala dan tuntas; WMS tanpa fitur freeze",
+   "ty": [
+    "a",
+    "b"
+   ],
+   "refs": [
+    [
+     "IMPORT",
+     [
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62
+     ]
+    ],
+    [
+     "EXPORT",
+     [
+      55,
+      61
+     ]
+    ]
+   ],
+   "ver": "Terverifikasi: Import 52, 54 sampai 60, dan 62 NON-COMPLY (9 langkah); Import 53 dan 61 N/A. Export 55 dan 61 N/A karena \"tidak ada menu freeze di WMS\". Catatan: Import 59 dan 60 NON-COMPLY padahal temuannya \"tidak ditemukan selisih\" (lihat bagian 6).",
+   "root": "SO berkala belum dilakukan; saat SO sistem tidak pernah di-lock karena WMS tidak punya menu freeze.",
+   "own": "Inventory (jadwal SO), tim WMS (freeze)",
+   "act": "Jadwalkan SO berkala Import, minta fitur freeze di WMS, dan input hasil SO ke WMS bukan ke drive tim."
+  },
+  {
+   "id": "pallet",
+   "t": "Disiplin Pallet ID, scanning, dan lokasi",
+   "ty": [
+    "a"
+   ],
+   "refs": [
+    [
+     "EXPORT",
+     [
+      18
+     ]
+    ],
+    [
+     "IMPORT",
+     [
+      23,
+      32
+     ]
+    ],
+    [
+     "DC",
+     [
+      18,
+      19,
+      20,
+      21
+     ]
+    ]
+   ],
+   "ver": "Terverifikasi: Import 23, 32 NON-COMPLY; DC 18 sampai 21 NON-COMPLY terutama di Semper (21 hanya di Marcen). Export 18 COMPLY dengan catatan perbaikan posisi Pallet ID.",
+   "root": "Pallet ID tidak konsisten diserahkan dan ditempel, put away tanpa scan, forklift langsung ke lokasi kosong.",
+   "own": "Ops Section Head dan Checker",
+   "act": "Wajibkan scan saat put away, standar posisi Pallet ID, dan pemeriksaan lokasi oleh supervisor."
+  },
+  {
+   "id": "input",
+   "t": "Input sistem terlambat atau salah",
+   "ty": [
+    "a"
+   ],
+   "refs": [
+    [
+     "IMPORT",
+     [
+      14,
+      33,
+      58
+     ]
+    ],
+    [
+     "DC",
+     [
+      8,
+      9,
+      10
+     ]
+    ]
+   ],
+   "ver": "Terverifikasi: Import 14 NON-COMPLY (salah input gate in) dan DC 8, 9, 10 NON-COMPLY di Semper (Job Order dibuat setelah selesai bongkar). Tambahan dari saya: Import 33 (input lokasi setelah barang masuk lokasi, COMPLY dengan penyimpangan) dan Import 58 (hasil SO diinput di drive, bukan WMS).",
+   "root": "Input dilakukan setelah pekerjaan fisik selesai, bukan sebelumnya.",
+   "own": "Admin dan Trucking Support; Ops Section Head",
+   "act": "Tetapkan batas waktu input (sebelum bongkar), dan cek keterlambatan lewat laporan WMS."
+  },
+  {
+   "id": "sop-usang",
+   "t": "SOP tidak sesuai praktik (tambahan dari data)",
+   "ty": [
+    "c"
+   ],
+   "refs": [
+    [
+     "EXPORT",
+     [
+      27
+     ]
+    ],
+    [
+     "IMPORT",
+     [
+      25,
+      27,
+      42
+     ]
+    ],
+    [
+     "DC",
+     [
+      7
+     ]
+    ]
+   ],
+   "ver": "Dari flag QA: Export 27 (peran surveyor sudah tidak ada) dan Import 42 (MKT tidak melakukan redress) seharusnya N/A; Import 25 dan 27 sop_outdated (BC tidak lagi menandatangani, hanya stempel); DC 7 sop_inconsistent (overtime 16:00 vs 17:00, praktik 17:00).",
+   "root": "SOP belum diperbarui mengikuti perubahan peran dan proses.",
+   "own": "Bisdev & Service Integrity, disetujui Warehouse Manager",
+   "act": "Revisi SOP: hapus peran surveyor di langkah stuffing, ubah tanda tangan BC menjadi stempel, keluarkan redress, samakan batas overtime."
+  }
+ ],
+ "FLAGTXT": {
+  "status_conflict_finding_says_not_run": "COMPLY, tetapi temuan menyebut belum dijalankan",
+  "status_conflict_finding_says_not_received": "COMPLY, tetapi temuan menyebut dokumen tidak diterima",
+  "status_conflict_should_be_NA": "COMPLY, tetapi proses sudah tidak ada di lapangan",
+  "sop_outdated": "SOP tidak sesuai praktik",
+  "sop_inconsistent_16_vs_17": "SOP tidak konsisten antar dokumen",
+  "deviation_but_comply": "COMPLY dengan penyimpangan dari kalimat SOP",
+  "form_gap": "Form/dokumen/WMS belum menyediakan",
+  "improvement_note": "Catatan perbaikan"
+ },
+ "CATN": {
+  "DOC": "Dokumen",
+  "COMP": "Compliance",
+  "SYS": "Sistem / WMS",
+  "OPS": "Operasional"
+ },
+ "quality": [
+  [
+   "Import 16",
+   "Bertanda status_conflict_finding_says_not_received dan dihitung NON-COMPLY di Adjusted. Tidak ada di prompt; saya tambahkan karena pola flag-nya sama.",
+   "COMPLY, temuan \"tidak menerima lampiran izin stripping\""
+  ],
+  [
+   "DC 3 (Marcen)",
+   "COMPLY, padahal temuannya \"dilakukan tetapi tanpa form standar\". DC 11 dan 32 dengan temuan serupa NON-COMPLY.",
+   "Penilaian tidak konsisten antar langkah"
+  ],
+  [
+   "Import 59, 60",
+   "NON-COMPLY, padahal temuannya \"tidak ditemukan selisih kargo\". Kemungkinan seharusnya N/A karena SO berkala belum dilakukan.",
+   "Meninjau ulang status"
+  ],
+  [
+   "Export 55, 61; Import 61",
+   "N/A karena WMS tidak punya menu freeze. Itu gap sistem, jadi N/A menyembunyikannya. Sebaliknya Import 55 dengan alasan serupa berstatus NON-COMPLY.",
+   "Samakan perlakuan N/A vs NON-COMPLY untuk gap WMS"
+  ],
+  [
+   "DC 39 (Semper)",
+   "N/A karena cycle count dilakukan Inventory HO. Aman, tapi berarti compliance Semper bergantung pada HO.",
+   "Catatan"
+  ]
+ ]
+}
