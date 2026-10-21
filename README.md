@@ -18,6 +18,8 @@ dengan tiga tab (Alur Proses Umum, Peta Proses Audit SOP, Gap Analysis).
 | `src/app.tpl.html` + `src/app.js` | **Halaman gabungan** dengan tiga tab (Alur, Peta, Gap), filter bersama, dan tautan antar tab. Markup dan CSS di template; logika di `app.js` (disisipkan saat build). |
 | `src/*.tpl.html` (lainnya) | Template tiga halaman terpisah yang lama (dipertahankan karena masih diterbitkan). Placeholder `__DATA__` atau `__ST__`. |
 | `scripts/build.py` | Membangun `dist/*.html` dari data dan template. `--check` membandingkan tanpa menulis. |
+| `data/medan_ho_mapping.json` | **Pemetaan draf** 170 langkah SOP Medan ke SOP Utama HO (setara / sebagian / hanya Medan, dengan keyakinan dan catatan). Dibangun oleh `scripts/make_medan_mapping.py`, yang juga tempat mengubah pemetaan. |
+| `scripts/make_medan_mapping.py` | Spesifikasi pemetaan Medan ke HO per langkah. Ubah di sini lalu jalankan ulang. |
 | `scripts/make_dataset_v3.py` | Membangun `audit_dataset_v3.json` dari sumber lima cabang. |
 | `scripts/validate_data.py` | Cek tiap langkah template HO masuk tepat satu tahap alur, referensi tema ada di data, dan jumlah baris sama dengan sumber. Jalankan setelah mengubah data. |
 | `scripts/make_xlsx_peta.py` | Membangun `dist/Peta_Proses_Audit_SOP_Review.xlsx` dari `data/flows.json` dan `data/audit_dataset_jkt_v2.json` (butuh openpyxl). Hitung ulang rumus dengan LibreOffice setelahnya. |
@@ -29,6 +31,7 @@ dengan tiga tab (Alur Proses Umum, Peta Proses Audit SOP, Gap Analysis).
 
 ```
 python3 scripts/make_dataset_v3.py # hanya bila sumber berubah
+python3 scripts/make_medan_mapping.py # hanya bila pemetaan Medan berubah
 python3 scripts/validate_data.py  # harus OK
 python3 scripts/build.py          # tulis dist/*.html
 python3 scripts/build.py --check  # harus SAMA untuk ketiganya
@@ -66,7 +69,8 @@ Menambah cabang: tambahkan sheet dengan field `site` ke `audit_dataset_jkt_v2.js
 - **Compliance:** resmi = C/(C+NC), N/A diabaikan. **Adjusted** = `status_conflict_*` dihitung ulang (NC, atau N/A untuk `should_be_NA` dan `role_not_exist`). **Cakupan** = porsi langkah bukan N/A, supaya cabang dengan banyak N/A (Semarang Import 25,8%, Surabaya Import 66,1%) tidak tampak sempurna.
 - **Jenis gap:** A kepatuhan petugas, B form/dokumen/WMS, C SOP tidak sesuai praktik, D dikerjakan pihak lain (`na_not_performed_by_mkt`). Klasifikasi adalah usulan, belum disetujui auditor.
 - **Flag baru:** `na_not_performed_by_mkt` (pola diagonal, "dikerjakan pihak lain"), `integrity_risk_reported_by_auditor` (Medan Export 11; ditandai khusus), `status_conflict_finding_says_not_done|incomplete|role_not_exist`.
-- **Excel review** masih hanya Jakarta (SOP Utama HO).
+- **Pemetaan Medan ke HO** (draf, belum dikonfirmasi pemilik SOP): 170 langkah Medan = 76 setara, 70 sebagian, 24 hanya Medan; 47 langkah HO belum punya padanan di Medan. Dipakai di matriks Gap (kolom MDN≈), badge ≈ di Alur untuk Medan, panel detail Peta (dua arah), dan sheet Excel.
+- **Excel review**: tahap, dokumen, dan langkah hanya Jakarta (SOP Utama HO), ditambah sheet pemetaan Medan-HO dan langkah HO tanpa padanan Medan.
 
 ## Rencana berikutnya
 

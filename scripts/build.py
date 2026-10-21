@@ -29,7 +29,8 @@ def app_payload():
     v3 = json.loads((ROOT / 'data/audit_dataset_v3.json').read_text(encoding='utf-8'))
     flows = json.loads((ROOT / 'data/flows.json').read_text(encoding='utf-8'))
     gap = json.loads((ROOT / 'data/gap_config.json').read_text(encoding='utf-8'))
-    return embed({'audit': v3, 'flows': flows, 'gap': gap}, True)
+    mp = json.loads((ROOT / 'data/medan_ho_mapping.json').read_text(encoding='utf-8'))
+    return embed({'audit': v3, 'flows': flows, 'gap': gap, 'map': mp}, True)
 
 OUT = {
     'mkt_audit_sop.html':         ('src/app.tpl.html',                   '__PAYLOAD__', app_payload),

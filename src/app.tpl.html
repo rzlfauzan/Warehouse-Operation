@@ -237,6 +237,9 @@ table{border-collapse:collapse;width:100%}
 .mc.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok-fg)} .mc.nc{background:var(--nc-bg);border-color:var(--nc);color:var(--nc-fg)} .mc.na{background:var(--na-bg);border-color:var(--na);color:var(--na-fg)} .mc.pe{border-color:var(--muted);color:var(--muted);background:var(--surface)}
 .mc.fl{border-style:dashed;border-color:var(--flag)}
 .mc.otr{background:repeating-linear-gradient(135deg,var(--na-bg) 0 4px,var(--surface) 4px 8px)}
+.mc.map{border-style:dotted}
+#gap-map3>summary,#gap-map4>summary{font-weight:600;font-size:14px}
+#gap-map3 table,#gap-map4 table{margin:0 14px 14px;width:calc(100% - 28px)}
 .mc.none{border-color:transparent;color:var(--muted);cursor:default}
 .rk{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
 .rkh{font-family:var(--f-display);font-weight:600;font-size:16px;margin-bottom:8px}
@@ -351,6 +354,12 @@ details.th[open]>summary::before{transform:rotate(90deg)}
       <p class="lead">Baris adalah langkah SOP Utama HO (template Jakarta); kolom adalah cabang. Garis putus kuning pada sel menandai flag status, garis diagonal menandai langkah dikerjakan pihak lain. Medan memakai SOP berbeda dan ada di heatmap tahap di bawah. Klik sel untuk membuka langkah di Peta.</p>
       <div class="row"><div class="seg" id="gap-mx-sheet"></div><span id="gap-mx-opt" class="row"></span><span class="lead mono" id="gap-mx-n"></span></div>
       <div class="panel scroll" style="max-height:560px;overflow-y:auto"><table class="hm mx" id="gap-mx"></table></div></section>
+    <section class="gsec" id="gap-smap" hidden><h2>Pemetaan langkah Medan ke SOP HO</h2>
+      <p class="lead">Medan memakai SOP sendiri, sedangkan alurnya harus mengacu SOP Utama di Head Office. Pemetaan ini <b>draf usulan</b> yang dibuat dari bunyi langkah dan aktor di kedua SOP, belum dikonfirmasi pemilik SOP. <b>Setara</b> = kegiatan sama; <b>sebagian</b> = tumpang tindih atau beda rincian atau aktor; <b>hanya Medan</b> = tidak ada di SOP HO. Pemetaan ini dipakai di matriks (kolom MDN≈), badge ≈ di tab Alur, dan panel detail Peta.</p>
+      <div class="panel scroll"><table class="hm" id="gap-map1"></table></div>
+      <div class="panel scroll"><table class="hm" id="gap-map2"></table></div>
+      <details class="th" id="gap-map3"></details>
+      <details class="th" id="gap-map4"></details></section>
     <section class="gsec" id="gap-s3"><h2>Heatmap tahap proses x status</h2>
       <p class="lead">Intensitas warna adalah porsi status itu dalam tahap, mengikuti cabang dan unit yang dipilih. Klik baris untuk melihat temuannya, atau "Alur" untuk membuka tahap alurnya.</p>
       <div class="panel scroll"><table class="hm" id="gap-hm"></table></div></section>

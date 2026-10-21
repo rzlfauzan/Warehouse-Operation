@@ -33,6 +33,21 @@ for k in list(GC['GT']) + GC['FORCE']:
     if ('HO', sh, int(n)) not in have:
         errs.append(f'GT/FORCE {k} tidak ada di data')
 
+# 2b. pemetaan Medan -> HO: tiap langkah Medan punya tepat satu entri, rujukan HO ada
+MP = json.loads((ROOT / 'data/medan_ho_mapping.json').read_text(encoding='utf-8'))['map']
+mdn = {(x['sheet'], i['no']) for x in D['sheets'] if x['site'] == 'MDN' for i in x['items']}
+seen = [(m['sheet'], m['no']) for m in MP]
+if sorted(seen) != sorted(mdn):
+    errs.append(f"pemetaan: langkah Medan tanpa entri {sorted(mdn - set(seen))}, entri berlebih {sorted(set(seen) - mdn)}")
+if len(seen) != len(set(seen)):
+    errs.append('pemetaan: ada entri ganda')
+for m in MP:
+    for h in m['ho']:
+        if ('HO', h['sheet'], h['no']) not in have:
+            errs.append(f"pemetaan Medan {m['sheet']} {m['no']}: rujukan HO {h['sheet']} {h['no']} tidak ada")
+    if (m['rel'] == 'M') != (not m['ho']):
+        errs.append(f"pemetaan Medan {m['sheet']} {m['no']}: relasi M harus tanpa padanan, dan sebaliknya")
+
 # 3. jumlah baris sumber = jumlah langkah terisi (JKT DC dua unit; langkah PENDING bukan dari sumber)
 n_app = sum(len(s['items']) * (2 if s['site'] == 'JKT' and s['sheet'] == 'DC' else 1) for s in D['sheets']
             for _ in [0]) - sum(1 for s in D['sheets'] for i in s['items'] if i['status'] == 'PENDING')

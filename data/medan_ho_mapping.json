@@ -1,0 +1,2216 @@
+{
+ "meta": {
+  "status": "draf usulan, belum dikonfirmasi pemilik SOP",
+  "rel": {
+   "S": "setara",
+   "P": "sebagian",
+   "M": "hanya Medan"
+  },
+  "conf": {
+   "T": "tinggi",
+   "S": "sedang",
+   "R": "rendah"
+  },
+  "note": "Medan memakai SOP-OPS-DC-002, EXP-003, IMP-004; acuan HO adalah SOP Utama (template Jakarta). T1-T8 = penarikan empty (asal Export 37-44), T9-T22 = penarikan full (draf)."
+ },
+ "map": [
+  {
+   "sheet": "EXPORT",
+   "no": 1,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 3
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Cek tujuan SJT di pos depan; HO sekaligus registrasi dan catat waktu tiba"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 2,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 3
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Pencocokan nopol dengan SJT; HO tidak memisahkannya"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 3,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 2
+    }
+   ],
+   "rel": "S",
+   "conf": "S",
+   "note": "Logbook Medan setara registrasi kendaraan di pos Security HO"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 4,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 2
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Langkah pengarah ke AO; HO tidak punya langkah eksplisit"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 5,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 5
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 6,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 7
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Closing time gudang (Sen-Jum 17.00, Sab 13.00) vs batas overtime HO 17:00; beda aturan"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 7,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 6
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 8,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 8
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Medan: AO input WIMS, beri cap, uang bongkar; HO: Admin buat Order Inbound"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 9,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Uang bongkar dan Kasir tidak ada di SOP HO"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 10,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Kasir dan Kwitansi Bongkar tidak ada di SOP HO"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 11,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 11
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Perintah bongkar oleh Checker; HO mencatat bongkar lewat WMS"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 12,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 14
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 13,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 17
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "TTD SJT oleh Checker; HO hanya punya TTD SJT inbound di DC"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 14,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 19
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Simpan cargo ke gudang oleh forklift"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 15,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 19
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Lokasi dicatat Google Form; HO put away dengan scanning"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 16,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 16
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Pencocokan lokasi dengan Cargo Tally; HO update Tally Report di WMS"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 17,
+   "ho": [
+    {
+     "sheet": "TRUCKING",
+     "no": 1
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 18,
+   "ho": [
+    {
+     "sheet": "TRUCKING",
+     "no": 3
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Instruksi ambil empty ke depo dengan DO; HO memberi Bon Muat"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 19,
+   "ho": [
+    {
+     "sheet": "TRUCKING",
+     "no": 6
+    },
+    {
+     "sheet": "TRUCKING",
+     "no": 7
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Pemeriksaan seal, SJT, EIR dan penggantian bila tidak layak"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 20,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Penurunan container ke CY MKT; belum ada di SOP HO (calon SOP CY Handling)"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 21,
+   "ho": [
+    {
+     "sheet": "TRUCKING",
+     "no": 4
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Lapor empty di CY dan serah seal ke AO; HO pemeriksaan bersama Depo"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 22,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Pencatatan container in ke WIMS tidak ada di SOP HO"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 23,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 5
+    },
+    {
+     "sheet": "TRUCKING",
+     "no": 9
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Terima VGM, PEB, COPARN, NPE; HO terima BC, SJ, PEB, NPE, PL, Invoice dan KE, PKBE"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 24,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "CEISA dan pembayaran port charge ke BNCT tidak ada di SOP HO"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 25,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Pengesahan NPE, PKBE, PL di BC hanggar tidak ada di SOP HO"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 26,
+   "ho": [
+    {
+     "sheet": "TRUCKING",
+     "no": 9
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "PKBE; draf HO penarikan full memuat PKBE sebagai dokumen masuk"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 27,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 22
+    },
+    {
+     "sheet": "EXPORT",
+     "no": 23
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Stuffing list Medan setara CLP di HO"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 28,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 24
+    },
+    {
+     "sheet": "EXPORT",
+     "no": 25
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Siapkan cargo sesuai stuffing list; HO oleh Picker"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 29,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 31
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Scan dan ukur dimensi; HO scan Pallet ID oleh Surveyor"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 30,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Kirim dimensi cargo ke pelanggan tidak ada di SOP HO"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 31,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 32
+    },
+    {
+     "sheet": "EXPORT",
+     "no": 33
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Muat per tier dan dokumentasi; HO dokumentasi 25/50/75/100%"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 32,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 35
+    },
+    {
+     "sheet": "EXPORT",
+     "no": 36
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Ambil seal, cocokkan nomor, segel; di HO dibagi Admin dan Surveyor"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 33,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 33
+    },
+    {
+     "sheet": "EXPORT",
+     "no": 36
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Dokumentasi penyegelan (foto)"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 34,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Serah Cargo Tally ke AO dan laporan ke pelanggan tidak ada di Export HO"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 35,
+   "ho": [
+    {
+     "sheet": "TRUCKING",
+     "no": 9
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "SP2 dan stuffing list dari pelanggan; HO penarikan full memulai dari KE, PKBE, Survey Pelayaran, ESL"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 36,
+   "ho": [],
+   "rel": "M",
+   "conf": "S",
+   "note": "Peran Gate Officer tidak ada di SOP HO"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 37,
+   "ho": [
+    {
+     "sheet": "TRUCKING",
+     "no": 16
+    }
+   ],
+   "rel": "S",
+   "conf": "S",
+   "note": "Pesan truck untuk full container ke pelabuhan setara SPK ke vendor"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 38,
+   "ho": [
+    {
+     "sheet": "TRUCKING",
+     "no": 14
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Muat container full; HO memeriksa kondisi saat keluar gudang"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 39,
+   "ho": [
+    {
+     "sheet": "TRUCKING",
+     "no": 15
+    },
+    {
+     "sheet": "TRUCKING",
+     "no": 13
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Cetak SJ dan cek nomor container dan seal; HO terbitkan SJT dan periksa segel"
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 40,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 45
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 41,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 46
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 42,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 47
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 43,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 48
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 44,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 49
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 45,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 50
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 46,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 51
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 47,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 52
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 48,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 53
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 49,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 54
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 50,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 55
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 51,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 56
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 52,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 57
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 53,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 58
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 54,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 59
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 55,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 60
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 56,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 61
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "EXPORT",
+   "no": 57,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 62
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 1,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 1
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 2,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 2
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 3,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 3
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Pengajuan pembayaran DO via MCM; HO AO estimasi biaya dan bayar"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 4,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 4
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Messenger ambil DO ke pelayaran; HO forwarding terbitkan DO"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 5,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 4
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Pelayaran verifikasi dan Messenger terima DO asli"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 6,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 5
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 7,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 6
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 8,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 7
+    }
+   ],
+   "rel": "S",
+   "conf": "S",
+   "note": "Permohonan PLP ke Pelindo (UTC) dan BC"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 9,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 8
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "BC TTD permohonan dan beri nomor pendaftaran"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 10,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 8
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 11,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 9
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Medan: Staff bayar port charges; HO: Vendor CC"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 12,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 9
+    },
+    {
+     "sheet": "IMPORT",
+     "no": 10
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Cetak SP2 dan order trucking; HO SP2 diteruskan untuk order E-Seal"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 13,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 11
+    },
+    {
+     "sheet": "IMPORT",
+     "no": 12
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Pengemudi tarik container dengan SP2"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 14,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 13
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "BC Pelindo pasang segel dan BA Penyegelan; HO pasang E-Seal"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 15,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 14
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Antar container ke CY MKT; HO langkah terdekat adalah input gate in"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 16,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 14
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Serah dokumen dan input data; HO input gate in ke sistem"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 17,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Penurunan container ke lapangan MKT belum ada di SOP HO (calon SOP CY Handling)"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 18,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 16
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 19,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 15
+    },
+    {
+     "sheet": "IMPORT",
+     "no": 18
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "TTD izin stripping oleh BC Hanggar"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 20,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 17
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Serah copy PLP dan manifest ke AO"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 21,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 21
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Instruksi bongkar; HO Staff Ops mengidentifikasi, menghitung, marking"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 22,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 21
+    },
+    {
+     "sheet": "IMPORT",
+     "no": 22
+    }
+   ],
+   "rel": "S",
+   "conf": "S",
+   "note": "Pemeriksaan fisik, marking, hitung; discrepancy ikut IK"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 23,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 23
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 24,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 19
+    },
+    {
+     "sheet": "IMPORT",
+     "no": 24
+    }
+   ],
+   "rel": "S",
+   "conf": "S",
+   "note": "Foto kegiatan bongkar; HO memisahkan foto seal dan foto bongkar"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 25,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 25
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "BC Hanggar dokumentasi ke Cargo Tally"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 26,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 25
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Report cargo tally dan foto ke pelanggan"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 27,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 26
+    },
+    {
+     "sheet": "IMPORT",
+     "no": 30
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "DO pengembalian empty dan input container out"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 28,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Pembayaran pengembalian empty di Depo tidak ada di SOP HO"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 29,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 26
+    },
+    {
+     "sheet": "IMPORT",
+     "no": 29
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Serah SJ, CRO, DO ke supir dan muat empty oleh Operator RS"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 30,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 27
+    },
+    {
+     "sheet": "IMPORT",
+     "no": 28
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Supir antar empty ke depo; Staff terima EIR"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 31,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Serah EIR dan kwitansi jaminan ke pelayaran tidak ada di SOP HO"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 32,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 32
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 33,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 32
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Operator tentukan dan lapor lokasi; Medan via Google Form"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 34,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 31
+    },
+    {
+     "sheet": "IMPORT",
+     "no": 33
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Catat lokasi dan cocokkan dengan Cargo Tally; HO input lokasi di WMS"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 35,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 36
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Consignee serahkan dokumen pengeluaran ke AO"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 36,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 36
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "AO verifikasi dokumen pengeluaran"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 37,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Kasir dan kwitansi muat tidak ada di SOP HO"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 38,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 36
+    },
+    {
+     "sheet": "IMPORT",
+     "no": 38
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Dokumen dan bukti bayar diserahkan ke Checker"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 39,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 37
+    },
+    {
+     "sheet": "IMPORT",
+     "no": 40
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Instruksi muat oleh TKBM dan SJ keluar"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 40,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 41
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Pelanggan bawa barang keluar dan input out cargo"
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 41,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 45
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 42,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 46
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 43,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 47
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 44,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 48
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 45,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 49
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 46,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 50
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 47,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 51
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 48,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 52
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 49,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 53
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 50,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 54
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 51,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 55
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 52,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 56
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 53,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 57
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 54,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 58
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 55,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 59
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 56,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 60
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 57,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 61
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "IMPORT",
+   "no": 58,
+   "ho": [
+    {
+     "sheet": "IMPORT",
+     "no": 62
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 1,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 1
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Info penarikan container dan SP2; HO info pengiriman via email"
+  },
+  {
+   "sheet": "DC",
+   "no": 2,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 8
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Input data container untuk WO dan SJT; HO Order Inbound di WMS"
+  },
+  {
+   "sheet": "DC",
+   "no": 3,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Penarikan full container dari CY pelabuhan ke area MKT; di HO dibahas di Import 9 sampai 14"
+  },
+  {
+   "sheet": "DC",
+   "no": 4,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 2
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Gate Officer terima SJT dan input WIMS; HO Security registrasi dan cek SJ"
+  },
+  {
+   "sheet": "DC",
+   "no": 5,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Penurunan container ke lapangan oleh Operator RS belum ada di SOP HO (calon SOP CY Handling)"
+  },
+  {
+   "sheet": "DC",
+   "no": 6,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 10
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 7,
+   "ho": [
+    {
+     "sheet": "EXPORT",
+     "no": 10
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Foto seal dan kondisi container; padanan terdekat ada di Export 10 (DC HO tidak punya)"
+  },
+  {
+   "sheet": "DC",
+   "no": 8,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 12
+    },
+    {
+     "sheet": "DC",
+     "no": 13
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Periksa fisik, marking, jumlah vs PL"
+  },
+  {
+   "sheet": "DC",
+   "no": 9,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 14
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 10,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 13
+    },
+    {
+     "sheet": "DC",
+     "no": 15
+    }
+   ],
+   "rel": "S",
+   "conf": "S",
+   "note": "Tally Sheet dan update WIMS"
+  },
+  {
+   "sheet": "DC",
+   "no": 11,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "ICR tidak ada di SOP HO"
+  },
+  {
+   "sheet": "DC",
+   "no": 12,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 5
+    },
+    {
+     "sheet": "DC",
+     "no": 7
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Terima dokumen dan cek jam kedatangan; HO batas overtime 16:00"
+  },
+  {
+   "sheet": "DC",
+   "no": 13,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 11
+    },
+    {
+     "sheet": "DC",
+     "no": 6
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Periksa kendaraan dan dokumen; konfirmasi jika tidak layak atau lengkap"
+  },
+  {
+   "sheet": "DC",
+   "no": 14,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 12
+    },
+    {
+     "sheet": "DC",
+     "no": 14
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Cek fisik saat bongkar; ketidaksesuaian di BA"
+  },
+  {
+   "sheet": "DC",
+   "no": 15,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 13
+    },
+    {
+     "sheet": "DC",
+     "no": 15
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": "Tally Sheet dan Receiving Report"
+  },
+  {
+   "sheet": "DC",
+   "no": 16,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 20
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Pindah cargo ke area simpan oleh forklift"
+  },
+  {
+   "sheet": "DC",
+   "no": 17,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 20
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Tentukan dan lapor lokasi"
+  },
+  {
+   "sheet": "DC",
+   "no": 18,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 21
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Catat lokasi dan cocokkan dengan Tally; HO Put Away Report"
+  },
+  {
+   "sheet": "DC",
+   "no": 19,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 23
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Terima DN/DO pelanggan; HO terima info pengeluaran via email"
+  },
+  {
+   "sheet": "DC",
+   "no": 20,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 27
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Cocokkan cargo keluar; HO picking sesuai Picking Report dan scan"
+  },
+  {
+   "sheet": "DC",
+   "no": 21,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 32
+    },
+    {
+     "sheet": "DC",
+     "no": 30
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Pemeriksaan kendaraan dengan form HSE; HO Form Kendaraan dan Form Kabin"
+  },
+  {
+   "sheet": "DC",
+   "no": 22,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Aturan keselamatan driver (rem tangan, ganjal ban, kunci) tidak ada di SOP HO"
+  },
+  {
+   "sheet": "DC",
+   "no": 23,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 33
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Security awasi pengeluaran dan cocokkan marking"
+  },
+  {
+   "sheet": "DC",
+   "no": 24,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 34
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "AO terbitkan SJT dan Outbound Report; HO Outbound Confirmation Report dan TTD Ops Section Head"
+  },
+  {
+   "sheet": "DC",
+   "no": 25,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Proses Cargo Retur tidak ada di SOP HO"
+  },
+  {
+   "sheet": "DC",
+   "no": 26,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Proses Cargo Retur tidak ada di SOP HO"
+  },
+  {
+   "sheet": "DC",
+   "no": 27,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Proses Cargo Retur tidak ada di SOP HO"
+  },
+  {
+   "sheet": "DC",
+   "no": 28,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Proses Cargo Retur tidak ada di SOP HO"
+  },
+  {
+   "sheet": "DC",
+   "no": 29,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Proses Cargo Retur tidak ada di SOP HO"
+  },
+  {
+   "sheet": "DC",
+   "no": 30,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Proses Cargo Retur tidak ada di SOP HO"
+  },
+  {
+   "sheet": "DC",
+   "no": 31,
+   "ho": [],
+   "rel": "M",
+   "conf": "T",
+   "note": "Proses Cargo Retur tidak ada di SOP HO"
+  },
+  {
+   "sheet": "DC",
+   "no": 32,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 18
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Pisahkan kargo damage dan susun ke pallet"
+  },
+  {
+   "sheet": "DC",
+   "no": 33,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 18
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Input jumlah SKU yang di-paletized ke WIMS"
+  },
+  {
+   "sheet": "DC",
+   "no": 34,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 18
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Cetak pallet tag dan list lokasi kosong; HO Pallet ID diserahkan ke Checker"
+  },
+  {
+   "sheet": "DC",
+   "no": 35,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 19
+    },
+    {
+     "sheet": "DC",
+     "no": 20
+    }
+   ],
+   "rel": "S",
+   "conf": "S",
+   "note": "Tempel dan scan pallet tag, tentukan lokasi"
+  },
+  {
+   "sheet": "DC",
+   "no": 36,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 20
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Letakkan palet ke area Bin"
+  },
+  {
+   "sheet": "DC",
+   "no": 37,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 20
+    }
+   ],
+   "rel": "P",
+   "conf": "R",
+   "note": "Naikkan palet ke level atas dengan Reach Truck"
+  },
+  {
+   "sheet": "DC",
+   "no": 38,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 36
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 39,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 37
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 40,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 38
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 41,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 39
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 42,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 40
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 43,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 41
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 44,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 42
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 45,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 43
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 46,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 44
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 47,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 45
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 48,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 46
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 49,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 47
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 50,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 48
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 51,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 49
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 52,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 50
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 53,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 51
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 54,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 52
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "DC",
+   "no": 55,
+   "ho": [
+    {
+     "sheet": "DC",
+     "no": 53
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  }
+ ]
+}
