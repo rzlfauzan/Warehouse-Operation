@@ -2,9 +2,9 @@
  "meta": {
   "status": "draf usulan, belum dikonfirmasi pemilik SOP",
   "rel": {
-   "S": "setara",
-   "P": "sebagian",
-   "M": "hanya Medan"
+   "S": "sama",
+   "P": "mirip",
+   "M": "hanya di Medan"
   },
   "conf": {
    "T": "tinggi",
@@ -51,7 +51,7 @@
    ],
    "rel": "S",
    "conf": "S",
-   "note": "Logbook Medan setara registrasi kendaraan di pos Security HO"
+   "note": "Logbook Medan sama dengan registrasi kendaraan di pos Security HO"
   },
   {
    "sheet": "EXPORT",
@@ -345,7 +345,7 @@
    ],
    "rel": "P",
    "conf": "S",
-   "note": "Stuffing list Medan setara CLP di HO"
+   "note": "Stuffing list Medan sama dengan CLP di HO"
   },
   {
    "sheet": "EXPORT",
@@ -476,7 +476,7 @@
    ],
    "rel": "S",
    "conf": "S",
-   "note": "Pesan truck untuk full container ke pelabuhan setara SPK ke vendor"
+   "note": "Pesan truck untuk full container ke pelabuhan sama dengan SPK ke vendor"
   },
   {
    "sheet": "EXPORT",
@@ -943,7 +943,7 @@
    ],
    "rel": "P",
    "conf": "R",
-   "note": "Antar container ke CY MKT; HO langkah terdekat adalah input gate in"
+   "note": "Antar container ke CY MKT; di HO langkah yang paling mirip adalah input gate in"
   },
   {
    "sheet": "IMPORT",
@@ -1599,7 +1599,7 @@
    ],
    "rel": "P",
    "conf": "R",
-   "note": "Foto seal dan kondisi container; padanan terdekat ada di Export 10 (DC HO tidak punya)"
+   "note": "Foto seal dan kondisi container; yang paling mirip ada di Export 10 (DC HO tidak punya)"
   },
   {
    "sheet": "DC",

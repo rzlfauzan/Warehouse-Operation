@@ -343,41 +343,32 @@ details.th[open]>summary::before{transform:rotate(90deg)}
 
   <!-- ===== GAP ===== -->
   <div class="panel-t" id="panel-gap" role="tabpanel" aria-labelledby="tab-gap" hidden style="gap:26px">
-    <p class="lead">Satuan hitung adalah <b>temuan</b>: satu langkah di satu cabang dan proses, dan untuk DC Jakarta satu langkah di satu unit (Semper, Marcen). Angka resmi memakai status lapangan (genba). Kolom dokumen (self-assessment) dibaca terpisah di bagian Dokumen vs lapangan; di DC Jakarta ia tampil sebagai unit "Dokumen" yang hanya masuk hitungan bila dipilih. Status Adjusted menghitung ulang item bertanda <span class="mono">status_conflict</span>. Langkah yang belum diaudit tidak ikut perhitungan.</p>
+    <p class="lead">Dihitung per langkah per cabang (DC Jakarta: per unit Semper atau Marcen). Angka resmi memakai status hasil lapangan.</p>
     <section class="gsec" id="gap-s1"><h2>Compliance per proses</h2>
-      <p class="lead">Resmi = COMPLY dibagi (COMPLY + NON-COMPLY), N/A diabaikan. Karena itu cabang dengan banyak N/A tampak tinggi, sehingga tiap baris memuat <b>cakupan</b>: porsi langkah yang benar-benar terverifikasi (bukan N/A). Contoh: Semarang Import resmi 100% tetapi cakupan 25,8%. Bagian ini selalu menampilkan semua unit DC Jakarta.</p>
+      <p class="lead">Resmi = COMPLY ÷ (COMPLY + NON-COMPLY), N/A tidak dihitung. "Diperiksa" = porsi langkah yang bukan N/A.</p>
       <div class="panel"><div class="glegend" style="margin-bottom:12px"><span><i class="dot"></i>Resmi</span><span><i class="dot a"></i>Adjusted</span><span>Garis penghubung menunjukkan selisih</span></div><div class="cmp" id="gap-cmp"></div></div></section>
-    <section class="gsec" id="gap-s2"><h2>Jenis gap dan pemiliknya</h2>
-      <p class="lead">Satu temuan masuk ke satu jenis. Klasifikasi ini usulan awal dari isi temuan dan catatan auditor, jadi perlu dikonfirmasi auditor. Klik kartu untuk menyaring daftar temuan.</p>
+    <section class="gsec" id="gap-s2"><h2>Jenis gap dan penanggung jawab</h2>
+      <p class="lead">Klik kartu untuk melihat daftar temuannya. Pembagian jenis adalah usulan, perlu dikonfirmasi auditor.</p>
       <div class="g3" id="gap-g3"></div></section>
     <section class="gsec" id="gap-smx"><h2>Matriks langkah x cabang</h2>
-      <p class="lead">Baris adalah langkah SOP Utama HO (template Jakarta); kolom adalah cabang. Garis putus kuning pada sel menandai flag status, garis diagonal menandai langkah dikerjakan pihak lain. Medan memakai SOP berbeda dan ada di heatmap tahap di bawah. Klik sel untuk membuka langkah di Peta.</p>
+      <p class="lead">Langkah SOP HO per cabang. Klik sel untuk membuka di Peta. MDN* = Medan lewat pemetaan draf.</p>
       <div class="row"><div class="seg" id="gap-mx-sheet"></div><span id="gap-mx-opt" class="row"></span><span class="lead mono" id="gap-mx-n"></span></div>
       <div class="panel scroll" style="max-height:560px;overflow-y:auto"><table class="hm mx" id="gap-mx"></table></div></section>
     <section class="gsec" id="gap-smap" hidden><h2>Pemetaan langkah Medan ke SOP HO</h2>
-      <p class="lead">Medan memakai SOP sendiri, sedangkan alurnya harus mengacu SOP Utama di Head Office. Pemetaan ini <b>draf usulan</b> yang dibuat dari bunyi langkah dan aktor di kedua SOP, belum dikonfirmasi pemilik SOP. <b>Setara</b> = kegiatan sama; <b>sebagian</b> = tumpang tindih atau beda rincian atau aktor; <b>hanya Medan</b> = tidak ada di SOP HO. Pemetaan ini dipakai di matriks (kolom MDN≈), badge ≈ di tab Alur, dan panel detail Peta.</p>
+      <p class="lead">Draf pemetaan langkah Medan ke SOP HO, belum dikonfirmasi pemilik SOP. <b>Sama</b> = kegiatan sama, <b>mirip</b> = sebagian sama, <b>hanya di Medan</b> = tidak ada di SOP HO.</p>
       <div class="panel scroll"><table class="hm" id="gap-map1"></table></div>
       <div class="panel scroll"><table class="hm" id="gap-map2"></table></div>
       <details class="th" id="gap-map3"></details>
       <details class="th" id="gap-map4"></details></section>
     <section class="gsec" id="gap-s3"><h2>Heatmap tahap proses x status</h2>
-      <p class="lead">Intensitas warna adalah porsi status itu dalam tahap, mengikuti cabang dan unit yang dipilih. Klik baris untuk melihat temuannya, atau "Alur" untuk membuka tahap alurnya.</p>
+      <p class="lead">Jumlah langkah per status di tiap tahap. Klik baris untuk melihat daftarnya.</p>
       <div class="panel scroll"><table class="hm" id="gap-hm"></table></div></section>
     <section class="gsec" id="gap-s4"><h2>Peringkat NON-COMPLY</h2>
-      <p class="lead">Jumlah temuan NON-COMPLY, dengan porsinya terhadap seluruh langkah aktor, kategori, atau SOP itu. Klik batang untuk menyaring daftar temuan.</p>
+      <p class="lead">NON-COMPLY dihitung per cabang. "x dari y" = jumlah NON-COMPLY dari y langkah yang diperiksa (COMPLY + NON-COMPLY).</p>
       <div class="rk" id="gap-rk"></div></section>
-    <section class="gsec" id="gap-sdg"><h2>Dokumen vs lapangan</h2>
-      <p class="lead">Kolom dokumen adalah self-assessment, lapangan adalah verifikasi auditor. <b>Overclaim</b> = dokumen COMPLY tetapi lapangan NON-COMPLY. <b>Underclaim</b> = kebalikannya, mis. Medan Import (dokumen NON-COMPLY, lapangan COMPLY). Klik angka untuk melihat langkahnya.</p>
-      <div class="panel scroll"><table class="hm" id="gap-dg"></table></div></section>
-    <section class="gsec" id="gap-src"><h2>Akar masalah bersama</h2>
-      <p class="lead">Satu akar masalah yang menggerakkan banyak NON-COMPLY dihitung sebagai satu akar dengan jumlah dampaknya, bukan sebagai temuan terpisah. Baru tercatat untuk Semarang.</p>
-      <div class="g3" id="gap-rc"></div></section>
     <section class="gsec" id="gap-s5"><h2>Tema gap lintas proses</h2>
-      <p class="lead">Tema lintas cabang dari prompt, ditambah beberapa dari data. Titik pada chip menunjukkan status tiap cabang. Klik chip untuk membuka langkahnya di Peta. Catatan "Verifikasi" memuat selisih dengan prompt jika ada.</p>
+      <p class="lead">Masalah yang berulang di banyak proses atau cabang. Klik chip untuk membuka langkahnya di Peta.</p>
       <div id="gap-themes" style="display:flex;flex-direction:column;gap:8px"></div></section>
-    <section class="gsec q" id="gap-s6"><h2>Kualitas data</h2>
-      <p class="lead">Flag QA tidak mengubah data sumber. Bagian ini juga memuat hal yang ditemukan saat verifikasi, sebagai bahan tinjau ulang auditor.</p>
-      <div class="panel scroll"><table id="gap-qf"></table></div><div class="panel scroll"><table id="gap-qx"></table></div></section>
     <section class="gsec" id="gap-s7"><h2>Daftar temuan</h2>
       <div class="gfb" id="gap-fb"></div>
       <div class="panel scroll" style="max-height:640px;overflow-y:auto"><table class="lt" id="gap-lt"></table></div></section>

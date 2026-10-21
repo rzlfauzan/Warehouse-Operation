@@ -108,16 +108,16 @@ wd.freeze_panes='C2';wd.auto_filter.ref=f"A1:{L(len(h2))}{wd.max_row}"
 dv=DataValidation(type='list',formula1='"Ya,Tidak,Perlu cek"',allow_blank=True);wd.add_data_validation(dv);dv.add(f'G2:G{wd.max_row}')
 
 # Pemetaan Medan -> HO
-REL={'S':'setara','P':'sebagian','M':'hanya Medan'};CONF={'T':'tinggi','S':'sedang','R':'rendah'}
+REL=MAPJ['meta']['rel'];CONF=MAPJ['meta']['conf']
 mdn={(x['sheet'],i['no']):(i,x) for x in V3['sheets'] if x['site']=='MDN' for i in x['items']}
 ho={(x['sheet'],i['no']):(i,x) for x in V3['sheets'] if x['site']=='JKT' for i in x['items']}
 SHN={'EXPORT':'Export','IMPORT':'Import','DC':'DC','TRUCKING':'Trucking'}
 wm=wb.create_sheet('Pemetaan Medan-HO')
-hm=['Proses Medan','No','Seksi','Aktor Medan','Langkah SOP Medan','Padanan di SOP HO','Langkah SOP HO','Relasi','Keyakinan','Catatan','Setuju?','Padanan HO menurut reviewer','Catatan reviewer','Reviewer']
+hm=['Proses Medan','No','Seksi','Aktor Medan','Langkah SOP Medan','Sama dengan di SOP HO','Langkah SOP HO','Hubungan','Kecocokan','Catatan','Setuju?','Langkah HO menurut reviewer','Catatan reviewer','Reviewer']
 wm.append(hm)
 for m in MAPJ['map']:
     it,_=mdn[(m['sheet'],m['no'])]
-    refs=', '.join(f"{SHN[h['sheet']]} {h['no']}" for h in m['ho']) or '(tidak ada)'
+    refs=', '.join(f"{SHN[h['sheet']]} {h['no']}" for h in m['ho']) or '(tidak ada di HO)'
     txt='\n'.join(f"{SHN[h['sheet']]} {h['no']}: {ho[(h['sheet'],h['no'])][0]['criterion']}" for h in m['ho'])
     wm.append([SHN[m['sheet']],m['no'],it['section'],it['actor'],it['criterion'],refs,txt,REL[m['rel']],CONF[m['conf']],m['note'],'','','',''])
 W3=[12,6,8,20,48,22,52,12,11,40,12,24,34,14]
@@ -134,7 +134,7 @@ wm.freeze_panes='C2';wm.auto_filter.ref=f"A1:{L(len(hm))}{wm.max_row}"
 dvm=DataValidation(type='list',formula1='"Ya,Tidak,Perlu diubah"',allow_blank=True);wm.add_data_validation(dvm);dvm.add(f'K2:K{wm.max_row}')
 # HO tanpa padanan di Medan
 covered={(h['sheet'],h['no']) for m in MAPJ['map'] for h in m['ho']}
-wo=wb.create_sheet('HO tanpa padanan Medan')
+wo=wb.create_sheet('HO tidak ada di Medan')
 ho2=['Proses HO','No','Seksi','Aktor HO','Langkah SOP HO','Catatan reviewer','Perlu ada di SOP Medan?','Reviewer']
 wo.append(ho2)
 for (sh,no),(it,_) in sorted(ho.items(),key=lambda kv:(['EXPORT','IMPORT','DC','TRUCKING'].index(kv[0][0]),kv[0][1])):
@@ -168,7 +168,7 @@ steps=['Satu sheet per proses: Export, Import, Trucking Support, DC. Tiap tahap 
  'Sheet "Dokumen" memuat satu baris per dokumen untuk catatan per dokumen (nama resmi, perlu TTD).',
  'Kolom berwarna kuning adalah kolom review dan satu-satunya yang perlu diisi. "Perlu diubah?" dan "Status review" memakai dropdown.',
  '(TTD) berarti dokumen perlu tanda tangan. "(perkiraan)" berarti penempatan dokumen di tahap itu belum dipastikan.',
- 'Sheet "Pemetaan Medan-HO" memuat draf pemetaan 170 langkah SOP Medan ke SOP Utama HO, dan "HO tanpa padanan Medan" memuat langkah HO yang belum ada di SOP Medan. Isi kolom kuning untuk menyetujui atau mengubah padanan.',
+ 'Sheet "Pemetaan Medan-HO" memuat draf pemetaan 170 langkah SOP Medan ke SOP Utama HO, dan "HO tidak ada di Medan" memuat langkah HO yang belum ada di SOP Medan. Isi kolom kuning untuk menyetujui atau mengubah pemetaan.',
  'Trucking Support langkah 1 sampai 8 (penarikan empty) asalnya Export 37 sampai 44. Langkah 9 sampai 22 (penarikan full container) belum diaudit dan masih draf dari Pendahuluan SOP.']
 for i,s in enumerate(steps):
     put(5+i,1,f'{i+1}. '+s);wp.merge_cells(start_row=5+i,start_column=1,end_row=5+i,end_column=4);wp.row_dimensions[5+i].height=30

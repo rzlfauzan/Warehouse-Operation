@@ -89,7 +89,7 @@
      ]
     ]
    ],
-   "ver": "Terverifikasi lintas cabang: NON-COMPLY di Jakarta (Export 51, Import 51, DC 42 di Semper dan Marcen), Semarang (Export 51, DC 42), Makassar (DC 42), dan Medan (Export 46, Import 47, DC 44). Surabaya N/A di ketiganya; Semarang Import 51 N/A karena dikerjakan pihak lain.",
+   "ver": "NON-COMPLY di Jakarta (Export 51, Import 51, DC 42 di Semper dan Marcen), Semarang (Export 51, DC 42), Makassar (DC 42), dan Medan (Export 46, Import 47, DC 44). Surabaya N/A di ketiganya; Semarang Import 51 N/A karena dikerjakan pihak lain.",
    "root": "Form BA Cycle Count belum tersedia dan hasilnya hanya dilaporkan lewat email ke PIC dan atasan (Jakarta Import 51: tidak ada form BA; Medan: BA tidak dibuat).",
    "own": "Bisdev & Service Integrity (form), Inventory (pengguna)",
    "act": "Buat form BA Cycle Count standar, masukkan ke SOP-OPS-006, lalu sosialisasikan."
@@ -139,7 +139,7 @@
      ]
     ]
    ],
-   "ver": "Terverifikasi: NON-COMPLY di Jakarta (Export 62, Import 62, DC 53 hanya Semper), Surabaya (Export 62, Import 62, DC 53), Semarang (Export 62, DC 53), Makassar (DC 53), dan Medan (Export 57, Import 58). Semarang Import 62 N/A. Medan DC 55 COMPLY. Import Jakarta menyebut \"tidak ada form BA\", cabang lain hanya \"belum digunakan\", jadi akar masalahnya belum tentu sama.",
+   "ver": "NON-COMPLY di Jakarta (Export 62, Import 62, DC 53 hanya Semper), Surabaya (Export 62, Import 62, DC 53), Semarang (Export 62, DC 53), Makassar (DC 53), dan Medan (Export 57, Import 58). Semarang Import 62 N/A. Medan DC 55 COMPLY. Import Jakarta menyebut \"tidak ada form BA\", cabang lain hanya \"belum digunakan\", jadi akar masalahnya belum tentu sama.",
    "root": "Import: form BA tidak ada. Export dan DC Semper: BA belum dipakai setelah SO selesai (sebab belum dicatat auditor).",
    "own": "Bisdev & Service Integrity (form), Inventory dan Ops (pelaksana)",
    "act": "Pastikan form BA SO tersedia di semua lokasi, wajibkan penandatanganan MKT dan pelanggan, lalu cek di SO berikutnya."
@@ -175,7 +175,7 @@
      ]
     ]
    ],
-   "ver": "Terverifikasi sebagian lintas cabang. Export 6: NON-COMPLY di Semarang; Jakarta dan Surabaya COMPLY dengan penyimpangan. Export 7: NON-COMPLY di Jakarta dan Surabaya. Export 29: NON-COMPLY di ketiganya. DC 6: NON-COMPLY di Semarang dan Makassar; DC 7: hanya Makassar. DC 31 COMPLY di semua cabang (Jakarta dengan penyimpangan). Import 21 Jakarta menyebut belum ada standar komunikasi, bukan WA atau telepon secara eksplisit.",
+   "ver": "Sebagian saja. Export 6: NON-COMPLY di Semarang; Jakarta dan Surabaya COMPLY dengan penyimpangan. Export 7: NON-COMPLY di Jakarta dan Surabaya. Export 29: NON-COMPLY di ketiganya. DC 6: NON-COMPLY di Semarang dan Makassar; DC 7: hanya Makassar. DC 31 COMPLY di semua cabang (Jakarta dengan penyimpangan). Import 21 Jakarta hanya menyebut belum ada standar komunikasi, tidak menyebut WA atau telepon.",
    "root": "SOP meminta email resmi, praktiknya WA atau telepon dengan email menyusul. Belum ada kanal yang disepakati sebagai resmi.",
    "own": "Operational Spv dan Bisdev & Service Integrity",
    "act": "Putuskan kanal resmi: tegakkan email, atau akui WA group resmi di SOP dengan rekap email harian."
@@ -198,7 +198,7 @@
      ]
     ]
    ],
-   "ver": "Terverifikasi: NON-COMPLY di Jakarta (Semper dan Marcen), Surabaya, Semarang, dan Makassar untuk DC 16, 17, dan 35; DC 22 NON-COMPLY kecuali Makassar yang COMPLY. DC 22 dan 35 di Jakarta bertanda form_gap (kolom TTD tidak ada di dokumen atau WMS); DC 17: WMS belum mengakomodasi surat jalan inbound; DC 16 Jakarta: contoh GR bertanda tangan ada di Marcen. SOP Medan tidak memuat langkah TTD Ops Section Head.",
+   "ver": "NON-COMPLY di Jakarta (Semper dan Marcen), Surabaya, Semarang, dan Makassar untuk DC 16, 17, dan 35; DC 22 NON-COMPLY kecuali Makassar yang COMPLY. DC 22 dan 35 di Jakarta kolom TTD memang tidak ada di dokumen atau WMS; DC 17: WMS belum mengakomodasi surat jalan inbound; DC 16 Jakarta: contoh GR bertanda tangan ada di Marcen. SOP Medan tidak memuat langkah TTD Ops Section Head.",
    "root": "Dokumen dan WMS tidak punya kolom TTD Ops Section Head, kecuali Good Receipt yang contohnya sudah ada.",
    "own": "Bisdev & Service Integrity dan tim WMS (22, 35, 17); Ops Section Head (16)",
    "act": "Tambah kolom TTD di dokumen inbound, DO MKT, dan WMS; untuk GR terapkan contoh dari Marcen ke Semper."
@@ -220,7 +220,7 @@
      ]
     ]
    ],
-   "ver": "Terverifikasi sebagian lintas cabang. DC 11 dan 32: NON-COMPLY di Jakarta, Surabaya, dan Semarang, COMPLY di Makassar. DC 3: NON-COMPLY di Jakarta Semper dan Surabaya (Jakarta Marcen COMPLY padahal temuannya \"tanpa form standar\"; Semarang dan Makassar COMPLY). DC 30: hanya Jakarta NON-COMPLY. Jadi \"NON-COMPLY di Jakarta-Semper, Surabaya, Semarang dan COMPLY di Makassar\" benar untuk DC 11 dan 32, tidak untuk semua empat langkah.",
+   "ver": "Sebagian saja. DC 11 dan 32: NON-COMPLY di Jakarta, Surabaya, dan Semarang, COMPLY di Makassar. DC 3: NON-COMPLY di Jakarta Semper dan Surabaya (Jakarta Marcen COMPLY padahal temuannya \"tanpa form standar\"; Semarang dan Makassar COMPLY). DC 30: hanya Jakarta NON-COMPLY. Jadi pola \"NON-COMPLY di Jakarta Semper, Surabaya, Semarang dan COMPLY di Makassar\" hanya berlaku untuk DC 11 dan 32.",
    "root": "Pernah disosialisasikan dan sempat jalan (dari QHSE saat ada PASI), lalu berhenti.",
    "own": "Security Supervisor dan Ops Section Head; QHSE",
    "act": "Sosialisasi ulang, taruh form di pos dan di titik bongkar muat, cek berkala oleh QHSE."
@@ -263,7 +263,7 @@
      ]
     ]
    ],
-   "ver": "Terverifikasi dengan catatan. Jakarta: Export 45 sampai 50 dan Import 45 sampai 46 berstatus COMPLY padahal temuannya \"belum dijalankan\" (status_conflict); DC Semper 37, 38, 40, 41 NON-COMPLY dan 39 N/A (dilakukan Inventory HO). Semarang: DC 36 sampai 41 seluruhnya NON-COMPLY, dan akar masalah no_cycle_count tercatat di Export dan DC. Surabaya dan Makassar COMPLY.",
+   "ver": "Jakarta: Export 45 sampai 50 dan Import 45 sampai 46 berstatus COMPLY padahal temuannya \"belum dijalankan\" (statusnya perlu ditinjau ulang); DC Semper 37, 38, 40, 41 NON-COMPLY dan 39 N/A (dilakukan Inventory HO). Semarang: DC 36 sampai 41 seluruhnya NON-COMPLY, dan akar masalah no_cycle_count tercatat di Export dan DC. Surabaya dan Makassar COMPLY.",
    "root": "Tidak ada stockkeeper in-charge di DC Export; cycle count baru mingguan.",
    "own": "Warehouse Manager dan Inventory",
    "act": "Tetapkan stockkeeper in-charge, atau jika mingguan memang realistis, revisi frekuensi di SOP-OPS-006."
@@ -291,7 +291,7 @@
      ]
     ]
    ],
-   "ver": "Jakarta: Import 52, 54, 56 sampai 60, dan 62 NON-COMPLY (8 langkah); Import 53 N/A. Import 59 dan 60 NON-COMPLY padahal temuannya \"tidak ditemukan selisih\" (lihat bagian 6). Untuk cabang lain lihat tabel per cabang.",
+   "ver": "Jakarta: Import 52, 54, 56 sampai 60, dan 62 NON-COMPLY (8 langkah); Import 53 N/A. Import 59 dan 60 NON-COMPLY padahal temuannya \"tidak ditemukan selisih\". Untuk cabang lain lihat tabel per cabang.",
    "root": "SO berkala belum dilakukan dan hasil hitung diinput di drive tim Inventory, bukan di WMS.",
    "own": "Inventory (jadwal SO), tim WMS (freeze)",
    "act": "Jadwalkan SO berkala Import dan input hasil SO ke WMS, bukan ke drive tim."
@@ -345,7 +345,7 @@
      ]
     ]
    ],
-   "ver": "Terverifikasi di Jakarta, Semarang, dan Medan. Jakarta: Export 55, 61 dan Import 61 N/A (\"tidak ada menu freeze\"), Import 55 NON-COMPLY. Semarang: DC 46 dan 52 NON-COMPLY, Export 55 dan 61 N/A (akar masalah no_wms_freeze_menu), Import N/A. Medan: DC 48 NON-COMPLY (\"belum freeze stock WMS saat SO\"), Export 50 dan Import 51 N/A. Surabaya COMPLY di semua langkah ini. Makassar: DC 46 NON-COMPLY, DC 52 COMPLY. Penilaian N/A dan NON-COMPLY untuk gap yang sama tidak konsisten antar cabang.",
+   "ver": "Terjadi di Jakarta, Semarang, dan Medan. Jakarta: Export 55, 61 dan Import 61 N/A (\"tidak ada menu freeze\"), Import 55 NON-COMPLY. Semarang: DC 46 dan 52 NON-COMPLY, Export 55 dan 61 N/A (akar masalah no_wms_freeze_menu), Import N/A. Medan: DC 48 NON-COMPLY (\"belum freeze stock WMS saat SO\"), Export 50 dan Import 51 N/A. Surabaya COMPLY di semua langkah ini. Makassar: DC 46 NON-COMPLY, DC 52 COMPLY. Penilaian N/A dan NON-COMPLY untuk gap yang sama tidak konsisten antar cabang.",
    "root": "Menu freeze atau lock stock tidak ada di WMS, sehingga transaksi masih berjalan saat stock opname.",
    "own": "Tim WMS dan Bisdev & Service Integrity",
    "act": "Minta fitur freeze di WMS; sampai tersedia, tetapkan prosedur manual (pembekuan transaksi lewat SOP) dan perlakukan sama di semua cabang."
@@ -392,7 +392,7 @@
      ]
     ]
    ],
-   "ver": "Terverifikasi: DC 19 (posisi Pallet ID) NON-COMPLY di Jakarta (Semper, Marcen), Surabaya, Semarang, dan Makassar, yaitu semua cabang ber-template Jakarta. DC 18, 20, 21: NON-COMPLY di Semarang dan sebagian di Jakarta; Surabaya dan Makassar COMPLY. Medan (template berbeda): pallet tag dan lokasi bermasalah di DC 17, 18, 34, 35, 36, 37, 41. Export 18 Jakarta COMPLY dengan catatan perbaikan.",
+   "ver": "DC 19 (posisi Pallet ID) NON-COMPLY di Jakarta (Semper, Marcen), Surabaya, Semarang, dan Makassar, yaitu semua cabang ber-template Jakarta. DC 18, 20, 21: NON-COMPLY di Semarang dan sebagian di Jakarta; Surabaya dan Makassar COMPLY. Medan (template berbeda): pallet tag dan lokasi bermasalah di DC 17, 18, 34, 35, 36, 37, 41. Export 18 Jakarta COMPLY dengan catatan perbaikan.",
    "root": "Pallet ID tidak konsisten diserahkan dan ditempel, put away tanpa scan, forklift langsung ke lokasi kosong.",
    "own": "Ops Section Head dan Checker",
    "act": "Wajibkan scan saat put away, standar posisi Pallet ID, dan pemeriksaan lokasi oleh supervisor."
@@ -421,7 +421,7 @@
      ]
     ]
    ],
-   "ver": "Terverifikasi: Import 14 NON-COMPLY (salah input gate in) dan DC 8, 9, 10 NON-COMPLY di Semper (Job Order dibuat setelah selesai bongkar). Tambahan dari saya: Import 33 (input lokasi setelah barang masuk lokasi, COMPLY dengan penyimpangan) dan Import 58 (hasil SO diinput di drive, bukan WMS). Cabang lain lihat tabel per cabang.",
+   "ver": "Import 14 NON-COMPLY (salah input gate in) dan DC 8, 9, 10 NON-COMPLY di Semper (Job Order dibuat setelah selesai bongkar). Tambahan dari saya: Import 33 (input lokasi setelah barang masuk lokasi, COMPLY dengan penyimpangan) dan Import 58 (hasil SO diinput di drive, bukan WMS). Cabang lain lihat tabel per cabang.",
    "root": "Input dilakukan setelah pekerjaan fisik selesai, bukan sebelumnya.",
    "own": "Admin dan Trucking Support; Ops Section Head",
    "act": "Tetapkan batas waktu input (sebelum bongkar), dan cek keterlambatan lewat laporan WMS."
@@ -454,7 +454,7 @@
      ]
     ]
    ],
-   "ver": "Dari flag QA: Export 27 (peran surveyor sudah tidak ada) dan Import 42 (MKT tidak melakukan redress) seharusnya N/A; Import 25 dan 27 sop_outdated (BC tidak lagi menandatangani, hanya stempel); DC 7 sop_inconsistent (overtime 16:00 vs 17:00, praktik 17:00). Surabaya Export 27 bertanda status_conflict_role_not_exist (peran surveyor tidak ada), sama dengan Jakarta. DC 7 (16:00 vs 17:00) juga bertanda sop_inconsistent di Surabaya.",
+   "ver": "Dari catatan auditor: Export 27 (peran surveyor sudah tidak ada) dan Import 42 (MKT tidak melakukan redress) seharusnya N/A; Import 25 dan 27 SOP sudah usang (BC tidak lagi menandatangani, hanya stempel); DC 7 SOP tidak konsisten (overtime 16:00 vs 17:00, praktik 17:00). Surabaya Export 27 dicatat peran surveyor sudah tidak ada, sama dengan Jakarta. DC 7 (16:00 vs 17:00) juga dicatat tidak konsisten di Surabaya.",
    "root": "SOP belum diperbarui mengikuti perubahan peran dan proses.",
    "own": "Bisdev & Service Integrity, disetujui Warehouse Manager",
    "act": "Revisi SOP: hapus peran surveyor di langkah stuffing, ubah tanda tangan BC menjadi stempel, keluarkan redress, samakan batas overtime."
@@ -487,7 +487,7 @@
      ]
     ]
    ],
-   "ver": "Terverifikasi: 8 dari 8 langkah NON-COMPLY. Operator forklift dan Checker mencatat lokasi di Google Form, bukan di WMS atau cargo tally (Export 15, 16; Import 33, 34); verifikasi dan SO tidak menemukan lokasi cargo area Export dan Import di WMS (Export 43, 53; Import 44, 54).",
+   "ver": "8 dari 8 langkah NON-COMPLY. Operator forklift dan Checker mencatat lokasi di Google Form, bukan di WMS atau cargo tally (Export 15, 16; Import 33, 34); verifikasi dan SO tidak menemukan lokasi cargo area Export dan Import di WMS (Export 43, 53; Import 44, 54).",
    "root": "Alur pencatatan lokasi cargo di Medan memakai Google Form, sedangkan SOP mengharuskan WMS.",
    "own": "Warehouse Manager Medan dan tim WMS",
    "act": "Pindahkan pencatatan lokasi ke WMS, hentikan Google Form setelah migrasi, dan cocokkan stok lokasi saat cycle count."
@@ -500,7 +500,7 @@
    ],
    "flag": "na_not_performed_by_mkt",
    "refs": [],
-   "ver": "Terverifikasi: 67 langkah bertanda na_not_performed_by_mkt, yaitu Semarang Import 46 dari 62 (LCL dikerjakan CFS Pelindo) dan Surabaya Import 21 dari 62. Karena N/A tidak dihitung, compliance resmi Semarang Import tampil 100% dan Surabaya Import 97,6%, padahal cakupan verifikasinya 25,8% dan 66,1%. Medan Import punya 8 langkah N/A (5, 8, 9, 13, 14, 15, 19, 30) yang berasal dari pekerjaan vendor, BC, atau pelayaran dan belum bertanda; 2 N/A lainnya adalah freeze WMS.",
+   "ver": "67 langkah N/A karena dikerjakan pihak lain: Semarang Import 46 dari 62 (LCL dikerjakan CFS Pelindo) dan Surabaya Import 21 dari 62. Karena N/A tidak dihitung, compliance resmi Semarang Import tampil 100% dan Surabaya Import 97,6%, padahal yang benar-benar diperiksa hanya 25,8% dan 66,1%. Medan Import punya 8 langkah N/A (5, 8, 9, 13, 14, 15, 19, 30) yang berasal dari pekerjaan vendor, BC, atau pelayaran dan belum diberi catatan \"dikerjakan pihak lain\"; 2 N/A lainnya adalah freeze WMS.",
    "root": "Proses dikerjakan CFS Pelindo, vendor, atau pelanggan, jadi MKT tidak menjalankan dan tidak memverifikasinya.",
    "own": "Kepala cabang dan Account Officer",
    "act": "Tetapkan apakah langkah itu tetap di ruang lingkup SOP cabang. Jika ya, minta bukti dan SLA dari pihak ketiga; jika tidak, tandai resmi sebagai di luar ruang lingkup."
@@ -540,58 +540,6 @@
   "SYS": "Sistem / WMS",
   "OPS": "Operasional"
  },
- "quality": [
-  [
-   "Import 16 (Jakarta)",
-   "Bertanda status_conflict_finding_says_not_received dan dihitung NON-COMPLY di Adjusted.",
-   "COMPLY, temuan \"tidak menerima lampiran izin stripping\""
-  ],
-  [
-   "DC 3 Marcen (Jakarta)",
-   "COMPLY, padahal temuannya \"dilakukan tetapi tanpa form standar\". DC 11 dan 32 dengan temuan serupa NON-COMPLY.",
-   "Penilaian tidak konsisten antar langkah"
-  ],
-  [
-   "Import 59, 60 (Jakarta)",
-   "NON-COMPLY, padahal temuannya \"tidak ditemukan selisih kargo\". Kemungkinan seharusnya N/A karena SO berkala belum dilakukan.",
-   "Meninjau ulang status"
-  ],
-  [
-   "WMS freeze (Jakarta, Semarang, Medan)",
-   "Gap yang sama dinilai N/A di sebagian cabang (Jakarta Export 55, 61, Import 61; Semarang Export, Import; Medan Export 50, Import 51) dan NON-COMPLY di yang lain (Jakarta Import 55; Semarang dan Makassar DC; Medan DC 48).",
-   "Samakan perlakuan N/A vs NON-COMPLY untuk gap WMS"
-  ],
-  [
-   "Semarang Import",
-   "Compliance resmi 100% tetapi 46 dari 62 langkah N/A karena dikerjakan CFS Pelindo. Hanya 16 langkah terverifikasi (25,8%).",
-   "Baca bersama cakupan, jangan hanya persentase resmi"
-  ],
-  [
-   "Surabaya Import",
-   "Compliance resmi 97,6% dengan 21 dari 62 langkah N/A. Cakupan verifikasi 66,1%.",
-   "Baca bersama cakupan"
-  ],
-  [
-   "Medan Import (8 N/A)",
-   "Langkah 5, 8, 9, 13, 14, 15, 19, 30 berstatus N/A karena dikerjakan vendor, BC, atau pelayaran, tetapi belum bertanda na_not_performed_by_mkt.",
-   "Tandai konsisten dengan Surabaya dan Semarang"
-  ],
-  [
-   "Medan Export 11",
-   "Bertanda integrity_risk_reported_by_auditor: auditor mencatat dugaan fraud saat bongkar. Tidak disembunyikan di halaman.",
-   "Tindak lanjut lewat jalur Service Integrity, di luar audit SOP"
-  ],
-  [
-   "Surabaya DC",
-   "Kolom bukti berisi placeholder sisa copy-paste (\"AREA TERBATAS & NC BARANG_n\"), tidak dipakai.",
-   "Bukti DC Surabaya perlu dilengkapi"
-  ],
-  [
-   "Selisih dokumen vs lapangan",
-   "Kolom doc (self-assessment) dan genba (lapangan) berbeda: overclaim (doc COMPLY, lapangan NON-COMPLY) paling banyak di Jakarta DC (14), Makassar DC (12), dan Medan Export (10). Medan Import kebalikannya: dokumen NON-COMPLY, lapangan COMPLY di 21 langkah.",
-   "Lihat bagian Dokumen vs lapangan"
-  ]
- ],
  "RCN": {
   "no_wms": "WMS belum dipakai",
   "no_cycle_count": "Cycle count belum berjalan",

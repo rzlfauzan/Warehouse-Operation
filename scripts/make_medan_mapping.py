@@ -2,9 +2,9 @@
 """Bangun data/medan_ho_mapping.json: pemetaan langkah SOP Medan ke SOP Utama HO (template Jakarta).
 
 Ini DRAF usulan. Dibuat dengan membaca bunyi langkah dan aktor kedua template; belum dikonfirmasi pemilik SOP.
-Spesifikasi ringkas per langkah Medan:  nomor: (padanan HO, relasi, keyakinan, catatan)
-  padanan HO : 'E3,E4' (E=EXPORT, I=IMPORT, D=DC, T=TRUCKING; T1-T8 penarikan empty, T9-T22 full), kosong = tidak ada
-  relasi     : S setara (kegiatan sama), P sebagian (tumpang tindih atau beda rincian/aktor), M hanya Medan
+Spesifikasi ringkas per langkah Medan:  nomor: (langkah HO, relasi, keyakinan, catatan)
+  langkah HO : 'E3,E4' (E=EXPORT, I=IMPORT, D=DC, T=TRUCKING; T1-T8 penarikan empty, T9-T22 full), kosong = tidak ada
+  relasi     : S sama (kegiatan sama), P mirip (sebagian sama atau beda rincian/aktor), M hanya di Medan
   keyakinan  : T tinggi, S sedang, R rendah
 """
 import json
@@ -19,7 +19,7 @@ def rng(a, b, ho_start, rel='S', conf='T', note=''):
 EXPORT = {
  1: ('E3', 'P', 'S', 'Cek tujuan SJT di pos depan; HO sekaligus registrasi dan catat waktu tiba'),
  2: ('E3', 'P', 'S', 'Pencocokan nopol dengan SJT; HO tidak memisahkannya'),
- 3: ('E2', 'S', 'S', 'Logbook Medan setara registrasi kendaraan di pos Security HO'),
+ 3: ('E2', 'S', 'S', 'Logbook Medan sama dengan registrasi kendaraan di pos Security HO'),
  4: ('E2', 'P', 'R', 'Langkah pengarah ke AO; HO tidak punya langkah eksplisit'),
  5: ('E5', 'S', 'T', ''),
  6: ('E7', 'P', 'S', 'Closing time gudang (Sen-Jum 17.00, Sab 13.00) vs batas overtime HO 17:00; beda aturan'),
@@ -43,7 +43,7 @@ EXPORT = {
  24: ('', 'M', 'T', 'CEISA dan pembayaran port charge ke BNCT tidak ada di SOP HO'),
  25: ('', 'M', 'T', 'Pengesahan NPE, PKBE, PL di BC hanggar tidak ada di SOP HO'),
  26: ('T9', 'P', 'R', 'PKBE; draf HO penarikan full memuat PKBE sebagai dokumen masuk'),
- 27: ('E22,E23', 'P', 'S', 'Stuffing list Medan setara CLP di HO'),
+ 27: ('E22,E23', 'P', 'S', 'Stuffing list Medan sama dengan CLP di HO'),
  28: ('E24,E25', 'P', 'S', 'Siapkan cargo sesuai stuffing list; HO oleh Picker'),
  29: ('E31', 'P', 'R', 'Scan dan ukur dimensi; HO scan Pallet ID oleh Surveyor'),
  30: ('', 'M', 'T', 'Kirim dimensi cargo ke pelanggan tidak ada di SOP HO'),
@@ -53,7 +53,7 @@ EXPORT = {
  34: ('', 'M', 'T', 'Serah Cargo Tally ke AO dan laporan ke pelanggan tidak ada di Export HO'),
  35: ('T9', 'P', 'R', 'SP2 dan stuffing list dari pelanggan; HO penarikan full memulai dari KE, PKBE, Survey Pelayaran, ESL'),
  36: ('', 'M', 'S', 'Peran Gate Officer tidak ada di SOP HO'),
- 37: ('T16', 'S', 'S', 'Pesan truck untuk full container ke pelabuhan setara SPK ke vendor'),
+ 37: ('T16', 'S', 'S', 'Pesan truck untuk full container ke pelabuhan sama dengan SPK ke vendor'),
  38: ('T14', 'P', 'R', 'Muat container full; HO memeriksa kondisi saat keluar gudang'),
  39: ('T15,T13', 'P', 'S', 'Cetak SJ dan cek nomor container dan seal; HO terbitkan SJT dan periksa segel'),
 }
@@ -73,7 +73,7 @@ IMPORT = {
  12: ('I9,I10', 'P', 'S', 'Cetak SP2 dan order trucking; HO SP2 diteruskan untuk order E-Seal'),
  13: ('I11,I12', 'P', 'R', 'Pengemudi tarik container dengan SP2'),
  14: ('I13', 'P', 'S', 'BC Pelindo pasang segel dan BA Penyegelan; HO pasang E-Seal'),
- 15: ('I14', 'P', 'R', 'Antar container ke CY MKT; HO langkah terdekat adalah input gate in'),
+ 15: ('I14', 'P', 'R', 'Antar container ke CY MKT; di HO langkah yang paling mirip adalah input gate in'),
  16: ('I14', 'P', 'S', 'Serah dokumen dan input data; HO input gate in ke sistem'),
  17: ('', 'M', 'T', 'Penurunan container ke lapangan MKT belum ada di SOP HO (calon SOP CY Handling)'),
  18: ('I16', 'S', 'T', ''),
@@ -110,7 +110,7 @@ DC = {
  4: ('D2', 'P', 'S', 'Gate Officer terima SJT dan input WIMS; HO Security registrasi dan cek SJ'),
  5: ('', 'M', 'T', 'Penurunan container ke lapangan oleh Operator RS belum ada di SOP HO (calon SOP CY Handling)'),
  6: ('D10', 'S', 'T', ''),
- 7: ('E10', 'P', 'R', 'Foto seal dan kondisi container; padanan terdekat ada di Export 10 (DC HO tidak punya)'),
+ 7: ('E10', 'P', 'R', 'Foto seal dan kondisi container; yang paling mirip ada di Export 10 (DC HO tidak punya)'),
  8: ('D12,D13', 'P', 'S', 'Periksa fisik, marking, jumlah vs PL'),
  9: ('D14', 'S', 'T', ''),
  10: ('D13,D15', 'S', 'S', 'Tally Sheet dan update WIMS'),
@@ -154,7 +154,7 @@ def build():
 if __name__ == '__main__':
     m = build()
     meta = {'status': 'draf usulan, belum dikonfirmasi pemilik SOP',
-            'rel': {'S': 'setara', 'P': 'sebagian', 'M': 'hanya Medan'}, 'conf': {'T': 'tinggi', 'S': 'sedang', 'R': 'rendah'},
+            'rel': {'S': 'sama', 'P': 'mirip', 'M': 'hanya di Medan'}, 'conf': {'T': 'tinggi', 'S': 'sedang', 'R': 'rendah'},
             'note': 'Medan memakai SOP-OPS-DC-002, EXP-003, IMP-004; acuan HO adalah SOP Utama (template Jakarta). T1-T8 = penarikan empty (asal Export 37-44), T9-T22 = penarikan full (draf).'}
     (ROOT / 'data/medan_ho_mapping.json').write_text(json.dumps({'meta': meta, 'map': m}, ensure_ascii=False, indent=1), encoding='utf-8')
     from collections import Counter
