@@ -6,7 +6,22 @@ from openpyxl.styles import Font,PatternFill,Alignment,Border,Side
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.worksheet.properties import PageSetupProperties
 from openpyxl.utils import get_column_letter as L
-rows=json.load(open(ROOT/'data/flow_rows_snapshot.json')); D=json.load(open(ROOT/'data/audit_dataset_jkt_v2.json'))
+D=json.load(open(ROOT/'data/audit_dataset_jkt_v2.json'))
+FLOWS=json.load(open(ROOT/'data/flows.json'))
+AREA=FLOWS['areas']
+def stage_rows(fl):
+    """Ratakan data/flows.json menjadi daftar tahap (satu dict per tahap, urutan alur)."""
+    out=[]
+    for p in fl['procs']:
+        for ph in p['phases']:
+            n=0
+            for st in ph['stages']:
+                n+=1
+                out.append(dict(flow=p['label'],phase=ph['name'],no=None if ph.get('periodic') else st['no'],name=st['name'],cond=st['cond'],
+                    pic=st['pic'],main=AREA[st['areas'][0]],others=[AREA[a] for a in st['areas'][1:]],sop=st['sop'],
+                    ref=[st['sheet'],st['from'],st['to']],**{'in':st['in'],'out':st['out']},sys=st['sys']))
+    return out
+rows=stage_rows(FLOWS)
 F='Arial'
 SHEETS={s['sheet']:s for s in D['sheets']}
 PROC=[('Export','EXPORT'),('Import','IMPORT'),('Trucking Support','TRUCKING'),('DC','DC')]

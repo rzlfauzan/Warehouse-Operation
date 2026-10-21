@@ -10,21 +10,21 @@ dengan tiga tab (Alur Proses Umum, Peta Proses Audit SOP, Gap Analysis).
 |---|---|
 | `data/audit_dataset_jkt_source.json` | Dataset asli dari auditor (62 Export, 62 Import, 53 DC). Jangan diubah. |
 | `data/audit_dataset_jkt_v2.json` | Dataset kerja. Perubahan dari source: sheet `EXPORT` kehilangan seksi E6 (langkah 37-44); sheet `TRUCKING` baru berisi E6 (langkah 1-8, sudah diaudit, `orig_no` menyimpan nomor asli) dan draf penarikan full container (langkah 9-22, status `PENDING`). Setiap sheet punya field `site`. |
-| `data/flow_rows_snapshot.json` | Hasil ekstraksi 32 tahap dari Alur Proses Umum (PIC, dokumen masuk/keluar, area). Dipakai untuk Excel. |
-| `data/flows.json` | Definisi 32 tahap alur (PIC, area kerja, dokumen masuk/keluar, rentang langkah audit, catatan per proses). Sumber untuk tab Alur. |
+| `data/flows.json` | Definisi 32 tahap alur (PIC, area kerja, dokumen masuk/keluar, rentang langkah audit, catatan per proses). Sumber untuk tab Alur dan Excel. |
 | `data/gap_config.json` | Klasifikasi gap A/B/C (`GT`, `FORCE`), jenis gap, sepuluh tema, teks flag QA, dan catatan kualitas data. Sumber untuk tab Gap. |
 | `src/app.tpl.html` | **Halaman gabungan** dengan tiga tab (Alur, Peta, Gap), filter bersama, dan tautan antar tab. Placeholder `__PAYLOAD__`. |
 | `src/*.tpl.html` (lainnya) | Template tiga halaman terpisah yang lama (dipertahankan karena masih diterbitkan). Placeholder `__DATA__` atau `__ST__`. |
 | `scripts/build.py` | Membangun `dist/*.html` dari data dan template. `--check` membandingkan tanpa menulis. |
-| `scripts/make_xlsx_peta.py` | Membangun `dist/Peta_Proses_Audit_SOP_Review.xlsx` (butuh openpyxl). |
-| `scripts/export_flow_rows.js` | Mengekstrak `flow_rows_snapshot.json` dari halaman Alur memakai Playwright. |
+| `scripts/validate_data.py` | Cek tiap langkah audit masuk tepat satu tahap alur, dan referensi tema ada di data. Jalankan setelah mengubah data. |
+| `scripts/make_xlsx_peta.py` | Membangun `dist/Peta_Proses_Audit_SOP_Review.xlsx` dari `data/flows.json` dan `data/audit_dataset_jkt_v2.json` (butuh openpyxl). Hitung ulang rumus dengan LibreOffice setelahnya. |
 | `dist/mkt_audit_sop.html` | Halaman gabungan (yang dipakai ke depan). |
-| `dist/` (lainnya) | Tiga halaman lama dan dua file Excel. |
+| `dist/` (lainnya) | Tiga halaman lama dan satu file Excel review. |
 | `docs/` | Prompt asli dan Pendahuluan SOP Penarikan Full Container ke UTC Rev.01 (butir 6 Prosedur belum diterima). |
 
 ## Membangun ulang
 
 ```
+python3 scripts/validate_data.py  # harus OK
 python3 scripts/build.py          # tulis dist/*.html
 python3 scripts/build.py --check  # harus SAMA untuk ketiganya
 python3 scripts/make_xlsx_peta.py
