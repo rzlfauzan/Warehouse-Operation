@@ -112,6 +112,8 @@ button.ncb:hover,.lnk:hover{border-color:var(--accent)}
 .achip i{width:12px;height:12px;border-radius:3px;background:var(--c);display:inline-block}
 .achip .n{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
 .foot{color:var(--muted);font-size:12.5px;max-width:90ch}
+.fbx.risk{border-left-color:var(--nc);background:var(--nc-bg)}
+.banner.risk{border-left-color:var(--nc);color:var(--fg);background:var(--nc-bg)}
 
 /* ===== PETA ===== */
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
@@ -125,6 +127,8 @@ button.ncb:hover,.lnk:hover{border-color:var(--accent)}
 .chip[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .sw{width:12px;height:12px;border-radius:3px;border:1.5px solid;display:inline-block;flex:none}
 .sw.ok{background:var(--ok-bg);border-color:var(--ok-bd)} .sw.nc{background:var(--nc-bg);border-color:var(--nc-bd)} .sw.na{background:var(--na-bg);border-color:var(--na-bd)} .sw.pe{background:var(--surface);border-color:var(--muted)}
+.sw.otr{background:repeating-linear-gradient(135deg,var(--na-bg) 0 3px,var(--surface) 3px 6px);border-color:var(--na-bd)}
+.sw.rsk{background:var(--surface);border:3px double var(--nc)}
 .sw.flag{background:var(--surface);border:2px dashed var(--flag)}
 .sw.dev{background:var(--ok-bg);border-color:var(--ok-bd);position:relative}
 .sw.dev::after{content:"";position:absolute;right:-4px;top:-4px;width:7px;height:7px;border-radius:50%;background:var(--flag);border:1px solid var(--surface)}
@@ -152,6 +156,11 @@ button.ncb:hover,.lnk:hover{border-color:var(--accent)}
 .node.pe{background:var(--surface);border-color:var(--muted);color:var(--muted)}
 .node.flag{border:2px dashed var(--flag)}
 .node.dim{opacity:.22}
+.node.otr{background:repeating-linear-gradient(135deg,var(--na-bg) 0 5px,var(--surface) 5px 10px);border-color:var(--na-bd);color:var(--na-fg)}
+.node.risk{border-width:3px;box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--nc)}
+.node.tg .t{-webkit-line-clamp:2}
+.node .rk{position:absolute;left:-7px;top:-9px;font-size:14px;line-height:1;background:var(--surface);border-radius:50%}
+.node .oth{position:absolute;left:6px;bottom:3px;max-width:138px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:10px var(--f-mono);background:var(--surface);color:var(--fg);padding:0 4px;border-radius:2px;border:1px solid var(--line)}
 .node.sel{box-shadow:0 0 0 3px var(--accent)}
 .node .dev{position:absolute;right:-6px;top:-6px;width:15px;height:15px;border-radius:50%;background:var(--flag);color:#3b2a00;font:700 10px/15px var(--f-mono);text-align:center;border:1.5px solid var(--surface)}
 .node .dots{position:absolute;right:5px;bottom:4px;display:flex;gap:3px}
@@ -189,6 +198,9 @@ button.ncb:hover,.lnk:hover{border-color:var(--accent)}
 .link{position:absolute;top:12px;height:3px;background:var(--s1);opacity:.5}
 .cv{font-family:var(--f-mono);font-size:12.5px;font-variant-numeric:tabular-nums}
 .cv .dn{color:var(--nc)}
+.cov{font-size:11px;color:var(--muted)} .cov.lo{color:var(--flag-fg)}
+.cs{grid-column:1/-1;font-family:var(--f-display);font-weight:600;font-size:17px;margin-top:10px;padding-top:8px;border-top:1px solid var(--line)}
+.cs span{font-family:var(--f-mono);font-weight:400;font-size:11.5px;color:var(--muted);margin-left:10px}
 .glegend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--muted)}
 .glegend span{display:inline-flex;align-items:center;gap:7px}
 .dot{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid var(--muted)}
@@ -216,6 +228,16 @@ table{border-collapse:collapse;width:100%}
 .hm .sid{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);margin-right:8px}
 .hm td.pe{background:repeating-linear-gradient(45deg,transparent 0 5px,var(--grid) 5px 6px)}
 .hm .lnk{margin-left:8px}
+.hm tr.sh.med td{background:var(--surface);font-family:var(--f-body);font-size:12.5px;text-transform:none;letter-spacing:0;color:var(--muted);border-top:2px solid var(--line)}
+.mx th{position:sticky;top:0;background:var(--surface);z-index:2}
+.mx td:first-child{min-width:300px}
+.mx .sid{display:inline-block;min-width:26px}
+.mx small.sec{display:block;color:var(--muted);font-size:11px;margin-left:34px}
+.mc{display:inline-block;min-width:34px;text-align:center;border-radius:3px;padding:1px 4px;font:11px var(--f-mono);border:1.5px solid;cursor:pointer}
+.mc.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok-fg)} .mc.nc{background:var(--nc-bg);border-color:var(--nc);color:var(--nc-fg)} .mc.na{background:var(--na-bg);border-color:var(--na);color:var(--na-fg)} .mc.pe{border-color:var(--muted);color:var(--muted);background:var(--surface)}
+.mc.fl{border-style:dashed;border-color:var(--flag)}
+.mc.otr{background:repeating-linear-gradient(135deg,var(--na-bg) 0 4px,var(--surface) 4px 8px)}
+.mc.none{border-color:transparent;color:var(--muted);cursor:default}
 .rk{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
 .rkh{font-family:var(--f-display);font-weight:600;font-size:16px;margin-bottom:8px}
 .br{display:grid;grid-template-columns:minmax(90px,150px) 1fr;gap:3px 10px;align-items:center;padding:3px 0;border:0;background:none;width:100%;text-align:left}
@@ -258,7 +280,7 @@ details.th[open]>summary::before{transform:rotate(90deg)}
 .st.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok-fg)}.st.nc{background:var(--nc-bg);border-color:var(--nc);color:var(--nc-fg)}.st.na{background:var(--na-bg);border-color:var(--na);color:var(--na-fg)}.st.pe{border-color:var(--muted);color:var(--muted)}
 .fgl{font-family:var(--f-mono);font-size:11px;color:var(--flag-fg)}
 .chk{display:inline-flex;gap:6px;align-items:center;font-size:13px}
-@media (max-width:760px){h1{font-size:28px}.cmp{grid-template-columns:1fr}.cmp .h{display:none}.tb2 dl{grid-template-columns:1fr}#peta-drawer{grid-template-columns:1fr}.card{flex-basis:248px}.sec-c{margin-left:0}}
+@media (max-width:760px){.mx td:first-child{min-width:220px}h1{font-size:28px}.cmp{grid-template-columns:1fr}.cmp .h{display:none}.tb2 dl{grid-template-columns:1fr}#peta-drawer{grid-template-columns:1fr}.card{flex-basis:248px}.sec-c{margin-left:0}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}.hl{animation:none;box-shadow:0 0 0 3px var(--accent)}}
 </style>
 
@@ -278,6 +300,8 @@ details.th[open]>summary::before{transform:rotate(90deg)}
     <span class="lab" id="locLab">Lokasi DC</span><div class="seg" id="locSeg"></div>
   </div>
 
+  <div class="banner" id="sitenote" hidden></div>
+
   <div class="tabs" id="tabs" role="tablist">
     <button type="button" role="tab" data-tab="alur" id="tab-alur">Alur Proses Umum</button>
     <button type="button" role="tab" data-tab="peta" id="tab-peta">Peta Proses Audit SOP</button>
@@ -287,6 +311,7 @@ details.th[open]>summary::before{transform:rotate(90deg)}
   <!-- ===== ALUR ===== -->
   <div class="panel-t" id="panel-alur" role="tabpanel" aria-labelledby="tab-alur">
     <div class="seg" id="alur-proc"></div>
+    <div class="banner" id="alur-hq" hidden></div>
     <div class="afilter" id="alur-af"></div>
     <div class="intro" id="alur-intro"></div>
     <div id="alur-flow" style="display:flex;flex-direction:column;gap:20px"></div>
@@ -298,11 +323,15 @@ details.th[open]>summary::before{transform:rotate(90deg)}
     <div class="seg" id="peta-proc"></div>
     <div class="kpis" id="peta-kpis"></div>
     <div class="banner" id="peta-banner" hidden></div>
+    <div class="banner risk" id="peta-risk" hidden></div>
     <div class="row"><span class="lab">Sorot</span><div class="chips" id="peta-chips"></div><div id="peta-range"></div></div>
     <div class="legend">
       <span><i class="sw ok"></i>COMPLY</span><span><i class="sw nc"></i>NON-COMPLY</span><span><i class="sw na"></i>N/A</span><span><i class="sw pe"></i>Belum diaudit</span>
       <span><i class="sw flag"></i>Garis putus kuning: temuan berbeda dari SOP, status perlu ditinjau ulang</span>
       <span><i class="sw dev"></i>Titik kuning: COMPLY tetapi praktik menyimpang dari SOP</span>
+      <span><i class="sw otr"></i>Garis diagonal abu-abu: N/A karena dikerjakan pihak lain</span>
+      <span><i class="sw rsk"></i>Bingkai merah ganda dan ⚠: risiko integritas dilaporkan auditor</span>
+      <span>↔ pelaksana aktual berbeda dari SOP</span>
       <span>Panah: urutan langkah. Hover untuk temuan, klik untuk detail dan tautan ke Alur dan Gap.</span>
     </div>
     <div id="peta-board" style="display:flex;flex-direction:column;gap:14px"></div>
@@ -311,24 +340,34 @@ details.th[open]>summary::before{transform:rotate(90deg)}
 
   <!-- ===== GAP ===== -->
   <div class="panel-t" id="panel-gap" role="tabpanel" aria-labelledby="tab-gap" hidden style="gap:26px">
-    <p class="lead">Satuan hitung adalah <b>temuan</b>: satu langkah di satu proses, dan untuk DC satu langkah di satu lokasi (Semper, Marcen, Dokumen). Status Adjusted menghitung ulang item bertanda <span class="mono">status_conflict</span>. Langkah yang belum diaudit tidak ikut perhitungan.</p>
+    <p class="lead">Satuan hitung adalah <b>temuan</b>: satu langkah di satu cabang dan proses, dan untuk DC Jakarta satu langkah di satu unit (Semper, Marcen). Angka resmi memakai status lapangan (genba). Kolom dokumen (self-assessment) dibaca terpisah di bagian Dokumen vs lapangan; di DC Jakarta ia tampil sebagai unit "Dokumen" yang hanya masuk hitungan bila dipilih. Status Adjusted menghitung ulang item bertanda <span class="mono">status_conflict</span>. Langkah yang belum diaudit tidak ikut perhitungan.</p>
     <section class="gsec" id="gap-s1"><h2>Compliance per proses</h2>
-      <p class="lead">Compliance = COMPLY dibagi (COMPLY + NON-COMPLY), N/A tidak dihitung. Bagian ini selalu menampilkan semua lokasi DC.</p>
-      <div class="panel"><div class="glegend" style="margin-bottom:12px"><span><i class="dot"></i>As reported</span><span><i class="dot a"></i>Adjusted</span><span>Garis penghubung menunjukkan selisih</span></div><div class="cmp" id="gap-cmp"></div></div></section>
+      <p class="lead">Resmi = COMPLY dibagi (COMPLY + NON-COMPLY), N/A diabaikan. Karena itu cabang dengan banyak N/A tampak tinggi, sehingga tiap baris memuat <b>cakupan</b>: porsi langkah yang benar-benar terverifikasi (bukan N/A). Contoh: Semarang Import resmi 100% tetapi cakupan 25,8%. Bagian ini selalu menampilkan semua unit DC Jakarta.</p>
+      <div class="panel"><div class="glegend" style="margin-bottom:12px"><span><i class="dot"></i>Resmi</span><span><i class="dot a"></i>Adjusted</span><span>Garis penghubung menunjukkan selisih</span></div><div class="cmp" id="gap-cmp"></div></div></section>
     <section class="gsec" id="gap-s2"><h2>Jenis gap dan pemiliknya</h2>
       <p class="lead">Satu temuan masuk ke satu jenis. Klasifikasi ini usulan awal dari isi temuan dan catatan auditor, jadi perlu dikonfirmasi auditor. Klik kartu untuk menyaring daftar temuan.</p>
       <div class="g3" id="gap-g3"></div></section>
+    <section class="gsec" id="gap-smx"><h2>Matriks langkah x cabang</h2>
+      <p class="lead">Baris adalah langkah SOP Utama HO (template Jakarta); kolom adalah cabang. Garis putus kuning pada sel menandai flag status, garis diagonal menandai langkah dikerjakan pihak lain. Medan memakai SOP berbeda dan ada di heatmap tahap di bawah. Klik sel untuk membuka langkah di Peta.</p>
+      <div class="row"><div class="seg" id="gap-mx-sheet"></div><span id="gap-mx-opt" class="row"></span><span class="lead mono" id="gap-mx-n"></span></div>
+      <div class="panel scroll" style="max-height:560px;overflow-y:auto"><table class="hm mx" id="gap-mx"></table></div></section>
     <section class="gsec" id="gap-s3"><h2>Heatmap tahap proses x status</h2>
-      <p class="lead">Intensitas warna adalah porsi status itu dalam tahap. Klik baris untuk melihat temuannya, atau "Alur" untuk membuka tahap alurnya.</p>
+      <p class="lead">Intensitas warna adalah porsi status itu dalam tahap, mengikuti cabang dan unit yang dipilih. Klik baris untuk melihat temuannya, atau "Alur" untuk membuka tahap alurnya.</p>
       <div class="panel scroll"><table class="hm" id="gap-hm"></table></div></section>
     <section class="gsec" id="gap-s4"><h2>Peringkat NON-COMPLY</h2>
       <p class="lead">Jumlah temuan NON-COMPLY, dengan porsinya terhadap seluruh langkah aktor, kategori, atau SOP itu. Klik batang untuk menyaring daftar temuan.</p>
       <div class="rk" id="gap-rk"></div></section>
+    <section class="gsec" id="gap-sdg"><h2>Dokumen vs lapangan</h2>
+      <p class="lead">Kolom dokumen adalah self-assessment, lapangan adalah verifikasi auditor. <b>Overclaim</b> = dokumen COMPLY tetapi lapangan NON-COMPLY. <b>Underclaim</b> = kebalikannya, mis. Medan Import (dokumen NON-COMPLY, lapangan COMPLY). Klik angka untuk melihat langkahnya.</p>
+      <div class="panel scroll"><table class="hm" id="gap-dg"></table></div></section>
+    <section class="gsec" id="gap-src"><h2>Akar masalah bersama</h2>
+      <p class="lead">Satu akar masalah yang menggerakkan banyak NON-COMPLY dihitung sebagai satu akar dengan jumlah dampaknya, bukan sebagai temuan terpisah. Baru tercatat untuk Semarang.</p>
+      <div class="g3" id="gap-rc"></div></section>
     <section class="gsec" id="gap-s5"><h2>Tema gap lintas proses</h2>
-      <p class="lead">Sembilan tema dari prompt dan satu tambahan dari data (SOP tidak sesuai praktik). Klik chip langkah untuk membukanya di Peta. Catatan "Verifikasi" memuat selisih dengan prompt jika ada.</p>
+      <p class="lead">Tema lintas cabang dari prompt, ditambah beberapa dari data. Titik pada chip menunjukkan status tiap cabang. Klik chip untuk membuka langkahnya di Peta. Catatan "Verifikasi" memuat selisih dengan prompt jika ada.</p>
       <div id="gap-themes" style="display:flex;flex-direction:column;gap:8px"></div></section>
     <section class="gsec q" id="gap-s6"><h2>Kualitas data</h2>
-      <p class="lead">Flag QA tidak mengubah data sumber. Bagian ini juga memuat hal yang saya temukan saat verifikasi sebagai bahan tinjau ulang auditor.</p>
+      <p class="lead">Flag QA tidak mengubah data sumber. Bagian ini juga memuat hal yang ditemukan saat verifikasi, sebagai bahan tinjau ulang auditor.</p>
       <div class="panel scroll"><table id="gap-qf"></table></div><div class="panel scroll"><table id="gap-qx"></table></div></section>
     <section class="gsec" id="gap-s7"><h2>Daftar temuan</h2>
       <div class="gfb" id="gap-fb"></div>
@@ -339,375 +378,5 @@ details.th[open]>summary::before{transform:rotate(90deg)}
 
 <script id="payload" type="application/json">__PAYLOAD__</script>
 <script>
-const $=id=>document.getElementById(id);
-const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const PL=JSON.parse($('payload').textContent);
-const DATA=PL.audit, FL=PL.flows, GC=PL.gap;
-
-/* ===================== INTI BERSAMA ===================== */
-const LOCS=['SEMPER','MARCEN','DOKUMEN'],LOCN={SEMPER:'Semper',MARCEN:'Marcen',DOKUMEN:'Dokumen'};
-const PROCS=['EXPORT','IMPORT','TRUCKING','DC'];
-const PROCN={EXPORT:'Export',IMPORT:'Import',TRUCKING:'Trucking Support',DC:'DC (Distribution Center)'};
-const SHN={EXPORT:'Export',IMPORT:'Import',DC:'DC',TRUCKING:'Trucking'};
-const CLS={'COMPLY':'ok','NON-COMPLY':'nc','N/A':'na','PENDING':'pe'};
-const CATN=GC.CATN, FLAGTXT=GC.FLAGTXT, AREAS=FL.areas, FORCE=new Set(GC.FORCE);
-const SITES=['Jakarta','Surabaya','Semarang','Medan','Makassar'];
-const adjOf=f=>!f?null:f==='status_conflict_should_be_NA'?'N/A':f.startsWith('status_conflict')?'NON-COMPLY':null;
-const S={site:DATA.meta.site,view:'rep',dcloc:'ALL',tab:'alur',proc:'EXPORT',
-  alur:{af:null,hl:null},peta:{focus:'all',sel:null,range:null,scrollTo:null},
-  gap:{f:{gt:'',sec:'',actor:'',cat:'',sop:'',theme:'',all:false,range:null}}};
-
-const OBS=[];
-DATA.sheets.forEach(s=>{
-  const secs=Object.fromEntries(s.sections.map(x=>[x.id,x]));
-  s.items.forEach(it=>{
-    const mk=(raw,loc,finding)=>OBS.push({site:s.site,sheet:s.sheet,no:it.no,loc,sec:it.section,secName:secs[it.section].name,actor:it.actor,cat:it.category,sop:it.sop_ref,crit:it.criterion,raw,flag:it.qa_flag||'',finding:finding||'',note:it.auditor_note||'',orig:it.orig_no?`Export ${it.orig_no}`:''});
-    if(s.sheet==='DC')LOCS.forEach(l=>mk(it.status[l],l,l==='SEMPER'?it.finding_semper:l==='MARCEN'?it.finding_marcen:it.finding));
-    else mk(it.status,null,it.finding);
-  });
-});
-const STAGES=[];FL.procs.forEach(p=>p.phases.forEach(ph=>ph.stages.forEach(st=>STAGES.push(Object.assign({proc:p.key,phase:ph.name},st)))));
-const stageOf=(sheet,no)=>STAGES.find(s=>s.sheet===sheet&&s.from<=no&&no<=s.to);
-const sheetOf=code=>DATA.sheets.find(s=>s.sheet===code&&s.site===S.site);
-const siteObs=()=>OBS.filter(o=>o.site===S.site);
-const locOk=o=>o.sheet!=='DC'||S.dcloc==='ALL'||o.loc===S.dcloc;
-const vis=()=>siteObs().filter(locOk);
-const key=o=>o.sheet+'-'+o.no;
-function eff(o){if(S.view==='adj'&&o.raw==='COMPLY'){const a=adjOf(o.flag);if(a)return a}return o.raw}
-function gtype(o){
-  const g=GC.GT[key(o)];if(g)return g;const f=o.flag;
-  if(f==='form_gap'||f==='improvement_note')return 'b';
-  if(f.startsWith('sop_')||f==='status_conflict_should_be_NA')return 'c';
-  if(f)return 'a';
-  return eff(o)==='NON-COMPLY'?'a':null;
-}
-const isTem=o=>eff(o)==='NON-COMPLY'||!!o.flag||FORCE.has(key(o));
-const procOf=o=>o.sheet==='DC'?'DC '+LOCN[o.loc]:SHN[o.sheet];
-const pct=(c,n)=>c+n?c/(c+n)*100:null;
-const fmt=x=>x==null?'-':x.toFixed(1).replace('.',',')+'%';
-function tally(os,f){let c=0,n=0,na=0,pe=0;os.forEach(o=>{const s=f(o);if(s==='COMPLY')c++;else if(s==='NON-COMPLY')n++;else if(s==='PENDING')pe++;else na++});return{c,n,na,pe}}
-function mkSeg(el,items,cur,cb){el.innerHTML='';items.forEach(([v,label,dis])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.disabled=!!dis;b.setAttribute('aria-pressed',String(v===cur));b.onclick=()=>cb(v);el.appendChild(b)})}
-function flash(el){if(!el)return;el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.remove('hl');void el.offsetWidth;el.classList.add('hl')}
-
-/* ---- navigasi antar tab ---- */
-function go(tab,o={}){
-  if(tab==='alur'){if(o.proc)S.proc=o.proc;S.alur.af=null;S.alur.hl=o.stage||null}
-  if(tab==='peta'){if(o.proc)S.proc=o.proc;S.peta.range=o.range||null;S.peta.sel=o.sel??null;S.peta.focus='all';S.peta.scrollTo=o.sel??(o.range?o.range[0]:null);if(o.loc)S.dcloc=o.loc}
-  if(tab==='gap'){const f=S.gap.f;Object.assign(f,{gt:'',sec:'',actor:'',cat:'',sop:'',theme:'',range:null,all:!!o.all},o.f||{})}
-  S.tab=tab;render();
-  requestAnimationFrame(()=>{
-    if(tab==='alur'&&S.alur.hl)flash(document.querySelector(`[data-stage="${S.alur.hl}"]`));
-    else if(tab==='peta'&&S.peta.scrollTo!=null){const n=document.querySelector(`#peta-board .node[data-no="${S.peta.scrollTo}"]`);flash(n);S.peta.scrollTo=null}
-    else if(tab==='gap'&&o.f)$('gap-s7').scrollIntoView({behavior:'smooth',block:'start'});
-    else window.scrollTo({top:0})
-  });
-}
-
-/* ---- header ---- */
-function renderHeader(){
-  mkSeg($('siteSeg'),SITES.map(s=>[s,s,!DATA.sheets.some(x=>x.site===s)]),S.site,v=>{S.site=v;S.peta.sel=null;render()});
-  [...$('viewSeg').children].forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.view)));
-  const showLoc=S.tab==='gap'||S.proc==='DC';
-  $('locSeg').hidden=!showLoc;$('locLab').hidden=!showLoc;
-  mkSeg($('locSeg'),[['ALL','Semua lokasi'],...LOCS.map(l=>[l,LOCN[l]])],S.dcloc,v=>{S.dcloc=v;render()});
-  [...$('tabs').children].forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===S.tab)));
-  ['alur','peta','gap'].forEach(t=>$('panel-'+t).hidden=t!==S.tab);
-  $('meta').innerHTML=`${esc(DATA.meta.audit_no)} · <b>${esc(S.site)}</b> · audit ${DATA.meta.dates.EXPORT}, ${DATA.meta.dates.IMPORT}, ${DATA.meta.dates.DC} · ${esc(DATA.meta.lead_auditor)}`;
-}
-function render(){
-  renderHeader();
-  if(S.tab==='alur')renderAlur();else if(S.tab==='peta')renderPeta();else renderGap();
-  try{history.replaceState(null,'','#'+S.tab)}catch(e){}
-}
-
-/* ===================== ALUR ===================== */
-function stageObs(st){return siteObs().filter(o=>o.sheet===st.sheet&&o.no>=st.from&&o.no<=st.to&&locOk(o))}
-function ncBadge(st){
-  const os=stageObs(st);
-  if(!os.length||os.every(o=>eff(o)==='PENDING'))return '<span class="ncb pe">belum diaudit</span>';
-  const mk=(sub,lab)=>{const n=sub.filter(o=>eff(o)==='NON-COMPLY').length;
-    return `<button type="button" class="ncb${n?'':' z'}" data-gap="${st.id}"${lab?` data-loc="${lab[0]}"`:''} title="Lihat temuan di Gap Analysis">${lab?lab[1]+' ':''}${n} NC</button>`};
-  if(st.sheet==='DC'&&S.dcloc==='ALL')return LOCS.map(l=>mk(os.filter(o=>o.loc===l),[l,LOCN[l].slice(0,3)==='Dok'?'Dok':LOCN[l]])).join('');
-  return mk(os,null);
-}
-function docs(list){return list.map(d=>`<li>${esc(d.t)}${d.sig?' <span class="sg" title="Memerlukan tanda tangan">✎ TTD</span>':''}</li>`).join('')}
-function alurCard(st,idx,seq){
-  const dim=S.alur.af&&!st.areas.includes(S.alur.af);
-  const ar=st.areas.map((a,i)=>`<span class="ar${i?'':' main'}" style="--c:var(--a-${a})" title="${i?'Area terlibat':'Area utama'}">${esc(AREAS[a])}</span>`).join('');
-  return `<article class="card${seq?' seq':''}${st.cond?' cond':''}${dim?' dim':''}" data-stage="${st.id}" style="--ac:var(--a-${st.areas[0]})">
-   <div class="c-h"><div class="areas">${ar}</div><div class="c-t"><span class="num${seq?'':' p'}">${seq?idx:'↻'}</span><div class="c-n">${esc(st.name)}${st.cond?` <span class="tag">${esc(st.cond)}</span>`:''}</div></div>
-   <div class="pic">${st.pic.map(p=>`<span>${esc(p)}</span>`).join('')}</div></div>
-   ${st.in.length?`<div class="cblk in"><div class="bl">Dokumen masuk</div><ul>${docs(st.in)}</ul></div>`:''}
-   ${st.out.length?`<div class="cblk out"><div class="bl">Dokumen keluar</div><ul>${docs(st.out)}</ul></div>`:''}
-   ${st.sys?`<div class="sys">${esc(st.sys)}</div>`:''}
-   <div class="c-f"><span>${esc(st.sop)}</span><button type="button" class="lnk" data-peta="${st.id}" title="Buka langkah audit di Peta">langkah ${st.from}–${st.to} →</button>${ncBadge(st)}</div></article>`;
-}
-function renderAlur(){
-  const p=FL.procs.find(x=>x.key===S.proc);let idx=0;
-  mkSeg($('alur-proc'),FL.procs.map(x=>[x.key,x.label]),S.proc,v=>{S.proc=v;S.alur.af=null;S.alur.hl=null;render()});
-  const all=p.phases.flatMap(x=>x.stages);
-  const present=Object.keys(AREAS).filter(a=>all.some(c=>c.areas.includes(a)));
-  if(S.alur.af&&!present.includes(S.alur.af))S.alur.af=null;
-  $('alur-af').innerHTML='<span class="lab">Area kerja</span>'+
-    `<button type="button" class="achip" data-a="" aria-pressed="${!S.alur.af}">Semua <span class="n">${all.length}</span></button>`+
-    present.map(a=>`<button type="button" class="achip" data-a="${a}" style="--c:var(--a-${a})" aria-pressed="${S.alur.af===a}"><i></i>${esc(AREAS[a])} <span class="n">${all.filter(c=>c.areas.includes(a)).length}</span></button>`).join('')+
-    '<span style="font-size:12.5px;color:var(--muted)">Label penuh = area utama, label garis = area yang ikut terlibat</span>';
-  $('alur-af').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.alur.af=b.dataset.a||null;renderAlur()});
-  $('alur-intro').innerHTML='<span class="k"><i class="i"></i>Dokumen masuk: harus ada sebelum tahap dimulai</span><span class="k"><i class="o"></i>Dokumen keluar: dihasilkan tahap ini</span><span class="k"><i class="s">✎ TTD</i>perlu tanda tangan</span>'+
-    '<span class="k">Klik "langkah" untuk membuka Peta, klik badge NC untuk membuka daftar temuan</span>';
-  $('alur-flow').innerHTML=p.phases.map(ph=>`<section class="phase"><div class="ph-h"><span class="ph-n">${esc(ph.name)}</span><span class="ph-m">${esc(ph.meta)}</span></div>
-    <div class="rowx">${ph.stages.map(st=>alurCard(st,ph.periodic?0:++idx,!ph.periodic)).join('')}</div></section>`).join('');
-  $('alur-foot').textContent='Urutan kartu mengikuti alur kerja nyata. Nomor langkah audit mengikuti nomor di Peta Proses Audit SOP. Jumlah NC mengikuti pilihan status di atas.'+(p.note?' '+p.note:'');
-  $('alur-flow').querySelectorAll('[data-peta]').forEach(b=>b.onclick=()=>{const st=STAGES.find(x=>x.id===b.dataset.peta);go('peta',{proc:st.sheet,range:[st.from,st.to]})});
-  $('alur-flow').querySelectorAll('[data-gap]').forEach(b=>b.onclick=()=>{const st=STAGES.find(x=>x.id===b.dataset.gap);
-    go('gap',{f:{range:{sheet:st.sheet,a:st.from,b:st.to,label:`${st.name} (${SHN[st.sheet]} ${st.from}–${st.to})`}}});if(b.dataset.loc){S.dcloc=b.dataset.loc;render()}});
-}
-
-/* ===================== PETA ===================== */
-const isDash=f=>f&&(f.startsWith('status_conflict')||f.startsWith('sop_'));
-const isDev=f=>f==='deviation_but_comply';
-function itemObs(sh,no){return siteObs().filter(o=>o.sheet===sh&&o.no===no)}
-function itemEff(sh,no){
-  const os=itemObs(sh,no).filter(locOk);const ss=os.map(eff);
-  if(ss.includes('NON-COMPLY'))return 'NON-COMPLY';
-  if(ss.includes('COMPLY'))return 'COMPLY';
-  if(ss.includes('PENDING'))return 'PENDING';
-  return 'N/A';
-}
-function itemFinding(sh,no){
-  const os=itemObs(sh,no).filter(locOk);
-  if(sh!=='DC')return os[0].finding;
-  if(os.length===1)return os[0].finding;
-  return os.filter(o=>o.finding).map(o=>`${LOCN[o.loc]}: ${o.finding}`).join(' | ');
-}
-const NW=150,NH=68,PX=34,LANEH=90,LABW=132,GAP=22;
-function petaStatusFocus(it,s){
-  if(S.peta.range&&!(it.no>=S.peta.range[0]&&it.no<=S.peta.range[1]))return false;
-  if(S.peta.focus==='NON-COMPLY')return s==='NON-COMPLY';
-  if(S.peta.focus==='flag')return !!itemObs(S.proc,it.no)[0].flag;
-  return true;
-}
-function renderPeta(){
-  const sh=sheetOf(S.proc);
-  mkSeg($('peta-proc'),PROCS.map(c=>[c,PROCN[c],!sheetOf(c)]),S.proc,v=>{S.proc=v;S.peta.sel=null;S.peta.range=null;render()});
-  // KPI
-  const os=siteObs().filter(o=>o.sheet===S.proc&&locOk(o));
-  const rep=tally(os,o=>o.raw),adj=tally(os,o=>{if(o.raw==='COMPLY'&&adjOf(o.flag))return adjOf(o.flag);return o.raw});
-  const pr=pct(rep.c,rep.n),pa=pct(adj.c,adj.n),nflag=sh.items.filter(i=>i.qa_flag).length,nconf=sh.items.filter(i=>i.qa_flag.startsWith('status_conflict')).length;
-  const lc=S.proc==='DC'&&S.dcloc!=='ALL'?' · '+LOCN[S.dcloc]:'';
-  $('peta-kpis').innerHTML=`<div class="kpi"><div class="v">${sh.items.length}</div><div class="l">langkah SOP${esc(lc)}</div></div>`+
-   (pr==null?'':`<div class="kpi pair"><div class="v">${fmt(pr)}<small>${rep.c} comply · ${rep.n} NC · ${rep.na} N/A</small></div><div class="l">Compliance as reported</div></div>
-   <div class="kpi pair"><div class="v">${fmt(pa)}<small>${adj.c} comply · ${adj.n} NC · ${adj.na} N/A</small></div><div class="l">Compliance adjusted (${nconf} status_conflict dihitung ulang)${pa!==pr?` <span class="arrow">▼ ${(pr-pa).toFixed(1).replace('.',',')} poin</span>`:''}</div></div>`)+
-   `<div class="kpi"><div class="v">${nflag}</div><div class="l">item ber-flag QA</div></div>`+(rep.pe?`<div class="kpi"><div class="v">${rep.pe}</div><div class="l">belum diaudit</div></div>`:'');
-  $('peta-banner').hidden=!sh.note;$('peta-banner').textContent=sh.note||'';
-  // chips
-  const cnt={all:sh.items.length,nc:0,flag:0};sh.items.forEach(i=>{if(itemEff(S.proc,i.no)==='NON-COMPLY')cnt.nc++;if(i.qa_flag)cnt.flag++});
-  $('peta-chips').innerHTML='';
-  [['all','Semua','',cnt.all],['NON-COMPLY','Hanya NON-COMPLY','nc',cnt.nc],['flag','Hanya flag QA','flag',cnt.flag]].forEach(([k,l,c,n])=>{
-    const b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('aria-pressed',String(S.peta.focus===k));
-    b.innerHTML=(c?`<i class="sw ${c}"></i>`:'')+esc(l)+` <span class="n">${n}</span>`;b.onclick=()=>{S.peta.focus=k;renderPeta()};$('peta-chips').appendChild(b)});
-  const r=S.peta.range;
-  $('peta-range').innerHTML=r?`<span class="fc" style="display:inline-flex;gap:6px;align-items:center;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:2px 4px 2px 10px;font-size:12.5px;background:var(--surface)">Tahap: langkah ${r[0]}–${r[1]}<button type="button" id="peta-rx" aria-label="Hapus sorotan tahap" style="border:0;background:transparent;color:inherit;font-size:15px;padding:0 6px">×</button></span>`:'';
-  if(r)$('peta-rx').onclick=()=>{S.peta.range=null;renderPeta()};
-  // board
-  const host=$('peta-board');host.innerHTML='';
-  sh.sections.forEach(sec=>{
-    const items=sh.items.filter(i=>i.section===sec.id).sort((a,b)=>a.no-b.no);
-    const actors=[];items.forEach(i=>{if(!actors.includes(i.actor))actors.push(i.actor)});
-    const cs=tally(items.map(i=>({no:i.no})),x=>itemEff(S.proc,x.no));
-    const W=LABW+PX+items.length*(NW+GAP)+PX-GAP,H=actors.length*LANEH;
-    const d=document.createElement('section');d.className='section';
-    const showCounts=cs.pe!==items.length;
-    d.innerHTML=`<div class="sec-h"><span class="sec-id">${esc(sec.id)}</span><span class="sec-n">${esc(sec.name)}</span><span class="sec-m">${esc(sec.sop)} · langkah ${sec.from_no}–${sec.to_no}</span>
-      <span class="sec-c">${showCounts?`<span class="ok">${cs.c} C</span><span class="nc">${cs.n} NC</span><span class="na">${cs.na} NA</span>`:''}${cs.pe?`<span class="pe">${cs.pe} belum diaudit</span>`:''}</span></div>
-      <div class="scroll"><div class="board" style="width:${W}px;height:${H}px"></div></div>`;
-    const b=d.querySelector('.board');
-    actors.forEach((a,i)=>{const l=document.createElement('div');l.className='lane';l.style.cssText=`top:${i*LANEH}px;height:${LANEH}px`;l.innerHTML=`<div class="lane-l">${esc(a)}</div>`;b.appendChild(l)});
-    const pos=items.map((it,k)=>({it,x:LABW+PX+k*(NW+GAP),y:actors.indexOf(it.actor)*LANEH+(LANEH-NH)/2}));
-    let paths='';
-    for(let k=0;k<pos.length-1;k++){const a=pos[k],c=pos[k+1];const x1=a.x+NW,y1=a.y+NH/2,x2=c.x,y2=c.y+NH/2,mx=x1+GAP/2;paths+=`<path d="M${x1} ${y1} H${mx} V${y2} H${x2-1}" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah)"/>`}
-    b.insertAdjacentHTML('beforeend',`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="currentColor"/></marker></defs>${paths}</svg>`);
-    pos.forEach(({it,x,y})=>{
-      const s=itemEff(S.proc,it.no),n=document.createElement('button');n.type='button';
-      n.className=`node ${CLS[s]}${isDash(it.qa_flag)?' flag':''}${petaStatusFocus(it,s)?'':' dim'}${S.peta.sel===it.no?' sel':''}`;
-      n.style.cssText=`left:${x}px;top:${y}px`;n.dataset.no=it.no;n.setAttribute('aria-label',`Langkah ${it.no}, ${s}, ${it.criterion}`);
-      n.innerHTML=`<span class="no">#${it.no} · ${esc(it.category)}</span><span class="t">${esc(it.criterion)}</span>`+(isDev(it.qa_flag)?'<span class="dev" title="Menyimpang dari SOP">!</span>':'')+
-        (S.proc==='DC'?`<span class="dots">${LOCS.map(l=>`<i class="${CLS[eff(itemObs('DC',it.no).find(o=>o.loc===l))]}" title="${LOCN[l]}"></i>`).join('')}</span>`:'');
-      n.onmouseenter=e=>showTip(e,it);n.onmousemove=moveTip;n.onmouseleave=()=>{$('tip').hidden=true};
-      n.onfocus=e=>showTip(e,it,true);n.onblur=()=>{$('tip').hidden=true};
-      n.onclick=()=>{S.peta.sel=it.no;renderPeta()};
-      b.appendChild(n);
-    });
-    host.appendChild(d);
-  });
-  renderDrawer(sh);
-}
-function showTip(e,it,fromFocus){
-  const s=itemEff(S.proc,it.no),f=itemFinding(S.proc,it.no);
-  let h=`<b>#${it.no}</b> ${esc(it.criterion)}`;
-  if(s==='PENDING')h+='<br><i>Belum diaudit</i>';else if(f)h+=`<br>${esc(f)}`;else if(s==='NON-COMPLY')h+='<br><i>(tidak ada catatan temuan)</i>';
-  if(it.qa_flag)h+=`<span class="fl">⚑ ${esc(FLAGTXT[it.qa_flag]||it.qa_flag)}</span>`;
-  const t=$('tip');t.innerHTML=h;t.hidden=false;
-  if(fromFocus){const r=e.target.getBoundingClientRect();place(r.left,r.bottom+6)}else moveTip(e);
-}
-function place(x,y){const t=$('tip');const w=t.offsetWidth,h=t.offsetHeight;t.style.left=Math.max(8,Math.min(x,innerWidth-w-8))+'px';t.style.top=(y+h>innerHeight-8?Math.max(8,y-h-30):y)+'px'}
-function moveTip(e){place(e.clientX+14,e.clientY+16)}
-function pill(s){return `<span class="pill ${CLS[s]}">${s}</span>`}
-function renderDrawer(sh){
-  const d=$('peta-drawer'),it=sh.items.find(i=>i.no===S.peta.sel);
-  if(!it){d.hidden=true;return}
-  d.hidden=false;
-  const sec=sh.sections.find(s=>s.id===it.section),os=itemObs(S.proc,it.no),st=stageOf(S.proc,it.no);
-  const o0=os.find(isTem)||os[0],gt=os.map(gtype).find(Boolean);
-  const themes=GC.THEMES.filter(t=>t.refs.some(([s,ns])=>s===S.proc&&ns.includes(it.no)));
-  let right='';
-  if(S.proc==='DC'){
-    right+='<div class="locs">'+os.map(o=>`<div>${pill(eff(o))} <b>${LOCN[o.loc]}</b>${o.finding?': '+esc(o.finding):''}</div>`).join('')+'</div>';
-    if(it.auditor_note)right+=`<div class="fbx plain"><b>Catatan auditor:</b> ${esc(it.auditor_note)}</div>`;
-  }else{
-    const s=eff(os[0]);
-    right+=`<div>${pill(s)} ${it.finding?esc(it.finding):`<i style="color:var(--muted)">${s==='PENDING'?'Belum diaudit. Item ini diturunkan dari Pendahuluan SOP, bukan dari langkah Prosedur.':'Tidak ada catatan temuan.'}</i>`}</div>`;
-  }
-  if(it.qa_flag)right+=`<div class="fbx"><b>Flag QA · ${esc(it.qa_flag)}</b><br>${esc(FLAGTXT[it.qa_flag]||'')}`+(adjOf(it.qa_flag)&&os[0].raw==='COMPLY'?`<br>Pada tampilan Adjusted dihitung sebagai <b>${adjOf(it.qa_flag)}</b>.`:'')+`</div>`;
-  right+='<div class="xl">'+(st?`<button type="button" class="lnk" data-alur="${st.id}">Tahap alur: ${esc(st.name)} →</button>`:'')+
-    `<button type="button" class="lnk" data-gaprange="1">Daftar temuan →</button>`+
-    (gt?`<span class="tp s t${gt}" title="Jenis gap ${gt.toUpperCase()}">${gt.toUpperCase()}</span>`:'')+
-    themes.map(t=>`<button type="button" class="lnk" data-theme="${t.id}">Tema: ${esc(t.t.length>38?t.t.slice(0,36)+'…':t.t)} →</button>`).join('')+'</div>';
-  d.innerHTML=`<button class="x" type="button" aria-label="Tutup detail" id="peta-dx">×</button>
-   <div><h2>#${it.no} ${esc(it.criterion)}</h2><dl><dt>Aktor</dt><dd>${esc(it.actor)}</dd><dt>Kategori</dt><dd>${esc(it.category)}</dd><dt>Acuan SOP</dt><dd>${esc(it.sop_ref)}</dd>${it.orig_no?`<dt>No. di form audit</dt><dd>${esc(it.orig_sheet)} ${it.orig_no}</dd>`:''}<dt>Tahap</dt><dd>${esc(sec.id)} · ${esc(sec.name)}</dd></dl></div><div>${right}</div>`;
-  $('peta-dx').onclick=()=>{S.peta.sel=null;renderPeta()};
-  d.querySelectorAll('[data-alur]').forEach(b=>b.onclick=()=>go('alur',{proc:S.proc,stage:b.dataset.alur}));
-  d.querySelectorAll('[data-theme]').forEach(b=>b.onclick=()=>go('gap',{f:{theme:b.dataset.theme}}));
-  d.querySelectorAll('[data-gaprange]').forEach(b=>b.onclick=()=>go('gap',{f:{range:{sheet:S.proc,a:it.no,b:it.no,label:`${SHN[S.proc]} ${it.no}`}},all:true}));
-}
-
-/* ===================== GAP ===================== */
-function renderGap(){renderCmp();renderG3();renderHm();renderRk();renderThemes();renderQ();renderList()}
-function renderCmp(){
-  const grp=o=>o.sheet==='DC'?'DC '+LOCN[o.loc]:o.sheet==='TRUCKING'?(o.sec==='T1'?'Trucking: penarikan empty':'Trucking: penarikan full'):SHN[o.sheet];
-  const groups=['Export','Import','DC Semper','DC Marcen','DC Dokumen','Trucking: penarikan empty','Trucking: penarikan full'];
-  let h='<div class="h">Proses</div><div class="h">Compliance (0 sampai 100%)</div><div class="h">As reported → adjusted</div>';
-  groups.forEach(g=>{
-    const os=siteObs().filter(o=>grp(o)===g);
-    const r=tally(os,o=>o.raw),a=tally(os,o=>{if(o.raw==='COMPLY'&&adjOf(o.flag))return adjOf(o.flag);return o.raw});
-    const pr=pct(r.c,r.n),pa=pct(a.c,a.n);
-    const sub=pr==null?`${os.length} langkah, belum diaudit`:`${r.c} comply · ${r.n} NC · ${r.na} N/A`;
-    let trk='<div class="trk">'+[0,25,50,75,100].map(t=>`<span class="tick" style="left:${t}%"></span><span class="tl" style="left:${t}%">${t}</span>`).join('');
-    let val;
-    if(pr==null)val='<span style="color:var(--muted)">belum diaudit</span>';
-    else{
-      if(pa!==pr)trk+=`<span class="link" style="left:${Math.min(pa,pr)}%;width:${Math.abs(pr-pa)}%"></span>`;
-      trk+=`<span class="mk" style="left:${pr}%" title="As reported ${fmt(pr)}"></span><span class="mk adj" style="left:${pa}%" title="Adjusted ${fmt(pa)}"></span>`;
-      val=`${fmt(pr)} → ${fmt(pa)}`+(pa!==pr?` <span class="dn">▼${(pr-pa).toFixed(1).replace('.',',')}</span>`:'');
-    }
-    h+=`<div class="cn">${esc(g)}<small>${sub}</small></div>${trk}</div><div class="cv">${val}</div>`;
-  });
-  $('gap-cmp').innerHTML=h;
-}
-function renderG3(){
-  const v=vis().filter(isTem),f=S.gap.f;
-  $('gap-g3').innerHTML=GC.GTYPES.map(t=>{
-    const os=v.filter(o=>gtype(o)===t.k),nc=os.filter(o=>eff(o)==='NON-COMPLY').length,fl=os.length-nc;
-    const by={};os.forEach(o=>{const k=procOf(o).split(' ')[0];by[k]=(by[k]||0)+1});
-    return `<button class="gc t${t.k}${f.gt===t.k?' on':''}" data-gt="${t.k}" type="button"><div class="gh"><span class="tp">${t.k.toUpperCase()}</span><span class="gn">${esc(t.n)}</span><span class="gv">${os.length}<small>temuan</small></span></div>
-     <p>${esc(t.d)}</p><dl><dt>NON-COMPLY</dt><dd class="mono">${nc}</dd><dt>Bertanda atau N/A</dt><dd class="mono">${fl}</dd><dt>Sebaran</dt><dd>${Object.entries(by).map(([k,n])=>k+' '+n).join(' · ')||'-'}</dd><dt>Owner usulan</dt><dd>${esc(t.own)}</dd><dt>Tindakan</dt><dd>${esc(t.act)}</dd></dl></button>`}).join('');
-  $('gap-g3').querySelectorAll('.gc').forEach(b=>b.onclick=()=>setF('gt',b.dataset.gt));
-}
-function renderHm(){
-  const v=vis();
-  let h='<thead><tr><th>Tahap</th><th class="n">COMPLY</th><th class="n">NON-COMPLY</th><th class="n">N/A</th><th class="n">Belum diaudit</th><th class="n">NC %</th></tr></thead><tbody>';
-  PROCS.forEach(sh=>{
-    const sheet=sheetOf(sh);if(!sheet)return;
-    h+=`<tr class="sh"><td colspan="6">${sh==='DC'&&S.dcloc!=='ALL'?'DC '+LOCN[S.dcloc]:SHN[sh]}</td></tr>`;
-    sheet.sections.forEach(sec=>{
-      const os=v.filter(o=>o.sheet===sh&&o.sec===sec.id),n=os.length,c={};os.forEach(o=>{const s=eff(o);c[s]=(c[s]||0)+1});
-      const cell=(k,col)=>{const x=c[k]||0,p=n?x/n:0;return `<td class="n${k==='PENDING'&&x?' pe':''}" style="${k!=='PENDING'&&x?`background:color-mix(in srgb,var(${col}) ${Math.round(p*55)}%,var(--surface))`:''}" title="${x} dari ${n} (${Math.round(p*100)}%)">${x||'·'}</td>`};
-      const rate=pct(c['COMPLY']||0,c['NON-COMPLY']||0);
-      const st=STAGES.find(s=>s.sheet===sh&&s.from<=sec.from_no&&sec.from_no<=s.to);
-      h+=`<tr data-sec="${sh}|${sec.id}"><td><span class="sid">${sec.id}</span><span class="sn">${esc(sec.name)}</span>${st?`<button type="button" class="lnk" data-alur="${st.id}">Alur</button>`:''}</td>${cell('COMPLY','--ok')}${cell('NON-COMPLY','--nc')}${cell('N/A','--na')}${cell('PENDING','--na')}<td class="n">${rate==null?'-':fmt(100-rate)}</td></tr>`;
-    });
-  });
-  $('gap-hm').innerHTML=h+'</tbody>';
-  $('gap-hm').querySelectorAll('tr[data-sec]').forEach(r=>r.onclick=()=>setF('sec',r.dataset.sec));
-  $('gap-hm').querySelectorAll('[data-alur]').forEach(b=>b.onclick=e=>{e.stopPropagation();const st=STAGES.find(x=>x.id===b.dataset.alur);go('alur',{proc:st.sheet,stage:st.id})});
-}
-function rankPanel(title,keyFn,labelFn,fkey,limit){
-  const v=vis().filter(o=>eff(o)!=='PENDING'),tot={},nc={};
-  v.forEach(o=>{const k=keyFn(o);tot[k]=(tot[k]||0)+1;if(eff(o)==='NON-COMPLY')nc[k]=(nc[k]||0)+1});
-  const list=Object.keys(nc).sort((a,b)=>nc[b]-nc[a]||tot[b]-tot[a]).slice(0,limit),mx=Math.max(1,...list.map(k=>nc[k]));
-  return `<div class="panel"><div class="rkh">${title}</div>`+(list.length?list.map(k=>`<button class="br" type="button" data-k="${esc(fkey)}" data-v="${esc(k)}"><span class="bn">${esc(labelFn(k))}</span><span class="bt"><span class="bf" style="width:${nc[k]/mx*100}%"></span><span class="bv" style="${nc[k]/mx<.18?`left:${nc[k]/mx*100}%`:'color:#fff'}">${nc[k]}</span></span><span class="bs">${nc[k]} dari ${tot[k]} langkah (${fmt(nc[k]/tot[k]*100)})</span></button>`).join(''):'<div class="lead">Tidak ada temuan NON-COMPLY.</div>')+'</div>';
-}
-function renderRk(){
-  $('gap-rk').innerHTML=rankPanel('Per aktor (12 teratas)',o=>o.actor,x=>x,'actor',12)+rankPanel('Per kategori',o=>o.cat,x=>CATN[x]||x,'cat',4)+rankPanel('Per acuan SOP (10 teratas)',o=>o.sop,x=>x,'sop',10);
-  $('gap-rk').querySelectorAll('.br').forEach(b=>b.onclick=()=>setF(b.dataset.k,b.dataset.v));
-}
-function chipFor(sh,no){
-  const os=itemObs(sh,no);if(!os.length)return '';
-  const dc=sh==='DC',main=dc?'':CLS[eff(os[0])],fl=os.some(o=>o.flag&&(o.flag.startsWith('status_conflict')||o.flag.startsWith('sop_')));
-  const dots=dc?os.map(o=>`<i class="${CLS[eff(o)]}" title="${LOCN[o.loc]}: ${eff(o)}"></i>`).join(''):'';
-  return `<button type="button" class="rc ${main}${fl?' fl':''}" data-peta="${sh}|${no}" title="${esc(os[0].crit)}. Klik untuk membuka di Peta.">${SHN[sh]} ${no}${dots}</button>`;
-}
-function renderThemes(){
-  const open=[...document.querySelectorAll('details.th[open]')].map(d=>d.dataset.id);
-  $('gap-themes').innerHTML=GC.THEMES.map(t=>{
-    const os=siteObs().filter(o=>t.refs.some(([s,ns])=>o.sheet===s&&ns.includes(o.no))&&locOk(o)),nc=os.filter(o=>eff(o)==='NON-COMPLY').length;
-    return `<details class="th" data-id="${t.id}"${open.includes(t.id)?' open':''}><summary><span class="tt">${esc(t.t)}</span><span class="tps">${t.ty.map(k=>`<span class="tp s t${k}" title="Jenis gap ${k.toUpperCase()}">${k.toUpperCase()}</span>`).join('')}</span><span class="tcnt"><b>${nc}</b> NC dari ${os.length} temuan</span></summary>
-    <div class="tb2"><div class="gchips">${t.refs.map(([s,ns])=>ns.map(n=>chipFor(s,n)).join('')).join('')}</div>
-    <dl><dt>Verifikasi data</dt><dd>${esc(t.ver)}</dd><dt>Akar masalah</dt><dd>${esc(t.root)}</dd><dt>Owner usulan</dt><dd>${esc(t.own)}</dd><dt>Tindakan usulan</dt><dd>${esc(t.act)}</dd></dl>
-    <button class="btn" type="button" data-th="${t.id}">Lihat temuan tema ini</button></div></details>`}).join('');
-  $('gap-themes').querySelectorAll('.btn').forEach(b=>b.onclick=()=>setF('theme',b.dataset.th));
-  $('gap-themes').querySelectorAll('.rc').forEach(b=>b.onclick=()=>{const [sh,no]=b.dataset.peta.split('|');go('peta',{proc:sh,sel:+no})});
-}
-function renderQ(){
-  const fl={};siteObs().filter(o=>o.flag&&(o.sheet!=='DC'||o.loc==='SEMPER')).forEach(o=>{(fl[o.flag]=fl[o.flag]||[]).push(o)});
-  let h='<thead><tr><th>Flag QA</th><th>Arti</th><th>Item</th><th>Pengaruh ke compliance</th></tr></thead><tbody>';
-  Object.keys(FLAGTXT).forEach(f=>{
-    const os=fl[f]||[];if(!os.length)return;
-    const eft=f==='status_conflict_should_be_NA'?'Dikeluarkan dari perhitungan (N/A) di Adjusted':f.startsWith('status_conflict')?'Dihitung NON-COMPLY di Adjusted':'Tidak mengubah angka; hanya ditandai';
-    h+=`<tr><td class="fcode">${f}</td><td>${esc(FLAGTXT[f])}</td><td>${os.map(o=>`<a href="#peta" data-peta="${o.sheet}|${o.no}">${SHN[o.sheet]} ${o.no}</a>`).join(', ')}</td><td>${eft}</td></tr>`;
-  });
-  $('gap-qf').innerHTML=h+'</tbody>';
-  $('gap-qf').querySelectorAll('a[data-peta]').forEach(a=>a.onclick=e=>{e.preventDefault();const [sh,no]=a.dataset.peta.split('|');go('peta',{proc:sh,sel:+no})});
-  const X=PL.gap.quality||[];
-  $('gap-qx').innerHTML='<thead><tr><th>Item</th><th>Observasi</th><th>Saran</th></tr></thead><tbody>'+X.map(r=>`<tr><td class="fcode">${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')+'</tbody>';
-}
-const THEME_OF=id=>GC.THEMES.find(t=>t.id===id);
-function matches(o){
-  const f=S.gap.f;
-  if(f.gt&&gtype(o)!==f.gt)return false;
-  if(f.sec){const[s,i]=f.sec.split('|');if(o.sheet!==s||o.sec!==i)return false}
-  if(f.actor&&o.actor!==f.actor)return false;
-  if(f.cat&&o.cat!==f.cat)return false;
-  if(f.sop&&o.sop!==f.sop)return false;
-  if(f.range&&!(o.sheet===f.range.sheet&&o.no>=f.range.a&&o.no<=f.range.b))return false;
-  if(f.theme){const t=THEME_OF(f.theme);if(!t.refs.some(([s,ns])=>o.sheet===s&&ns.includes(o.no)))return false}
-  if(!f.all&&!isTem(o))return false;
-  return true;
-}
-const FN={gt:'Jenis',sec:'Tahap',actor:'Aktor',cat:'Kategori',sop:'SOP',theme:'Tema',range:'Langkah'};
-function fval(k,v){return k==='gt'?'Jenis '+v.toUpperCase():k==='cat'?CATN[v]:k==='theme'?THEME_OF(v).t:k==='sec'?v.replace('|',' '):k==='range'?v.label:v}
-function setF(k,v){const f=S.gap.f;f[k]=f[k]===v?'':v;renderGap();$('gap-s7').scrollIntoView({behavior:'smooth',block:'start'})}
-function renderList(){
-  const f=S.gap.f,rows=vis().filter(matches),shown=rows.slice(0,300);
-  let fb=Object.keys(FN).filter(k=>f[k]).map(k=>`<span class="fc">${FN[k]}: ${esc(fval(k,f[k]))}<button type="button" data-clear="${k}" aria-label="Hapus filter">×</button></span>`).join('');
-  fb+=`<label class="chk"><input type="checkbox" id="gap-allchk" ${f.all?'checked':''}> Tampilkan semua langkah (bukan hanya temuan)</label><span class="lead mono">${rows.length} baris${rows.length>shown.length?', 300 pertama':''}</span>`;
-  $('gap-fb').innerHTML=fb;
-  $('gap-fb').querySelectorAll('[data-clear]').forEach(b=>b.onclick=()=>{f[b.dataset.clear]=k0(b.dataset.clear);renderGap()});
-  $('gap-allchk').onchange=e=>{f.all=e.target.checked;renderGap()};
-  $('gap-lt').innerHTML='<thead><tr><th>Proses</th><th>No</th><th>Tahap</th><th>Aktor</th><th>Kat</th><th>Status</th><th>Jenis</th><th>Langkah dan temuan</th></tr></thead><tbody>'+
-   shown.map(o=>{const s=eff(o),g=gtype(o),stg=stageOf(o.sheet,o.no);
-     return `<tr><td>${esc(procOf(o))}</td><td class="mono"><a href="#peta" data-peta="${o.sheet}|${o.no}|${o.loc||''}" title="Buka di Peta">${o.no}</a>${o.orig?`<br><small style="color:var(--muted)">${o.orig}</small>`:''}</td><td>${stg?`<a href="#alur" data-alur="${stg.id}" title="${esc(stg.name)}">${esc(o.sec)}</a>`:esc(o.sec)}</td><td>${esc(o.actor)}</td><td>${o.cat}</td><td><span class="st ${CLS[s]}">${s}</span>${S.view==='adj'&&s!==o.raw?`<br><small class="fgl">awal ${o.raw}</small>`:''}</td><td>${g?`<span class="tp s t${g}">${g.toUpperCase()}</span>`:''}</td>
-     <td>${esc(o.crit)}${o.finding?`<br><b>Temuan:</b> ${esc(o.finding)}`:''}${o.note&&o.loc!==null?`<br><small style="color:var(--muted)">Auditor: ${esc(o.note)}</small>`:''}${o.flag?`<br><span class="fgl">⚑ ${esc(FLAGTXT[o.flag]||o.flag)}</span>`:''}</td></tr>`}).join('')+'</tbody>';
-  $('gap-lt').querySelectorAll('a[data-peta]').forEach(a=>a.onclick=e=>{e.preventDefault();const [sh,no,loc]=a.dataset.peta.split('|');go('peta',{proc:sh,sel:+no,...(loc?{loc}:{})})});
-  $('gap-lt').querySelectorAll('a[data-alur]').forEach(a=>a.onclick=e=>{e.preventDefault();const st=STAGES.find(x=>x.id===a.dataset.alur);go('alur',{proc:st.sheet,stage:st.id})});
-}
-const k0=k=>k==='range'?null:'';
-
-/* ===================== MULAI ===================== */
-[...$('viewSeg').children].forEach(b=>b.onclick=()=>{S.view=b.dataset.v;render()});
-[...$('tabs').children].forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();window.scrollTo({top:0})});
-const modes=[null,'light','dark'],mn=['otomatis','terang','gelap'];let mi=0;
-$('themeBtn').onclick=()=>{mi=(mi+1)%3;const r=document.documentElement;modes[mi]?r.setAttribute('data-theme',modes[mi]):r.removeAttribute('data-theme');$('themeBtn').textContent='Tema: '+mn[mi]};
-const h0=(location.hash||'').slice(1);if(['alur','peta','gap'].includes(h0))S.tab=h0;
-render();
+__APP_JS__
 </script>

@@ -26,9 +26,10 @@ def status_map(d):
     return st
 
 def app_payload():
+    v3 = json.loads((ROOT / 'data/audit_dataset_v3.json').read_text(encoding='utf-8'))
     flows = json.loads((ROOT / 'data/flows.json').read_text(encoding='utf-8'))
     gap = json.loads((ROOT / 'data/gap_config.json').read_text(encoding='utf-8'))
-    return embed({'audit': DATA, 'flows': flows, 'gap': gap}, True)
+    return embed({'audit': v3, 'flows': flows, 'gap': gap}, True)
 
 OUT = {
     'mkt_audit_sop.html':         ('src/app.tpl.html',                   '__PAYLOAD__', app_payload),
@@ -44,6 +45,8 @@ def main():
         tp = (ROOT / tpl).read_text(encoding='utf-8')
         assert tp.count(ph) == 1, f'{tpl}: placeholder {ph} harus tepat satu'
         html = tp.replace(ph, payload())
+        if '__APP_JS__' in html:
+            html = html.replace('__APP_JS__', (ROOT / 'src/app.js').read_text(encoding='utf-8'))
         dest = ROOT / 'dist' / name
         if check:
             same = dest.exists() and dest.read_text(encoding='utf-8') == html

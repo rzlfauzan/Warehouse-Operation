@@ -6,7 +6,8 @@ from openpyxl.styles import Font,PatternFill,Alignment,Border,Side
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.worksheet.properties import PageSetupProperties
 from openpyxl.utils import get_column_letter as L
-D=json.load(open(ROOT/'data/audit_dataset_jkt_v2.json'))
+D=json.load(open(ROOT/'data/audit_dataset_v3.json'))
+D['sheets']=[x for x in D['sheets'] if x['site']=='JKT']  # Excel review hanya Jakarta (SOP Utama HO)
 FLOWS=json.load(open(ROOT/'data/flows.json'))
 AREA=FLOWS['areas']
 def stage_rows(fl):
