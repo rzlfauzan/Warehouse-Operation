@@ -348,8 +348,12 @@ details.th[open]>summary::before{transform:rotate(90deg)}
       <p class="lead">Resmi = COMPLY ÷ (COMPLY + NON-COMPLY), N/A tidak dihitung. "Diperiksa" = porsi langkah yang bukan N/A.</p>
       <div class="panel"><div class="glegend" style="margin-bottom:12px"><span><i class="dot"></i>Resmi</span><span><i class="dot a"></i>Adjusted</span><span>Garis penghubung menunjukkan selisih</span></div><div class="cmp" id="gap-cmp"></div></div></section>
     <section class="gsec" id="gap-s2"><h2>Jenis gap dan penanggung jawab</h2>
-      <p class="lead">Klik kartu untuk melihat daftar temuannya. Pembagian jenis adalah usulan, perlu dikonfirmasi auditor.</p>
+      <p class="lead">Fokus pada NON-COMPLY dari langkah yang diperiksa (COMPLY + NON-COMPLY; N/A tidak dihitung). Jenis gap adalah usulan, perlu dikonfirmasi auditor.</p>
+      <div class="kpis" id="gap-strip"></div>
       <div class="g3" id="gap-g3"></div></section>
+    <section class="gsec" id="gap-snote"><h2>Catatan di luar NON-COMPLY</h2>
+      <p class="lead">Langkah COMPLY atau N/A yang membawa catatan. Tidak dihitung sebagai NON-COMPLY, tetapi menunjukkan gap lain. Klik angka untuk melihat langkahnya.</p>
+      <div class="panel scroll"><table class="hm" id="gap-notes"></table></div></section>
     <section class="gsec" id="gap-smx"><h2>Matriks langkah x cabang</h2>
       <p class="lead">Langkah SOP HO per cabang. Klik sel untuk membuka di Peta. MDN* = Medan lewat pemetaan draf.</p>
       <div class="row"><div class="seg" id="gap-mx-sheet"></div><span id="gap-mx-opt" class="row"></span><span class="lead mono" id="gap-mx-n"></span></div>

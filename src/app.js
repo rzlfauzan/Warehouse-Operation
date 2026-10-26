@@ -20,7 +20,7 @@ const NA_OTHER='na_not_performed_by_mkt', RISK='integrity_risk_reported_by_audit
 const adjOf=f=>!f?null:(f==='status_conflict_should_be_NA'||f==='status_conflict_role_not_exist')?'N/A':f.startsWith('status_conflict')?'NON-COMPLY':null;
 const S={site:'JKT',lastSite:'JKT',view:'rep',dcloc:'ALL',tab:'alur',proc:'EXPORT',
   alur:{af:null,hl:null},peta:{focus:'all',sel:null,range:null,scrollTo:null},
-  gap:{mx:{sheet:'EXPORT',onlyNc:false,sort:false},f:{gt:'',sec:'',actor:'',cat:'',sop:'',theme:'',mapStage:'',all:false,range:null}}};
+  gap:{mx:{sheet:'EXPORT',onlyNc:false,sort:false},f:{gt:'',sec:'',actor:'',cat:'',sop:'',theme:'',mapStage:'',note:'',all:false,range:null}}};
 
 const OBS=[];
 DATA.sheets.forEach(s=>{
@@ -55,7 +55,17 @@ function gtype(o){
   if(f)return 'a';
   return eff(o)==='NON-COMPLY'?'a':null;
 }
-const isTem=o=>eff(o)==='NON-COMPLY'||!!o.flag||(o.tpl==='HO'&&FORCE.has(key(o)));
+const isNC=o=>eff(o)==='NON-COMPLY';
+const gapType=o=>gtype(o)==='b'?'b':'a';
+const NOTES=GC.NOTES;
+function noteOf(o){
+  if(isNC(o))return null;
+  for(const n of NOTES){
+    if(n.flags&&n.flags.includes(o.flag))return n.k;
+    if(n.special==='wms'&&o.tpl==='HO'&&FORCE.has(key(o))&&eff(o)==='N/A')return n.k;
+  }
+  return null;
+}
 const procOf=o=>o.sheet==='DC'&&o.site==='JKT'?'DC '+LOCN[o.loc]:SHN[o.sheet];
 const pct=(c,n)=>c+n?c/(c+n)*100:null;
 const fmt=x=>x==null?'-':x.toFixed(1).replace('.',',')+'%';
@@ -71,7 +81,7 @@ function go(tab,o={}){
   if(tab==='peta'&&S.site==='ALL')setSite(S.lastSite||'JKT');
   if(tab==='alur'){if(o.proc)S.proc=o.proc;S.alur.af=null;S.alur.hl=o.stage||null}
   if(tab==='peta'){if(o.proc)S.proc=o.proc;S.peta.range=o.range||null;S.peta.sel=o.sel??null;S.peta.focus='all';S.peta.scrollTo=o.sel??(o.range?o.range[0]:null);if(o.loc)S.dcloc=o.loc}
-  if(tab==='gap'){const f=S.gap.f;Object.assign(f,{gt:'',sec:'',actor:'',cat:'',sop:'',theme:'',mapStage:'',range:null,all:!!o.all},o.f||{})}
+  if(tab==='gap'){const f=S.gap.f;Object.assign(f,{gt:'',sec:'',actor:'',cat:'',sop:'',theme:'',mapStage:'',note:'',range:null,all:!!o.all},o.f||{})}
   S.tab=tab;render();
   requestAnimationFrame(()=>{
     if(tab==='alur'&&S.alur.hl)flash(document.querySelector(`[data-stage="${S.alur.hl}"]`));
@@ -333,13 +343,20 @@ function renderCmp(){
   $('gap-cmp').innerHTML=h;
 }
 function renderG3(){
-  const v=vis().filter(isTem),f=S.gap.f;
-  $('gap-g3').innerHTML=GC.GTYPES.map(t=>{
-    const os=v.filter(o=>gtype(o)===t.k),nc=os.filter(o=>eff(o)==='NON-COMPLY').length,fl=os.length-nc;
-    const by={};os.forEach(o=>{by[o.site]=(by[o.site]||0)+1});
-    return `<button class="gc t${t.k}${f.gt===t.k?' on':''}" data-gt="${t.k}" type="button"><div class="gh"><span class="tp">${t.k.toUpperCase()}</span><span class="gn">${esc(t.n)}</span><span class="gv">${os.length}<small>temuan</small></span></div>
-     <p>${esc(t.d)}</p><dl><dt>NON-COMPLY</dt><dd class="mono">${nc}</dd><dt>Ada catatan atau N/A</dt><dd class="mono">${fl}</dd><dt>Per cabang</dt><dd>${Object.entries(by).map(([k,n])=>k+' '+n).join(' · ')||'-'}</dd><dt>Penanggung jawab (usulan)</dt><dd>${esc(t.own)}</dd><dt>Tindakan</dt><dd>${esc(t.act)}</dd></dl></button>`}).join('');
+  const v=vis().filter(o=>eff(o)!=='PENDING'),f=S.gap.f;
+  const C=v.filter(o=>eff(o)==='COMPLY').length,NC=v.filter(isNC).length,NA=v.filter(o=>eff(o)==='N/A').length,chk=C+NC;
+  const notes=v.filter(o=>noteOf(o)).length;
+  $('gap-strip').innerHTML=`<div class="kpi"><div class="v">${v.length}</div><div class="l">langkah diaudit</div></div><div class="kpi"><div class="v">${C}</div><div class="l">COMPLY</div></div><div class="kpi"><div class="v" style="color:var(--nc)">${NC}</div><div class="l">NON-COMPLY (${fmt(chk?NC/chk*100:null)} dari ${chk} langkah diperiksa)</div></div><div class="kpi"><div class="v">${NA}</div><div class="l">N/A (tidak dihitung)</div></div><div class="kpi"><div class="v">${notes}</div><div class="l">catatan di luar NON-COMPLY (lihat bagian berikutnya)</div></div>`;
+  $('gap-g3').innerHTML=GC.GTYPES.filter(t=>t.k==='a'||t.k==='b').map(t=>{
+    const os=v.filter(o=>isNC(o)&&gapType(o)===t.k),by={};
+    os.forEach(o=>{by[o.site]=(by[o.site]||0)+1});
+    return `<button class="gc t${t.k}${f.gt===t.k?' on':''}" data-gt="${t.k}" type="button"><div class="gh"><span class="tp">${t.k.toUpperCase()}</span><span class="gn">${esc(t.n)}</span><span class="gv">${os.length}<small>NON-COMPLY</small></span></div>
+     <p>${esc(t.d)}</p><dl><dt>Dari yang diperiksa</dt><dd class="mono">${os.length} dari ${chk} langkah (${fmt(chk?os.length/chk*100:null)})</dd><dt>Dari NON-COMPLY</dt><dd class="mono">${fmt(NC?os.length/NC*100:null)}</dd><dt>Per cabang</dt><dd>${Object.entries(by).map(([k,n])=>k+' '+n).join(' · ')||'-'}</dd><dt>Penanggung jawab (usulan)</dt><dd>${esc(t.own)}</dd><dt>Tindakan</dt><dd>${esc(t.act)}</dd></dl></button>`}).join('');
   $('gap-g3').querySelectorAll('.gc').forEach(b=>b.onclick=()=>setF('gt',b.dataset.gt));
+  const rows=NOTES.map(n=>{const os=v.filter(o=>noteOf(o)===n.k),by={};os.forEach(o=>{by[o.site]=(by[o.site]||0)+1});return{n,os,by}});
+  $('gap-notes').innerHTML='<thead><tr><th>Catatan</th><th class="n">Langkah</th><th>Per cabang</th><th>Penanggung jawab (usulan)</th><th>Tindakan (usulan)</th></tr></thead><tbody>'+
+    rows.map(({n,os,by})=>`<tr><td>${esc(n.t)}</td><td class="n">${os.length?`<button type="button" class="lnk" data-note="${n.k}">${os.length}</button>`:'·'}</td><td>${Object.entries(by).map(([k,c])=>k+' '+c).join(' · ')||'-'}</td><td>${esc(n.own)}</td><td>${esc(n.act)}</td></tr>`).join('')+'</tbody>';
+  $('gap-notes').querySelectorAll('[data-note]').forEach(b=>b.onclick=()=>go('gap',{all:true,f:{note:b.dataset.note}}));
 }
 
 /* matriks langkah x cabang (template HO) */
@@ -449,13 +466,13 @@ function chipFor(ref,no){
 function renderThemes(){
   const open=[...document.querySelectorAll('details.th[open]')].map(d=>d.dataset.id),tpls=scopeTpls();
   $('gap-themes').innerHTML=GC.THEMES.filter(t=>tpls.has(t.tpl||'HO')).map(t=>{
-    const os=siteObs().filter(o=>locOk(o)&&themeHit(t,o)),nc=os.filter(o=>eff(o)==='NON-COMPLY').length;
+    const os=siteObs().filter(o=>locOk(o)&&themeHit(t,o)),nc=os.filter(o=>eff(o)==='NON-COMPLY').length,chkn=os.filter(o=>eff(o)==='COMPLY'||eff(o)==='NON-COMPLY').length;
     const per=scopeSites().map(c=>{const k=os.filter(o=>o.site===c);return k.length?`<span class="rc ${k.some(o=>eff(o)==='NON-COMPLY')?'nc':'ok'}">${c} ${k.filter(o=>eff(o)==='NON-COMPLY').length} NC / ${k.length}</span>`:''}).join('');
     const refChips=t.refs.map(([s,ns])=>ns.map(n=>chipFor(s,n)).join('')).join('');
-    return `<details class="th" data-id="${t.id}"${open.includes(t.id)?' open':''}><summary><span class="tt">${esc(t.t)}</span><span class="tps">${t.ty.map(k=>`<span class="tp s t${k}" title="Jenis gap ${k.toUpperCase()}">${k.toUpperCase()}</span>`).join('')}</span><span class="tcnt"><b>${nc}</b> NC dari ${os.length} temuan</span></summary>
+    return `<details class="th" data-id="${t.id}"${open.includes(t.id)?' open':''}><summary><span class="tt">${esc(t.t)}</span><span class="tps">${t.ty.map(k=>`<span class="tp s t${k}" title="Jenis gap ${k.toUpperCase()}">${k.toUpperCase()}</span>`).join('')}</span><span class="tcnt">${t.flag?`<b>${os.length}</b> langkah N/A`:t.refs.length?`<b>${nc}</b> NON-COMPLY dari ${chkn} langkah diperiksa`:'bukan hitungan langkah'}</span></summary>
     <div class="tb2">${per?`<div class="gchips"><span class="lab">Per cabang</span>${per}</div>`:''}${refChips?`<div class="gchips">${refChips}</div>`:''}
     <dl><dt>Hasil cek data</dt><dd>${esc(t.ver)}</dd><dt>Akar masalah</dt><dd>${esc(t.root)}</dd><dt>Penanggung jawab (usulan)</dt><dd>${esc(t.own)}</dd><dt>Tindakan (usulan)</dt><dd>${esc(t.act)}</dd></dl>
-    ${os.length?`<button class="btn" type="button" data-th="${t.id}">Lihat temuan tema ini</button>`:''}</div></details>`}).join('');
+    ${os.length?`<button class="btn" type="button" data-th="${t.id}">Lihat langkahnya</button>`:''}</div></details>`}).join('');
   $('gap-themes').querySelectorAll('.btn').forEach(b=>b.onclick=()=>setF('theme',b.dataset.th));
   $('gap-themes').querySelectorAll('.rc[data-peta]').forEach(b=>b.onclick=()=>{const [site,sh,no]=b.dataset.peta.split('|');go('peta',{site,proc:sh,sel:+no})});
 }
@@ -463,7 +480,8 @@ function renderThemes(){
 const THEME_OF=id=>GC.THEMES.find(t=>t.id===id);
 function matches(o){
   const f=S.gap.f;
-  if(f.gt&&gtype(o)!==f.gt)return false;
+  if(f.gt&&!(isNC(o)&&gapType(o)===f.gt))return false;
+  if(f.note&&noteOf(o)!==f.note)return false;
   if(f.sec){const[tp,s,i]=f.sec.split('|');if(o.tpl!==tp||o.sheet!==s||o.sec!==i)return false}
   if(f.actor&&o.actor!==f.actor)return false;
   if(f.cat&&o.cat!==f.cat)return false;
@@ -471,11 +489,11 @@ function matches(o){
   if(f.range){const r=f.range;if(o.tpl!==(r.tpl||'HO')||o.sheet!==r.sheet||o.no<r.a||o.no>r.b)return false;if(r.site&&o.site!==r.site)return false}
   if(f.mapStage){const stg=STAGES.find(x=>x.id===f.mapStage),m=MAPBY[o.sheet+'-'+o.no];if(o.tpl!=='MDN'||!m||!m.ho.some(h=>h.sheet===stg.sheet&&h.no>=stg.from&&h.no<=stg.to))return false}
   if(f.theme&&!themeHit(THEME_OF(f.theme),o))return false;
-  if(!f.all&&!isTem(o))return false;
+  if(!f.all&&!isNC(o))return false;
   return true;
 }
-const FN={gt:'Jenis',sec:'Tahap',actor:'Aktor',cat:'Kategori',sop:'SOP',theme:'Tema',range:'Langkah',mapStage:'Tahap HO (via pemetaan Medan)'};
-function fval(k,v){return k==='gt'?'Jenis '+v.toUpperCase():k==='cat'?CATN[v]:k==='theme'?THEME_OF(v).t:k==='sec'?(SECNAME[v.split('|')[0]+'|'+v.split('|')[2]]||v):k==='range'?v.label:k==='mapStage'?STAGES.find(x=>x.id===v).name:v}
+const FN={gt:'Jenis',sec:'Tahap',actor:'Aktor',cat:'Kategori',sop:'SOP',theme:'Tema',range:'Langkah',note:'Catatan',mapStage:'Tahap HO (via pemetaan Medan)'};
+function fval(k,v){return k==='gt'?'Jenis '+v.toUpperCase():k==='cat'?CATN[v]:k==='theme'?THEME_OF(v).t:k==='sec'?(SECNAME[v.split('|')[0]+'|'+v.split('|')[2]]||v):k==='range'?v.label:k==='mapStage'?STAGES.find(x=>x.id===v).name:k==='note'?NOTES.find(n=>n.k===v).t:v}
 function setF(k,v){const f=S.gap.f;f[k]=f[k]===v?'':v;renderGap();$('gap-s7').scrollIntoView({behavior:'smooth',block:'start'})}
 const k0=k=>k==='range'?null:'';
 function renderList(){

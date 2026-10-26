@@ -545,5 +545,82 @@
   "no_cycle_count": "Cycle count belum berjalan",
   "no_so": "Stock opname belum berjalan",
   "no_wms_freeze_menu": "WMS belum punya menu freeze"
- }
+ },
+ "NOTES": [
+  {
+   "k": "menyimpang",
+   "t": "COMPLY, tetapi praktik menyimpang dari SOP",
+   "flags": [
+    "deviation_but_comply"
+   ],
+   "own": "Ops Section Head",
+   "act": "Putuskan apakah penyimpangan itu dibakukan di SOP atau dikembalikan ke SOP."
+  },
+  {
+   "k": "status",
+   "t": "COMPLY, tetapi temuannya menyebut belum dijalankan",
+   "flags": [
+    "status_conflict_finding_says_not_run",
+    "status_conflict_finding_says_not_received",
+    "status_conflict_finding_says_not_done",
+    "status_conflict_finding_says_incomplete"
+   ],
+   "own": "Auditor",
+   "act": "Tinjau ulang statusnya. Pada tampilan Adjusted langkah ini dihitung NON-COMPLY."
+  },
+  {
+   "k": "seharusnya-na",
+   "t": "COMPLY, padahal prosesnya sudah tidak ada",
+   "flags": [
+    "status_conflict_should_be_NA",
+    "status_conflict_role_not_exist"
+   ],
+   "own": "Bisdev & Service Integrity",
+   "act": "Ubah ke N/A atau alihkan ke peran lain, lalu revisi SOP."
+  },
+  {
+   "k": "sop",
+   "t": "SOP usang atau tidak konsisten",
+   "flags": [
+    "sop_outdated",
+    "sop_inconsistent_16_vs_17"
+   ],
+   "own": "Bisdev & Service Integrity (pembuat SOP), disetujui Warehouse Manager",
+   "act": "Revisi SOP agar sesuai proses terkini atau putuskan bahwa praktik lapangan yang harus dikembalikan."
+  },
+  {
+   "k": "perbaikan",
+   "t": "Catatan perbaikan",
+   "flags": [
+    "improvement_note"
+   ],
+   "own": "Pemilik form atau WMS",
+   "act": "Masukkan ke revisi form atau WMS berikutnya."
+  },
+  {
+   "k": "pihak-lain",
+   "t": "N/A karena dikerjakan pihak lain",
+   "flags": [
+    "na_not_performed_by_mkt"
+   ],
+   "own": "Kepala cabang dan Account Officer (kontrak atau SLA dengan pihak ketiga)",
+   "act": "Putuskan: minta bukti dan SLA dari pihak ketiga, atau keluarkan langkah itu dari ruang lingkup audit cabang."
+  },
+  {
+   "k": "wms-na",
+   "t": "N/A padahal gap fitur WMS (tidak ada menu freeze)",
+   "special": "wms",
+   "own": "Tim WMS",
+   "act": "Samakan penilaiannya dengan cabang lain: NON-COMPLY bila fitur memang tidak ada."
+  },
+  {
+   "k": "risiko",
+   "t": "Risiko integritas dilaporkan auditor",
+   "flags": [
+    "integrity_risk_reported_by_auditor"
+   ],
+   "own": "Service Integrity",
+   "act": "Tindak lanjut di luar audit SOP. Tidak disembunyikan."
+  }
+ ]
 }
