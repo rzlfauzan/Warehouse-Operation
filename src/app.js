@@ -5,9 +5,9 @@ const DATA=PL.audit, FL=PL.flows, GC=PL.gap;
 
 /* ===================== INTI BERSAMA ===================== */
 const LOCS=['SEMPER','MARCEN','DOKUMEN'],LOCN={SEMPER:'Semper',MARCEN:'Marcen',DOKUMEN:'Dokumen'};
-const PROCS=['EXPORT','IMPORT','TRUCKING','DC'];
-const PROCN={EXPORT:'Export',IMPORT:'Import',TRUCKING:'Trucking Support',DC:'DC (Distribution Center)'};
-const SHN={EXPORT:'Export',IMPORT:'Import',DC:'DC',TRUCKING:'Trucking'};
+const PROCS=['EXPORT','IMPORT','TRUCKING','DC','CY'];
+const PROCN={EXPORT:'Export',IMPORT:'Import',TRUCKING:'Trucking Support',DC:'DC (Distribution Center)',CY:'CY Handling'};
+const SHN={EXPORT:'Export',IMPORT:'Import',DC:'DC',TRUCKING:'Trucking',CY:'CY Handling'};
 const CLS={'COMPLY':'ok','NON-COMPLY':'nc','N/A':'na','PENDING':'pe'};
 const CATN=GC.CATN, FLAGTXT=GC.FLAGTXT, AREAS=FL.areas, FORCE=new Set(GC.FORCE), RCN=GC.RCN;
 const SITES=DATA.sites;
@@ -19,7 +19,7 @@ const tplOfSite=c=>siteInfo(c).template==='MDN_TEMPLATE'?'MDN':'HO';
 const NA_OTHER='na_not_performed_by_mkt', RISK='integrity_risk_reported_by_auditor';
 const adjOf=f=>!f?null:(f==='status_conflict_should_be_NA'||f==='status_conflict_role_not_exist')?'N/A':f.startsWith('status_conflict')?'NON-COMPLY':null;
 const S={site:'JKT',lastSite:'JKT',view:'rep',dcloc:'ALL',tab:'alur',proc:'EXPORT',
-  alur:{af:null,hl:null},peta:{focus:'all',sel:null,range:null,scrollTo:null},
+  alur:{af:null,hl:null},peta:{focus:'all',sel:null,range:null,nos:null,scrollTo:null},
   gap:{mx:{sheet:'EXPORT',onlyNc:false,sort:false},f:{gt:'',sec:'',actor:'',cat:'',sop:'',theme:'',mapStage:'',note:'',all:false,range:null}}};
 
 const OBS=[];
@@ -35,7 +35,7 @@ DATA.sheets.forEach(s=>{
   });
 });
 const STAGES=[];FL.procs.forEach(p=>p.phases.forEach(ph=>ph.stages.forEach(st=>STAGES.push(Object.assign({proc:p.key,phase:ph.name},st)))));
-const stageOf=(sheet,no)=>STAGES.find(s=>s.sheet===sheet&&s.from<=no&&no<=s.to);
+const stageOf=(sheet,no)=>STAGES.find(s=>s.sheet===sheet&&(s.refs?s.refs.includes(no):(s.from<=no&&no<=s.to)));
 const sheetOf=code=>DATA.sheets.find(s=>s.sheet===code&&s.site===S.site);
 const SECNAME={};DATA.sheets.forEach(s=>s.sections.forEach(x=>{SECNAME[(s.template==='MDN_TEMPLATE'?'MDN':'HO')+'|'+x.id]=x.id+' '+x.name}));
 const inScope=o=>S.site==='ALL'||o.site===S.site;
@@ -73,14 +73,14 @@ function tally(os,f){let c=0,n=0,na=0,pe=0;os.forEach(o=>{const s=f(o);if(s==='C
 const adjStatus=o=>{if(o.raw==='COMPLY'&&adjOf(o.flag))return adjOf(o.flag);return o.raw};
 function mkSeg(el,items,cur,cb){el.innerHTML='';items.forEach(([v,label,dis])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.disabled=!!dis;b.setAttribute('aria-pressed',String(v===cur));b.onclick=()=>cb(v);el.appendChild(b)})}
 function flash(el){if(!el)return;el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.remove('hl');void el.offsetWidth;el.classList.add('hl')}
-function setSite(c){S.site=c;if(c!=='ALL')S.lastSite=c;S.peta.sel=null;S.peta.range=null;S.alur.hl=null;const sh=DATA.sheets.filter(s=>s.site===c);if(c!=='ALL'&&!sh.some(s=>s.sheet===S.proc))S.proc=(PROCS.find(p=>sh.some(s=>s.sheet===p)))||S.proc}
+function setSite(c){S.site=c;if(c!=='ALL')S.lastSite=c;S.peta.sel=null;S.peta.range=null;S.peta.nos=null;S.alur.hl=null;const sh=DATA.sheets.filter(s=>s.site===c);if(c!=='ALL'&&!sh.some(s=>s.sheet===S.proc))S.proc=(PROCS.find(p=>sh.some(s=>s.sheet===p)))||S.proc}
 
 /* ---- navigasi antar tab ---- */
 function go(tab,o={}){
   if(o.site)setSite(o.site);
   if(tab==='peta'&&S.site==='ALL')setSite(S.lastSite||'JKT');
   if(tab==='alur'){if(o.proc)S.proc=o.proc;S.alur.af=null;S.alur.hl=o.stage||null}
-  if(tab==='peta'){if(o.proc)S.proc=o.proc;S.peta.range=o.range||null;S.peta.sel=o.sel??null;S.peta.focus='all';S.peta.scrollTo=o.sel??(o.range?o.range[0]:null);if(o.loc)S.dcloc=o.loc}
+  if(tab==='peta'){if(o.proc)S.proc=o.proc;S.peta.range=o.range||null;S.peta.nos=o.nos||null;S.peta.sel=o.sel??null;S.peta.focus='all';S.peta.scrollTo=o.sel??(o.nos?o.nos[0]:(o.range?o.range[0]:null));if(o.loc)S.dcloc=o.loc}
   if(tab==='gap'){const f=S.gap.f;Object.assign(f,{gt:'',sec:'',actor:'',cat:'',sop:'',theme:'',mapStage:'',note:'',range:null,all:!!o.all},o.f||{})}
   S.tab=tab;render();
   requestAnimationFrame(()=>{
@@ -126,6 +126,13 @@ function mdnBadge(st,prefix){
   return `<button type="button" class="ncb${n?'':' z'}" data-gapmap="${st.id}" title="Pemetaan draf Medan ke SOP HO: ${os.length} langkah Medan masuk tahap ini. Klik untuk melihat.">${prefix}${n} NC*</button>`;
 }
 function ncBadge(st){
+  if(st.sheet==='CY'){
+    if(!st.refs.length)return '<span class="ncb pe" title="Belum ada langkah audit di SOP-OPS-CY-001">usulan</span>';
+    const os=siteObs().filter(o=>o.sheet==='CY'&&st.refs.includes(o.no));
+    if(!os.length)return '<span class="ncb pe">tidak diaudit</span>';
+    const n=os.filter(isNC).length;
+    return `<button type="button" class="ncb${n?'':' z'}" data-gapcy="${st.id}" title="Hasil audit Medan pada langkah ${st.refs.join(', ')}">${S.site==='ALL'?'Medan ':''}${n} NC</button>`;
+  }
   if(S.site!=='ALL'&&tplOfSite(S.site)==='MDN')return mdnBadge(st,'');
   const os=stageObs(st),med=S.site==='ALL'?mdnBadge(st,'Medan '):'';
   if(!os.length)return '<span class="ncb pe">tidak diaudit</span>'+med;
@@ -146,7 +153,8 @@ function alurCard(st,idx,seq){
    ${st.in.length?`<div class="cblk in"><div class="bl">Dokumen masuk</div><ul>${docs(st.in)}</ul></div>`:''}
    ${st.out.length?`<div class="cblk out"><div class="bl">Dokumen keluar</div><ul>${docs(st.out)}</ul></div>`:''}
    ${st.sys?`<div class="sys">${esc(st.sys)}</div>`:''}
-   <div class="c-f"><span>${esc(st.sop)}</span>${mdn?`<span>langkah ${st.from}–${st.to} (HO)</span>`:`<button type="button" class="lnk" data-peta="${st.id}" title="Buka langkah audit di Peta">langkah ${st.from}–${st.to} →</button>`}${ncBadge(st)}</div></article>`;
+   ${st.manual?`<details class="cblk var"><summary>Gate manual vs otomatis</summary><div><b>Manual</b> (${esc(st.pic_manual.join(', '))}): ${esc(st.manual)}</div><div><b>Otomatis</b> (${esc(st.pic_otomatis.join(', ')||'tanpa PIC')}): ${esc(st.otomatis)}</div>${st.catatan?`<div><b>Catatan:</b> ${esc(st.catatan)}</div>`:''}</details>`:''}
+   <div class="c-f"><span>${esc(st.sop)}</span>${st.sheet==='CY'?(st.refs.length?`<button type="button" class="lnk" data-peta="${st.id}" title="Buka langkah audit Medan di Peta">langkah ${st.refs.join(', ')} →</button>`:'<span>belum ada langkah audit</span>'):mdn?`<span>langkah ${st.from}–${st.to} (HO)</span>`:`<button type="button" class="lnk" data-peta="${st.id}" title="Buka langkah audit di Peta">langkah ${st.from}–${st.to} →</button>`}${ncBadge(st)}</div></article>`;
 }
 function renderAlur(){
   const p=FL.procs.find(x=>x.key===S.proc);let idx=0;
@@ -164,9 +172,10 @@ function renderAlur(){
   $('alur-intro').innerHTML='<span class="k"><i class="i"></i>Dokumen masuk: harus ada sebelum tahap dimulai</span><span class="k"><i class="o"></i>Dokumen keluar: dihasilkan tahap ini</span><span class="k"><i class="s">✎ TTD</i>perlu tanda tangan</span>'+
     '<span class="k">Klik "langkah" untuk membuka Peta, klik badge NC untuk membuka daftar temuan</span>';
   $('alur-flow').innerHTML=p.phases.map(ph=>`<section class="phase"><div class="ph-h"><span class="ph-n">${esc(ph.name)}</span><span class="ph-m">${esc(ph.meta)}</span></div>
-    <div class="rowx">${ph.stages.map(st=>alurCard(st,ph.periodic?0:++idx,!ph.periodic)).join('')}</div></section>`).join('');
+    <div class="rowx">${ph.stages.map(st=>alurCard(st,ph.restart?st.no:(ph.periodic?0:++idx),!ph.periodic)).join('')}</div></section>`).join('');
   $('alur-foot').textContent='Urutan kartu mengikuti alur kerja nyata di SOP HO. Nomor langkah audit mengikuti nomor di Peta Proses Audit SOP. Jumlah NC mengikuti pilihan cabang dan status di atas.'+(p.note?' '+p.note:'');
-  $('alur-flow').querySelectorAll('[data-peta]').forEach(b=>b.onclick=()=>{const st=STAGES.find(x=>x.id===b.dataset.peta);go('peta',{proc:st.sheet,range:[st.from,st.to]})});
+  $('alur-flow').querySelectorAll('[data-peta]').forEach(b=>b.onclick=()=>{const st=STAGES.find(x=>x.id===b.dataset.peta);go('peta',st.sheet==='CY'?{site:'MDN',proc:'CY',nos:st.refs}:{proc:st.sheet,range:[st.from,st.to]})});
+  $('alur-flow').querySelectorAll('[data-gapcy]').forEach(b=>b.onclick=()=>{const st=STAGES.find(x=>x.id===b.dataset.gapcy);go('gap',{all:true,f:{range:{tpl:'MDN',site:'MDN',sheet:'CY',a:Math.min(...st.refs),b:Math.max(...st.refs),nos:st.refs,label:`${st.name} (CY Handling ${st.refs.join(', ')})`}}})});
   $('alur-flow').querySelectorAll('[data-gapmap]').forEach(b=>b.onclick=()=>go('gap',{all:true,f:{mapStage:b.dataset.gapmap}}));
   $('alur-flow').querySelectorAll('[data-gap]').forEach(b=>b.onclick=()=>{const st=STAGES.find(x=>x.id===b.dataset.gap);
     go('gap',{f:{range:{tpl:'HO',sheet:st.sheet,a:st.from,b:st.to,label:`${st.name} (${SHN[st.sheet]} ${st.from}–${st.to})`}}});
@@ -192,6 +201,7 @@ function itemFinding(sh,no){
 }
 const NW=150,NH=68,PX=34,LANEH=90,LABW=132,GAP=22;
 function petaFocus(it,s){
+  if(S.peta.nos&&!S.peta.nos.includes(it.no))return false;
   if(S.peta.range&&!(it.no>=S.peta.range[0]&&it.no<=S.peta.range[1]))return false;
   if(S.peta.focus==='NON-COMPLY')return s==='NON-COMPLY';
   if(S.peta.focus==='flag')return !!it.qa_flag;
@@ -199,7 +209,7 @@ function petaFocus(it,s){
 }
 function renderPeta(){
   const sh=sheetOf(S.proc);
-  mkSeg($('peta-proc'),PROCS.map(c=>[c,PROCN[c],!sheetOf(c)]),S.proc,v=>{S.proc=v;S.peta.sel=null;S.peta.range=null;render()});
+  mkSeg($('peta-proc'),PROCS.map(c=>[c,PROCN[c],!sheetOf(c)]),S.proc,v=>{S.proc=v;S.peta.sel=null;S.peta.range=null;S.peta.nos=null;render()});
   const os=siteObs().filter(o=>o.sheet===S.proc&&locOk(o));
   const rep=tally(os,o=>o.raw),adj=tally(os,adjStatus);
   const pr=pct(rep.c,rep.n),pa=pct(adj.c,adj.n),cov=rep.c+rep.n+rep.na?(rep.c+rep.n)/(rep.c+rep.n+rep.na)*100:null;
@@ -210,7 +220,7 @@ function renderPeta(){
    <div class="kpi pair"><div class="v">${fmt(pa)}<small>${adj.c} C · ${adj.n} NC · ${adj.na} N/A</small></div><div class="l">Adjusted (${nconf} status_conflict dihitung ulang)${pa!==pr?` <span class="arrow">▼ ${(pr-pa).toFixed(1).replace('.',',')} poin</span>`:''}</div></div>
    <div class="kpi"><div class="v">${fmt(cov)}</div><div class="l">Langkah yang diperiksa (bukan N/A)${rep.na?` (${rep.na} N/A)`:''}</div></div>`)+
    `<div class="kpi"><div class="v">${nflag}</div><div class="l">item ber-flag QA</div></div>`+(rep.pe?`<div class="kpi"><div class="v">${rep.pe}</div><div class="l">belum diaudit</div></div>`:'')+
-   (tplOfSite(S.site)==='MDN'?(()=>{const c=k=>sh.items.filter(i=>(MAPBY[S.proc+'-'+i.no]||{}).rel===k).length;return `<div class="kpi"><div class="v">${c('S')} · ${c('P')} · ${c('M')}</div><div class="l">Dibanding SOP HO (draf): sama · mirip · hanya di Medan</div></div>`})():'');
+   (tplOfSite(S.site)==='MDN'&&S.proc!=='CY'?(()=>{const c=k=>sh.items.filter(i=>(MAPBY[S.proc+'-'+i.no]||{}).rel===k).length;return `<div class="kpi"><div class="v">${c('S')} · ${c('P')} · ${c('M')}</div><div class="l">Dibanding SOP HO (draf): sama · mirip · hanya di Medan</div></div>`})():'');
   $('peta-banner').hidden=!sh.note;$('peta-banner').textContent=sh.note||'';
   const risk=sh.items.filter(i=>i.qa_flag===RISK);
   $('peta-risk').hidden=!risk.length;
@@ -220,9 +230,9 @@ function renderPeta(){
   [['all','Semua','',cnt.all],['NON-COMPLY','Hanya NON-COMPLY','nc',cnt.nc],['flag','Hanya flag QA','flag',cnt.flag]].forEach(([k,l,c,n])=>{
     const b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('aria-pressed',String(S.peta.focus===k));
     b.innerHTML=(c?`<i class="sw ${c}"></i>`:'')+esc(l)+` <span class="n">${n}</span>`;b.onclick=()=>{S.peta.focus=k;renderPeta()};$('peta-chips').appendChild(b)});
-  const r=S.peta.range;
-  $('peta-range').innerHTML=r?`<span class="fc">Tahap: langkah ${r[0]}–${r[1]}<button type="button" id="peta-rx" aria-label="Hapus sorotan tahap">×</button></span>`:'';
-  if(r)$('peta-rx').onclick=()=>{S.peta.range=null;renderPeta()};
+  const r=S.peta.range,nz=S.peta.nos,hasF=r||nz;
+  $('peta-range').innerHTML=hasF?`<span class="fc">Tahap: langkah ${nz?nz.join(', '):r[0]+'–'+r[1]}<button type="button" id="peta-rx" aria-label="Hapus sorotan tahap">×</button></span>`:'';
+  if(hasF)$('peta-rx').onclick=()=>{S.peta.range=null;S.peta.nos=null;renderPeta()};
   const host=$('peta-board');host.innerHTML='';
   sh.sections.forEach(sec=>{
     const items=sh.items.filter(i=>i.section===sec.id).sort((a,b)=>a.no-b.no);
@@ -277,7 +287,7 @@ function renderDrawer(sh){
   if(!it){d.hidden=true;return}
   d.hidden=false;
   const tpl=tplOfSite(S.site),sec=sh.sections.find(s=>s.id===it.section),os=itemObs(S.proc,it.no),mp=tpl==='MDN'?MAPBY[S.proc+'-'+it.no]:null;
-  const st=tpl==='HO'?stageOf(S.proc,it.no):(mp&&mp.ho[0]?stageOf(mp.ho[0].sheet,mp.ho[0].no):null);
+  const st=S.proc==='CY'?stageOf('CY',it.no):tpl==='HO'?stageOf(S.proc,it.no):(mp&&mp.ho[0]?stageOf(mp.ho[0].sheet,mp.ho[0].no):null);
   const gt=os.map(gtype).find(Boolean),themes=GC.THEMES.filter(t=>os.some(o=>themeHit(t,o)));
   let right='';
   if(S.site==='JKT'&&S.proc==='DC'){
@@ -422,7 +432,7 @@ function renderMap(){
 /* heatmap tahap x status */
 function renderHm(){
   const v=vis(),tpls=scopeTpls();
-  const groups=[['EXPORT','HO'],['IMPORT','HO'],['DC','HO'],['TRUCKING','HO'],['EXPORT','MDN'],['IMPORT','MDN'],['DC','MDN']].filter(([sh,tp])=>tpls.has(tp));
+  const groups=[['EXPORT','HO'],['IMPORT','HO'],['DC','HO'],['TRUCKING','HO'],['EXPORT','MDN'],['IMPORT','MDN'],['DC','MDN'],['CY','MDN']].filter(([sh,tp])=>tpls.has(tp));
   let h='<thead><tr><th>Tahap</th><th class="n">COMPLY</th><th class="n">NON-COMPLY</th><th class="n">N/A</th><th class="n">Belum diaudit</th><th class="n">NC %</th></tr></thead><tbody>';
   groups.forEach(([sh,tp])=>{
     const sheet=DATA.sheets.find(s=>s.sheet===sh&&(s.template==='MDN_TEMPLATE'?'MDN':'HO')===tp);if(!sheet)return;
@@ -486,7 +496,7 @@ function matches(o){
   if(f.actor&&o.actor!==f.actor)return false;
   if(f.cat&&o.cat!==f.cat)return false;
   if(f.sop&&o.sop!==f.sop)return false;
-  if(f.range){const r=f.range;if(o.tpl!==(r.tpl||'HO')||o.sheet!==r.sheet||o.no<r.a||o.no>r.b)return false;if(r.site&&o.site!==r.site)return false}
+  if(f.range){const r=f.range;if(o.tpl!==(r.tpl||'HO')||o.sheet!==r.sheet||o.no<r.a||o.no>r.b||(r.nos&&!r.nos.includes(o.no)))return false;if(r.site&&o.site!==r.site)return false}
   if(f.mapStage){const stg=STAGES.find(x=>x.id===f.mapStage),m=MAPBY[o.sheet+'-'+o.no];if(o.tpl!=='MDN'||!m||!m.ho.some(h=>h.sheet===stg.sheet&&h.no>=stg.from&&h.no<=stg.to))return false}
   if(f.theme&&!themeHit(THEME_OF(f.theme),o))return false;
   if(!f.all&&!isNC(o))return false;

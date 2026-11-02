@@ -1,0 +1,135 @@
+{
+ "sumber": "Notion: Draf SOP Penarikan Full Container ke UTC/CY dan CY Handling, dibaca 2026-11-02 (hasil edit pengguna atas draf awal)",
+ "judul": "SOP Penarikan Full Container ke CY Pelabuhan (UTPK/UTC), draf Rev.02",
+ "tujuan": "Pedoman penarikan full container setelah stuffing di area gudang untuk dibawa ke Unit Terminal Peti Kemas (UTPK) atau CY Pelabuhan.",
+ "ruang_lingkup": "Berlaku di PT Masaji Kargosentra Tama.",
+ "pembuat": "Warehouse Operation Department Head",
+ "pemeriksa": "Warehouse Operation Division Head",
+ "penyetuju": "Management Representative",
+ "langkah": [
+  {
+   "no": 1,
+   "tahap": "Terima dan cek dokumen",
+   "langkah": "Menerima Kartu Ekspor (KE), PKBE, dan Export Summary List",
+   "aktor": "Staff Trucking",
+   "masuk": [
+    "KE",
+    "PKBE",
+    "Export Summary List"
+   ],
+   "keluar": [],
+   "sumber": "Ruang lingkup",
+   "kategori": "DOC"
+  },
+  {
+   "no": 2,
+   "tahap": "Terima dan cek dokumen",
+   "langkah": "Cek kelengkapan dan kesesuaian dokumen",
+   "aktor": "Staff Trucking",
+   "masuk": [
+    "KE",
+    "PKBE",
+    "Export Summary List"
+   ],
+   "keluar": [],
+   "sumber": "Ruang lingkup",
+   "kategori": "DOC"
+  },
+  {
+   "no": 3,
+   "tahap": "Periksa sebelum berangkat",
+   "langkah": "Memeriksa segel terpasang baik saat container akan diberangkatkan dari gudang",
+   "aktor": "Staff Trucking",
+   "masuk": [],
+   "keluar": [
+    "Catatan pemeriksaan segel"
+   ],
+   "sumber": "Uraian 4a",
+   "kategori": "COMP"
+  },
+  {
+   "no": 4,
+   "tahap": "Periksa sebelum berangkat",
+   "langkah": "Menerbitkan Surat Jalan (SJT) yang menjelaskan container yang dibawa sopir ke CY Pelabuhan",
+   "aktor": "Staff Trucking",
+   "masuk": [
+    "Export Summary List"
+   ],
+   "keluar": [
+    "Surat Jalan (SJT)",
+    "Bon Muat (penempatan perkiraan)"
+   ],
+   "sumber": "Definisi 3c; dokumen terkait",
+   "kategori": "DOC"
+  },
+  {
+   "no": 5,
+   "tahap": "SPK dan penarikan",
+   "langkah": "Memberikan SJT ke vendor/unit MKT untuk penarikan ke CY Pelabuhan",
+   "aktor": "Staff Trucking",
+   "masuk": [],
+   "keluar": [
+    "Surat Jalan (SJT)"
+   ],
+   "sumber": "Ruang lingkup",
+   "kategori": "DOC"
+  },
+  {
+   "no": 6,
+   "tahap": "SPK dan penarikan",
+   "langkah": "Jadwalkan penarikan dengan memperhatikan closing time pelabuhan",
+   "aktor": "Staff Trucking",
+   "masuk": [
+    "Informasi closing time"
+   ],
+   "keluar": [],
+   "sumber": "Uraian 4c",
+   "kategori": "COMP"
+  },
+  {
+   "no": 7,
+   "tahap": "SPK dan penarikan",
+   "langkah": "Melakukan komunikasi/tracing antara Staff Trucking dan Supir",
+   "aktor": "Staff Trucking",
+   "masuk": [],
+   "keluar": [],
+   "sumber": "Uraian 4d",
+   "kategori": "OPS"
+  },
+  {
+   "no": 8,
+   "tahap": "Terima di CY UTPK",
+   "langkah": "Membandingkan segel saat container diturunkan di CY Pelabuhan dengan hasil pemeriksaan di gudang",
+   "aktor": "Supir",
+   "masuk": [],
+   "keluar": [],
+   "sumber": "Uraian 4a",
+   "kategori": "OPS"
+  },
+  {
+   "no": 9,
+   "tahap": "Terima di CY UTPK",
+   "langkah": "Bandingkan kondisi container: EIR versi UTPK dengan Surat Jalan",
+   "aktor": "Supir & Staff Trucking",
+   "masuk": [
+    "EIR versi UTPK",
+    "Surat Jalan (SJT)"
+   ],
+   "keluar": [],
+   "sumber": "Uraian 4b",
+   "kategori": "DOC"
+  },
+  {
+   "no": 10,
+   "tahap": "Terima di CY UTPK",
+   "langkah": "Jika terjadi selisih, Staff Trucking melaporkan ke AO dan membuat Berita Acara",
+   "aktor": "Staff Trucking",
+   "masuk": [],
+   "keluar": [
+    "Berita Acara"
+   ],
+   "sumber": "Dokumen terkait",
+   "kategori": "DOC"
+  }
+ ]
+}

@@ -27,12 +27,15 @@ rows = {}
 for r in SRC['results']:
     rows.setdefault((r['site'], r['sheet'], r['no']), []).append(r)
 
-t2 = next(s for s in V2['sheets'] if s['sheet'] == 'TRUCKING')
-T2_SECTION = next(x for x in t2['sections'] if x['id'] == 'T2')
-T2_ITEMS = [i for i in t2['items'] if i['section'] == 'T2']
+FC = json.loads((ROOT / 'data/sop_full_container_draft.json').read_text(encoding='utf-8'))
+CYSRC = json.loads((ROOT / 'data/cy_handling_medan_source.json').read_text(encoding='utf-8'))
+T2_SECTION = {'id': 'T2', 'name': 'Penarikan Full Container ke CY Pelabuhan (UTPK/UTC)', 'sop': 'SOP Penarikan Full Container ke CY Pelabuhan (draf Rev.02)',
+              'from_no': 9, 'to_no': 8 + len(FC['langkah'])}
+T2_ITEMS = [{'no': 8 + x['no'], 'section': 'T2', 'sop_ref': 'Draf Rev.02 · ' + x['sumber'], 'category': x['kategori'],
+             'criterion': x['langkah'], 'actor': x['aktor']} for x in FC['langkah']]
 TRUCK_NOTE = ('Penarikan empty container (langkah 1-8) asalnya langkah Export 37-44 (SOP-OPS-005) dan dipindah ke sini. '
-              'Penarikan full container (langkah 9-22) belum diaudit: draf checklist dari Pendahuluan SOP butir 1 sampai 5; '
-              'butir 6 Prosedur belum diterima sehingga langkah, aktor, dan urutan perlu disesuaikan.')
+              f"Penarikan full container (langkah 9-{8 + len(FC['langkah'])}) belum diaudit: draf Rev.02 (sumber: Notion, dibaca 2026-11-02) "
+              'dengan 10 langkah; checklist audit diturunkan dari prosedur draf itu.')
 
 def build_item(tpl_item, site, sheet):
     rs = rows.get((site, sheet, tpl_item['no']))
@@ -72,10 +75,19 @@ for site in SRC['sites']:
                 j = {k: i[k] for k in ('no', 'section', 'sop_ref', 'category', 'criterion', 'actor')}
                 j.update(status='PENDING', doc_status=None, finding='', auditor_note='', qa_flag='', actor_actual='', root_cause='')
                 full.append(j)
-            sheets.append(dict(base, sheet='TRUCKING', note=TRUCK_NOTE, sop_refs=['SOP-OPS-005', 'SOP Penarikan Full Container ke UTC Rev.01'],
+            sheets.append(dict(base, sheet='TRUCKING', note=TRUCK_NOTE, sop_refs=['SOP-OPS-005', 'SOP Penarikan Full Container ke CY Pelabuhan (draf Rev.02)'],
                 sections=[dict(id='T1', name=sec6['name'], sop=sec6['sop'], from_no=1, to_no=len(empty)), dict(T2_SECTION)],
                 items=empty + full))
         sheets.append(dict(base, sections=sections, items=items))
+
+# sheet CY Handling Medan (SOP-OPS-CY-001), dibaca dari Google Sheets
+MCY = {'COMPLY': 'COMPLY', 'NON-COMPLY': 'NON-COMPLY', 'N/A': 'N/A'}
+sheets.append(dict(site='MDN', sheet='CY', template='MDN_TEMPLATE',
+    note='Sheet CY HANDLING MEDAN (SOP-OPS-CY-001), 27 langkah. Status resmi = status lapangan (genba); status dokumen disimpan terpisah. Sumber: Google Sheets, dibaca 2026-11-02.',
+    sop_refs=[CYSRC['sop']], sections=[dict(x) for x in CYSRC['seksi']],
+    items=[dict(no=x['no'], section=x['section'], sop_ref=x['sop_ref'], category=x['category'], criterion=x['criterion'], actor=x['actor'],
+                status=MCY[x['status_genba']], doc_status=MCY[x['status_doc']], finding=x['finding'], auditor_note='', qa_flag='',
+                actor_actual='', root_cause='') for x in CYSRC['langkah']]))
 
 sites = [{k: s[k] for k in ('code', 'name', 'audit_no', 'date', 'template') if k in s} | {'note': s.get('note', ''), 'units': s.get('units', {}),
          'sheets': [x['sheet'] for x in sheets if x['site'] == s['code']]} for s in SRC['sites']]

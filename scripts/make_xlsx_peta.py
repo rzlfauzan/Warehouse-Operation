@@ -9,9 +9,14 @@ from openpyxl.utils import get_column_letter as L
 D=json.load(open(ROOT/'data/audit_dataset_v3.json'))
 V3=json.load(open(ROOT/'data/audit_dataset_v3.json'))
 MAPJ=json.load(open(ROOT/'data/medan_ho_mapping.json'))
-D['sheets']=[x for x in D['sheets'] if x['site']=='JKT']  # Excel review hanya Jakarta (SOP Utama HO)
+D['sheets']=[x for x in D['sheets'] if x['site']=='JKT' or (x['site']=='MDN' and x['sheet']=='CY')]  # Jakarta (SOP Utama HO) + CY Handling (sumber Medan)
 FLOWS=json.load(open(ROOT/'data/flows.json'))
 AREA=FLOWS['areas']
+def cy_sys(st):
+    t=st['sys'] or ''
+    if st.get('manual'):
+        t=(t+'\n' if t else '')+f"Gate manual ({', '.join(st['pic_manual'])}): {st['manual']}\nGate otomatis ({', '.join(st['pic_otomatis']) or 'tanpa PIC'}): {st['otomatis']}"+(f"\nCatatan: {st['catatan']}" if st['catatan'] else '')
+    return t
 def stage_rows(fl):
     """Ratakan data/flows.json menjadi daftar tahap (satu dict per tahap, urutan alur)."""
     out=[]
@@ -22,13 +27,13 @@ def stage_rows(fl):
                 n+=1
                 out.append(dict(flow=p['label'],phase=ph['name'],no=None if ph.get('periodic') else st['no'],name=st['name'],cond=st['cond'],
                     pic=st['pic'],main=AREA[st['areas'][0]],others=[AREA[a] for a in st['areas'][1:]],sop=st['sop'],
-                    ref=[st['sheet'],st['from'],st['to']],**{'in':st['in'],'out':st['out']},sys=st['sys']))
+                    ref=[st['sheet'],st['from'],st['to']],refs=st.get('refs'),**{'in':st['in'],'out':st['out']},sys=cy_sys(st)))
     return out
 rows=stage_rows(FLOWS)
 F='Arial'
 SHEETS={s['sheet']:s for s in D['sheets']}
-PROC=[('Export','EXPORT'),('Import','IMPORT'),('Trucking Support','TRUCKING'),('DC','DC')]
-FLOWN={'Export':'Export','Import':'Import','Trucking Support':'Trucking Support','DC':'DC (Distribution Center)'}
+PROC=[('Export','EXPORT'),('Import','IMPORT'),('Trucking Support','TRUCKING'),('DC','DC'),('CY Handling','CY')]
+FLOWN={'Export':'Export','Import':'Import','Trucking Support':'Trucking Support','DC':'DC (Distribution Center)','CY Handling':'CY Handling'}
 hf=Font(name=F,size=10,bold=True,color='FFFFFF'); navy=PatternFill('solid',fgColor='0B4A6F'); brown=PatternFill('solid',fgColor='7A5C00')
 yel=PatternFill('solid',fgColor='FFF9C4'); stagef=PatternFill('solid',fgColor='E9EEF3')
 areaf={'Gudang MKT':'DCE8F7','Port / Pelayaran':'D3F0F0','Depo':'FBE3D4','Bea Cukai':'F6D5E8'}
@@ -51,8 +56,8 @@ for name,code in PROC:
     covered=set(); nstage=0
     for st in stages:
         a,b=st['ref'][1],st['ref'][2]
-        its=[i for i in items if a<=i['no']<=b]; covered|={i['no'] for i in its}
-        label=(f"{st['no']}. " if st['no'] else 'Periodik: ')+st['name']+(f" ({st['cond']})" if st['cond'] else '')
+        its=[i for i in items if (i['no'] in st['refs'] if st.get('refs') is not None else a<=i['no']<=b)]; covered|={i['no'] for i in its}
+        label=(f"{st['no']}. " if st['no'] is not None else 'Periodik: ')+st['name']+(f" ({st['cond']})" if st['cond'] else '')
         secs=sorted({i['section'] for i in its})
         area=st['main']+(' + '+', '.join(st['others']) if st['others'] else '')
         ws.append([label,', '.join(secs),area,', '.join(st['pic']),None,None,None,st['sop'],('Sistem / catatan: '+st['sys']) if st['sys'] else None,dl(st['in']),dl(st['out']),None,None,None,None,'Belum direview'])
@@ -65,6 +70,17 @@ for name,code in PROC:
             k=i['criterion']+(f" [asal Export {i['orig_no']}]" if i.get('orig_no') else '')
             ws.append([label,i['section'],None,None,i['no'],i['actor'],i['category'],i['sop_ref'],k,None,None,None,None,None,None,'Belum direview'])
             ws.cell(ws.max_row,1).font=Font(name=F,size=9,color='7A8793')
+    rest=[i for i in items if i['no'] not in covered]
+    if rest and code=='CY':
+        lab='Di luar tahap pemetaan (area pelabuhan, order truck)'
+        ws.append([lab,', '.join(sorted({i['section'] for i in rest})),'Gudang MKT',None,None,None,None,'SOP-OPS-CY-001','Langkah audit yang tidak dipetakan ke tahap CY area MKT',None,None,None,None,None,None,'Belum direview'])
+        r=ws.max_row
+        for c in range(1,len(HDR)+1):
+            cell=ws.cell(r,c); cell.font=Font(name=F,size=10,bold=True if c<=4 else False); cell.fill=stagef
+        for i in rest:
+            ws.append([lab,i['section'],None,None,i['no'],i['actor'],i['category'],i['sop_ref'],i['criterion'],None,None,None,None,None,None,'Belum direview'])
+            ws.cell(ws.max_row,1).font=Font(name=F,size=9,color='7A8793')
+        covered|={i['no'] for i in rest}
     assert covered=={i['no'] for i in items},(name,{i['no'] for i in items}-covered)
     # style
     for c in range(1,len(HDR)+1):
@@ -91,7 +107,7 @@ for name,code in PROC:
 wd=wb.create_sheet('Dokumen'); h2=['Proses','Tahap alur','Jenis','Dokumen','Perlu TTD','Catatan reviewer','Perlu diubah?','Nama resmi / usulan revisi','Reviewer']
 wd.append(h2)
 for x in rows:
-    t=(f"{x['no']}. " if x['no'] else 'Periodik: ')+x['name']
+    t=(f"{x['no']}. " if x['no'] is not None else 'Periodik: ')+x['name']
     for j,lst in (('Masuk',x['in']),('Keluar',x['out'])):
         for d in lst: wd.append([x['flow'],t,j,d['t'],'Ya' if d['sig'] else '','','','',''])
 W2=[22,36,9,50,10,40,13,36,14]
@@ -163,13 +179,13 @@ put(1,1,'Peta Proses Audit SOP: lembar review',size=14,bold=True)
 put(2,1,'Sumber: form audit SOP FRM-OPS-001-0001 (Jakarta, Agustus 2026), untuk SOP Warehouse dan Multimode MKT. Isi tahap dan dokumen sama dengan halaman Alur Proses Umum MKT. Hasil audit tidak dimuat.',color='5A6B78')
 wp.merge_cells('A2:D2'); wp.row_dimensions[2].height=30
 put(4,1,'Cara pakai',bold=True)
-steps=['Satu sheet per proses: Export, Import, Trucking Support, DC. Tiap tahap alur diawali satu baris berlatar abu (area kerja, PIC, dokumen masuk dan keluar), diikuti langkah audit di bawahnya.',
+steps=['Satu sheet per proses: Export, Import, Trucking Support, DC, CY Handling. Tiap tahap alur diawali satu baris berlatar abu (area kerja, PIC, dokumen masuk dan keluar), diikuti langkah audit di bawahnya.',
  'Dokumen masuk dan keluar dimuat per tahap, bukan per langkah, karena dokumennya milik tahap. Langkah audit (No, Aktor, Acuan SOP) mengikuti nomor di Peta Proses Audit SOP.',
  'Sheet "Dokumen" memuat satu baris per dokumen untuk catatan per dokumen (nama resmi, perlu TTD).',
  'Kolom berwarna kuning adalah kolom review dan satu-satunya yang perlu diisi. "Perlu diubah?" dan "Status review" memakai dropdown.',
  '(TTD) berarti dokumen perlu tanda tangan. "(perkiraan)" berarti penempatan dokumen di tahap itu belum dipastikan.',
  'Sheet "Pemetaan Medan-HO" memuat draf pemetaan 170 langkah SOP Medan ke SOP Utama HO, dan "HO tidak ada di Medan" memuat langkah HO yang belum ada di SOP Medan. Isi kolom kuning untuk menyetujui atau mengubah pemetaan.',
- 'Trucking Support langkah 1 sampai 8 (penarikan empty) asalnya Export 37 sampai 44. Langkah 9 sampai 22 (penarikan full container) belum diaudit dan masih draf dari Pendahuluan SOP.']
+ 'Trucking Support langkah 1 sampai 8 (penarikan empty) asalnya Export 37 sampai 44. Langkah 9 sampai 18 (penarikan full container) belum diaudit; isinya draf Rev.02 dari Notion. Sheet CY Handling berasal dari pemetaan proses CY MKT Medan (varian Gate Manual dan Gate Otomatis ada di kolom keterangan), dengan langkah audit 27 butir SOP-OPS-CY-001 milik Medan.']
 for i,s in enumerate(steps):
     put(5+i,1,f'{i+1}. '+s);wp.merge_cells(start_row=5+i,start_column=1,end_row=5+i,end_column=4);wp.row_dimensions[5+i].height=30
 r=12

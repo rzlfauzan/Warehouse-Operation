@@ -3,7 +3,7 @@
 
 Ini DRAF usulan. Dibuat dengan membaca bunyi langkah dan aktor kedua template; belum dikonfirmasi pemilik SOP.
 Spesifikasi ringkas per langkah Medan:  nomor: (langkah HO, relasi, keyakinan, catatan)
-  langkah HO : 'E3,E4' (E=EXPORT, I=IMPORT, D=DC, T=TRUCKING; T1-T8 penarikan empty, T9-T22 full), kosong = tidak ada
+  langkah HO : 'E3,E4' (E=EXPORT, I=IMPORT, D=DC, T=TRUCKING; T1-T8 penarikan empty, T9-T18 full), kosong = tidak ada
   relasi     : S sama (kegiatan sama), P mirip (sebagian sama atau beda rincian/aktor), M hanya di Medan
   keyakinan  : T tinggi, S sedang, R rendah
 """
@@ -51,11 +51,11 @@ EXPORT = {
  32: ('E35,E36', 'P', 'S', 'Ambil seal, cocokkan nomor, segel; di HO dibagi Admin dan Surveyor'),
  33: ('E33,E36', 'P', 'S', 'Dokumentasi penyegelan (foto)'),
  34: ('', 'M', 'T', 'Serah Cargo Tally ke AO dan laporan ke pelanggan tidak ada di Export HO'),
- 35: ('T9', 'P', 'R', 'SP2 dan stuffing list dari pelanggan; HO penarikan full memulai dari KE, PKBE, Survey Pelayaran, ESL'),
+ 35: ('T9', 'P', 'R', 'SP2 dan stuffing list dari pelanggan; HO penarikan full memulai dari KE, PKBE, ESL'),
  36: ('', 'M', 'S', 'Peran Gate Officer tidak ada di SOP HO'),
- 37: ('T16', 'S', 'S', 'Pesan truck untuk full container ke pelabuhan sama dengan SPK ke vendor'),
- 38: ('T14', 'P', 'R', 'Muat container full; HO memeriksa kondisi saat keluar gudang'),
- 39: ('T15,T13', 'P', 'S', 'Cetak SJ dan cek nomor container dan seal; HO terbitkan SJT dan periksa segel'),
+ 37: ('T13', 'P', 'S', 'Pesan truck untuk full container ke pelabuhan; HO memberikan SJT ke vendor/unit MKT untuk penarikan'),
+ 38: ('', 'M', 'R', 'Muat container full oleh Operator RS; draf HO penarikan full tidak punya langkah muat'),
+ 39: ('T12,T11', 'P', 'S', 'Cetak SJ dan cek nomor container dan seal; HO terbitkan SJT dan periksa segel'),
 }
 EXPORT.update(rng(40, 46, 'E45'))
 EXPORT.update(rng(47, 57, 'E52'))
@@ -155,7 +155,7 @@ if __name__ == '__main__':
     m = build()
     meta = {'status': 'draf usulan, belum dikonfirmasi pemilik SOP',
             'rel': {'S': 'sama', 'P': 'mirip', 'M': 'hanya di Medan'}, 'conf': {'T': 'tinggi', 'S': 'sedang', 'R': 'rendah'},
-            'note': 'Medan memakai SOP-OPS-DC-002, EXP-003, IMP-004; acuan HO adalah SOP Utama (template Jakarta). T1-T8 = penarikan empty (asal Export 37-44), T9-T22 = penarikan full (draf).'}
+            'note': 'Medan memakai SOP-OPS-DC-002, EXP-003, IMP-004; acuan HO adalah SOP Utama (template Jakarta). T1-T8 = penarikan empty (asal Export 37-44), T9-T18 = penarikan full (draf Rev.02).'}
     (ROOT / 'data/medan_ho_mapping.json').write_text(json.dumps({'meta': meta, 'map': m}, ensure_ascii=False, indent=1), encoding='utf-8')
     from collections import Counter
     for sh in ('EXPORT', 'IMPORT', 'DC'):

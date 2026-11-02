@@ -1,0 +1,292 @@
+{
+ "sumber": "Google Sheets sheet PEMETAAN PROSES CY MKT dan FLOWCHART CY MKT, dibaca 2026-11-02",
+ "judul": "Pemetaan proses CY, area MKT Medan (Gate Manual vs Gate Otomatis)",
+ "catatan_sheet": "Sumber: SOP-OPS-CY-001 / sheet CY HANDLING MEDAN. Ruang lingkup hanya aktivitas di dalam area MKT. Item 'Usulan' belum ada di SOP.",
+ "alur": [
+  {
+   "id": "A",
+   "nama": "Penerimaan Empty / Full Container di CY MKT",
+   "tahap": [
+    {
+     "no": 0,
+     "tahap": "Pra-Kedatangan",
+     "manual": "1) Pelanggan/forwarder mengirim pra-info ke AO via email (no. container, status Empty/Full, size/type, SJT/SP2) sebagai pemberitahuan ada container yang akan masuk. 2) AO melakukan input Working Order (WO) di WIMS dan menyerahkan tiket bongkar.",
+     "pic_manual": [
+      "Pelanggan",
+      "AO"
+     ],
+     "otomatis": "1) Pelanggan/forwarder mengirim pra-info ke AO via email. 2) Pelanggan/forwarder/supir mengajukan permintaan GATE PASS ke CS (no. container, nopol, nama supir). CS mencocokkan dengan pra-info dan data WIMS, lalu menerbitkan Gate Pass (QR/barcode).",
+     "pic_otomatis": [
+      "Pelanggan",
+      "AO",
+      "CS"
+     ],
+     "dokumen_sistem": "Email pra-info, SJT/SP2, WO WIMS, Tiket Bongkar",
+     "catatan": "Full: wajib no. seal. Empty: wajib info shipping line/depo asal.",
+     "ref": [
+      1,
+      12
+     ]
+    },
+    {
+     "no": 1,
+     "tahap": "Kedatangan di Gerbang",
+     "manual": "Security memeriksa tujuan SJT dan kecocokan nopol, mencatat nopol, nama supir, no. container di logbook.",
+     "pic_manual": [
+      "Security"
+     ],
+     "otomatis": "Supir scan Gate Pass di gate; sistem mencocokkan data Gate Pass. Security memeriksa nopol dan no. container secara visual dan mencatat di log gate.",
+     "pic_otomatis": [
+      "Supir",
+      "Sistem",
+      "Security"
+     ],
+     "dokumen_sistem": "SJT, Logbook / Log Gate otomatis",
+     "catatan": "Full: cek kondisi seal utuh.",
+     "ref": [
+      9,
+      10
+     ]
+    },
+    {
+     "no": 2,
+     "tahap": "Lapor Dokumen",
+     "manual": "Supir lapor ke AO; AO cek kelengkapan SJT, beri cap dan jam lapor, arahkan ke Gate Officer.",
+     "pic_manual": [
+      "AO"
+     ],
+     "otomatis": "Tidak diperlukan: verifikasi dokumen sudah dilakukan CS saat penerbitan Gate Pass.",
+     "pic_otomatis": [],
+     "dokumen_sistem": "SJT ber-cap",
+     "catatan": "",
+     "ref": [
+      11,
+      13
+     ]
+    },
+    {
+     "no": 3,
+     "tahap": "Gate In",
+     "manual": "AO menginput data Gate In container sesuai SJT ke WIMS.",
+     "pic_manual": [
+      "AO"
+     ],
+     "otomatis": "Gate In tercatat otomatis di WIMS saat scan; tiket bongkar tercetak/digital, palang terbuka.",
+     "pic_otomatis": [
+      "Sistem"
+     ],
+     "dokumen_sistem": "WIMS, Tiket Bongkar",
+     "catatan": "",
+     "ref": [
+      14
+     ]
+    },
+    {
+     "no": 4,
+     "tahap": "Inspeksi Container",
+     "manual": "Checker/Tallyman memeriksa kondisi fisik (damage) dan seal memakai Form Inspeksi Container.",
+     "pic_manual": [
+      "Checker / Tallyman"
+     ],
+     "otomatis": "Sama: inspeksi fisik manual memakai Form Inspeksi Container.",
+     "pic_otomatis": [
+      "Checker / Tallyman"
+     ],
+     "dokumen_sistem": "Form Inspeksi Container",
+     "catatan": "Full: no. seal sesuai dokumen. Empty: kebersihan dan kelayakan box.",
+     "ref": [],
+     "usulan": true
+    },
+    {
+     "no": 5,
+     "tahap": "Bongkar dan Penumpukan",
+     "manual": "Supir serahkan bon bongkar ke Operator RS; RS menurunkan container dan menempatkan di blok/slot lapangan MKT.",
+     "pic_manual": [
+      "Operator RS"
+     ],
+     "otomatis": "Sama.",
+     "pic_otomatis": [
+      "Operator RS"
+     ],
+     "dokumen_sistem": "Tiket Bongkar",
+     "catatan": "Pisahkan blok stack Empty dan Full.",
+     "ref": [
+      15
+     ]
+    },
+    {
+     "no": 6,
+     "tahap": "Update Lokasi",
+     "manual": "Update posisi stack (blok/row/tier) di WIMS.",
+     "pic_manual": [
+      "AO",
+      "Operator RS"
+     ],
+     "otomatis": "Sama (opsional via handheld).",
+     "pic_otomatis": [
+      "Operator RS"
+     ],
+     "dokumen_sistem": "WIMS",
+     "catatan": "",
+     "ref": [],
+     "usulan": true
+    },
+    {
+     "no": 7,
+     "tahap": "Gate Out Truck",
+     "manual": "1) Supir lapor ke AO; AO mencatat jam keluar di WIMS. 2) Supir menerima EIR dan menyerahkannya kepada Security. 3) Security mengecek truck dalam keadaan kosong (container sudah dibongkar).",
+     "pic_manual": [
+      "Supir",
+      "AO",
+      "Security"
+     ],
+     "otomatis": "Scan Gate Pass di gate keluar; jam keluar tercatat otomatis.",
+     "pic_otomatis": [
+      "Sistem",
+      "Security"
+     ],
+     "dokumen_sistem": "WIMS, EIR",
+     "catatan": "",
+     "ref": [],
+     "usulan": true
+    }
+   ]
+  },
+  {
+   "id": "B",
+   "nama": "Pengambilan Empty / Full Container di CY MKT",
+   "tahap": [
+    {
+     "no": 0,
+     "tahap": "Pra-Kedatangan",
+     "manual": "1) Pelanggan/forwarder mengirim pra-info ke AO via email (no. container, status Empty/Full, size/type, DO/SJT/stuffing list) sebagai pemberitahuan ada container yang akan diambil. 2) AO melakukan input Working Order (WO) di WIMS dan menyerahkan tiket muat.",
+     "pic_manual": [
+      "Pelanggan",
+      "AO"
+     ],
+     "otomatis": "1) Pra-info ke AO via email. 2) Pelanggan/forwarder/supir mengajukan permintaan GATE PASS ke CS (nopol, nama supir). CS cek status container di WIMS (ada, bebas hold, billing lunas) sesuai pra-info, lalu terbitkan Gate Pass.",
+     "pic_otomatis": [
+      "Pelanggan",
+      "AO",
+      "CS"
+     ],
+     "dokumen_sistem": "Email pra-info, DO/SJT, WO WIMS, Gate Pass",
+     "catatan": "Empty: cukup release order shipping line. Full: DO + stuffing list.",
+     "ref": [
+      16,
+      22
+     ]
+    },
+    {
+     "no": 1,
+     "tahap": "Kedatangan di Gerbang",
+     "manual": "Security memeriksa tujuan SJT dan kecocokan nopol, mencatat nopol dan nama supir di logbook.",
+     "pic_manual": [
+      "Security"
+     ],
+     "otomatis": "Supir scan Gate Pass di gate; sistem mencocokkan data Gate Pass. Security memeriksa nopol secara visual.",
+     "pic_otomatis": [
+      "Supir",
+      "Sistem",
+      "Security"
+     ],
+     "dokumen_sistem": "SJT, Logbook / Log Gate",
+     "catatan": "",
+     "ref": [
+      23
+     ]
+    },
+    {
+     "no": 2,
+     "tahap": "Lapor Dokumen",
+     "manual": "Supir lapor ke AO; AO cek kelengkapan, beri cap dan jam lapor, arahkan ke Gate Officer.",
+     "pic_manual": [
+      "AO"
+     ],
+     "otomatis": "Tidak diperlukan: sudah diverifikasi CS saat Gate Pass.",
+     "pic_otomatis": [],
+     "dokumen_sistem": "SJT ber-cap",
+     "catatan": "",
+     "ref": [
+      24,
+      25
+     ]
+    },
+    {
+     "no": 3,
+     "tahap": "Gate In",
+     "manual": "Gate Officer input data di WIMS dan serahkan tiket muat ke supir; info ke Operator RS.",
+     "pic_manual": [
+      "Gate Officer"
+     ],
+     "otomatis": "Gate In otomatis di WIMS; job order muat terkirim ke Operator RS; tiket muat tercetak/digital.",
+     "pic_otomatis": [
+      "Sistem"
+     ],
+     "dokumen_sistem": "WIMS, Tiket Muat",
+     "catatan": "",
+     "ref": [
+      17,
+      26
+     ]
+    },
+    {
+     "no": 4,
+     "tahap": "Muat Container",
+     "manual": "Supir serahkan tiket muat ke Operator RS; RS ambil container dari lapangan dan muat ke truck.",
+     "pic_manual": [
+      "Operator RS"
+     ],
+     "otomatis": "Sama.",
+     "pic_otomatis": [
+      "Operator RS"
+     ],
+     "dokumen_sistem": "Tiket Muat",
+     "catatan": "Empty: pilih box layak pakai sesuai size/type.",
+     "ref": [
+      19,
+      27
+     ]
+    },
+    {
+     "no": 5,
+     "tahap": "Konfirmasi Muat",
+     "manual": "Supir laporkan no. container yang dimuat ke Gate Officer; Gate Officer update WIMS.",
+     "pic_manual": [
+      "Supir",
+      "Gate Officer"
+     ],
+     "otomatis": "Status muat terupdate otomatis (handheld RS/scan).",
+     "pic_otomatis": [
+      "Sistem"
+     ],
+     "dokumen_sistem": "WIMS",
+     "catatan": "",
+     "ref": [
+      19,
+      20
+     ]
+    },
+    {
+     "no": 6,
+     "tahap": "Gate Out",
+     "manual": "Security cek fisik no. container vs SJT dan seal, catat logbook; Gate Officer catat Gate Out dan isi Form Inspeksi Container.",
+     "pic_manual": [
+      "Security",
+      "Gate Officer"
+     ],
+     "otomatis": "Scan Gate Pass di gate keluar, Gate Out tercatat otomatis; Security memeriksa fisik no. container vs SJT dan seal.",
+     "pic_otomatis": [
+      "Sistem",
+      "Security"
+     ],
+     "dokumen_sistem": "SJT, Form Inspeksi Container, Logbook / Log Gate",
+     "catatan": "Full: cek seal wajib. Empty: cek kondisi box.",
+     "ref": [
+      21
+     ]
+    }
+   ]
+  }
+ ]
+}

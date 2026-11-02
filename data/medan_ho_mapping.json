@@ -11,7 +11,7 @@
    "S": "sedang",
    "R": "rendah"
   },
-  "note": "Medan memakai SOP-OPS-DC-002, EXP-003, IMP-004; acuan HO adalah SOP Utama (template Jakarta). T1-T8 = penarikan empty (asal Export 37-44), T9-T22 = penarikan full (draf)."
+  "note": "Medan memakai SOP-OPS-DC-002, EXP-003, IMP-004; acuan HO adalah SOP Utama (template Jakarta). T1-T8 = penarikan empty (asal Export 37-44), T9-T18 = penarikan full (draf Rev.02)."
  },
  "map": [
   {
@@ -455,7 +455,7 @@
    ],
    "rel": "P",
    "conf": "R",
-   "note": "SP2 dan stuffing list dari pelanggan; HO penarikan full memulai dari KE, PKBE, Survey Pelayaran, ESL"
+   "note": "SP2 dan stuffing list dari pelanggan; HO penarikan full memulai dari KE, PKBE, ESL"
   },
   {
    "sheet": "EXPORT",
@@ -471,25 +471,20 @@
    "ho": [
     {
      "sheet": "TRUCKING",
-     "no": 16
+     "no": 13
     }
    ],
-   "rel": "S",
+   "rel": "P",
    "conf": "S",
-   "note": "Pesan truck untuk full container ke pelabuhan sama dengan SPK ke vendor"
+   "note": "Pesan truck untuk full container ke pelabuhan; HO memberikan SJT ke vendor/unit MKT untuk penarikan"
   },
   {
    "sheet": "EXPORT",
    "no": 38,
-   "ho": [
-    {
-     "sheet": "TRUCKING",
-     "no": 14
-    }
-   ],
-   "rel": "P",
+   "ho": [],
+   "rel": "M",
    "conf": "R",
-   "note": "Muat container full; HO memeriksa kondisi saat keluar gudang"
+   "note": "Muat container full oleh Operator RS; draf HO penarikan full tidak punya langkah muat"
   },
   {
    "sheet": "EXPORT",
@@ -497,11 +492,11 @@
    "ho": [
     {
      "sheet": "TRUCKING",
-     "no": 15
+     "no": 12
     },
     {
      "sheet": "TRUCKING",
-     "no": 13
+     "no": 11
     }
    ],
    "rel": "P",

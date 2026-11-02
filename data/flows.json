@@ -810,7 +810,7 @@
   {
    "key": "TRUCKING",
    "label": "Trucking Support",
-   "note": "Penarikan empty sudah diaudit (langkah 1 sampai 8, asalnya Export 37-44). Penarikan full container belum diaudit; tahap dan dokumen di kartu 4 sampai 7 diturunkan dari Pendahuluan SOP dan perlu dikonfirmasi setelah butir Prosedur diterima.",
+   "note": "Penarikan empty sudah diaudit (langkah 1 sampai 8, asalnya Export 37-44). Penarikan full container belum diaudit: tahap dan dokumen di kartu 4 sampai 7 berasal dari draf Rev.02 (Notion) dan checklist langkah 9 sampai 18 diturunkan darinya.",
    "phases": [
     {
      "name": "Penarikan empty container",
@@ -928,35 +928,31 @@
     },
     {
      "name": "Penarikan full container ke UTPK/UTC",
-     "meta": "SOP Penarikan Full Container ke UTC Rev.01 · draft dari Pendahuluan, butir Prosedur belum diterima · belum diaudit",
+     "meta": "SOP Penarikan Full Container ke CY Pelabuhan (UTPK/UTC), draf Rev.02 · pembuat Warehouse Operation Department Head, pemeriksa Warehouse Operation Division Head, penyetuju Management Representative · belum diaudit",
      "periodic": false,
      "stages": [
       {
        "id": "TRUCKING-4",
        "no": 4,
-       "name": "Terima & cek dokumen",
+       "name": "Terima dan cek dokumen",
        "cond": "",
        "pic": [
-        "Staff Container & Trucking"
+        "Staff Trucking"
        ],
        "areas": [
         "G"
        ],
-       "sop": "Ruang Lingkup",
+       "sop": "Draf Rev.02",
        "sheet": "TRUCKING",
        "from": 9,
-       "to": 12,
+       "to": 10,
        "in": [
         {
-         "t": "Kartu Ekspor (KE)",
+         "t": "KE",
          "sig": 0
         },
         {
          "t": "PKBE",
-         "sig": 0
-        },
-        {
-         "t": "Survey Pelayaran",
          "sig": 0
         },
         {
@@ -965,25 +961,24 @@
         }
        ],
        "out": [],
-       "sys": "Dokumen keluar tahap ini menunggu butir Prosedur.",
+       "sys": "",
        "pending": true
       },
       {
        "id": "TRUCKING-5",
        "no": 5,
-       "name": "Periksa segel & kondisi sebelum berangkat",
+       "name": "Periksa sebelum berangkat",
        "cond": "",
        "pic": [
-        "Staff Container & Trucking",
-        "Gudang"
+        "Staff Trucking"
        ],
        "areas": [
         "G"
        ],
-       "sop": "Uraian 4a, 4b",
+       "sop": "Draf Rev.02",
        "sheet": "TRUCKING",
-       "from": 13,
-       "to": 15,
+       "from": 11,
+       "to": 12,
        "in": [
         {
          "t": "Export Summary List",
@@ -992,89 +987,84 @@
        ],
        "out": [
         {
+         "t": "Catatan pemeriksaan segel",
+         "sig": 0
+        },
+        {
          "t": "Surat Jalan (SJT)",
          "sig": 0
         },
         {
-         "t": "Bon Muat (perkiraan)",
+         "t": "Bon Muat (penempatan perkiraan)",
          "sig": 0
         }
        ],
-       "sys": "Segel terpasang baik dan kondisi container dicatat saat keluar gudang.",
+       "sys": "",
        "pending": true
       },
       {
        "id": "TRUCKING-6",
        "no": 6,
-       "name": "SPK vendor & penarikan",
+       "name": "SPK dan penarikan",
        "cond": "",
        "pic": [
-        "Staff Container & Trucking",
-        "Sopir / Vendor"
+        "Staff Trucking"
        ],
        "areas": [
         "P"
        ],
-       "sop": "Uraian 4c, 4d",
+       "sop": "Draf Rev.02",
        "sheet": "TRUCKING",
-       "from": 16,
-       "to": 19,
+       "from": 13,
+       "to": 15,
        "in": [
         {
-         "t": "Surat Jalan (SJT)",
-         "sig": 0
-        },
-        {
-         "t": "Bon Muat (perkiraan)",
-         "sig": 0
-        },
-        {
-         "t": "Closing time pelabuhan",
+         "t": "Informasi closing time",
          "sig": 0
         }
        ],
        "out": [
         {
-         "t": "SPK ke vendor",
+         "t": "Surat Jalan (SJT)",
          "sig": 0
         }
        ],
-       "sys": "Komunikasi dua arah via HP dengan sopir. Antisipasi closing time agar tidak kena denda.",
+       "sys": "Komunikasi dan tracing Staff Trucking dengan sopir; antisipasi closing time pelabuhan.",
        "pending": true
       },
       {
        "id": "TRUCKING-7",
        "no": 7,
-       "name": "Terima di CY UTPK & bandingkan",
+       "name": "Terima di CY UTPK",
        "cond": "",
        "pic": [
-        "Staff Container & Trucking",
-        "UTPK"
+        "Supir",
+        "Staff Trucking"
        ],
        "areas": [
         "P"
        ],
-       "sop": "Uraian 4a, 4b",
+       "sop": "Draf Rev.02",
        "sheet": "TRUCKING",
-       "from": 20,
-       "to": 22,
+       "from": 16,
+       "to": 18,
        "in": [
         {
          "t": "EIR versi UTPK",
          "sig": 0
         },
         {
-         "t": "Surat Jalan gudang",
+         "t": "Surat Jalan (SJT)",
          "sig": 0
         }
        ],
        "out": [
         {
-         "t": "IK Discrepancies penarikan full container ke UTC (jika ada selisih)",
+         "t": "Berita Acara",
          "sig": 0
         }
        ],
-       "sys": "Bandingkan segel dan kondisi container saat keluar gudang vs saat diterima UTPK.",
+       "sys": "",
        "pending": true
       }
      ]
@@ -1404,6 +1394,675 @@
         }
        ],
        "sys": "WMS di-freeze saat hitung, lalu di-unfreeze",
+       "pending": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "key": "CY",
+   "label": "CY Handling",
+   "note": "Draf berasal dari pemetaan proses CY area MKT Medan (Google Sheets). Tahap bertanda \"usulan\" belum ada di SOP-OPS-CY-001. Langkah audit hanya ada untuk Medan (27 langkah); 8 langkah audit di luar area MKT (penarikan dari pelabuhan, order truck) tidak dipetakan ke tahap.",
+   "phases": [
+    {
+     "name": "Penerimaan Empty / Full Container di CY MKT",
+     "meta": "SOP-OPS-CY-001 · area MKT Medan · Gate Manual vs Gate Otomatis",
+     "periodic": false,
+     "restart": true,
+     "stages": [
+      {
+       "id": "CY-A0",
+       "no": 0,
+       "name": "Pra-Kedatangan",
+       "cond": "",
+       "pic": [
+        "Pelanggan",
+        "AO",
+        "CS"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [
+        1,
+        12
+       ],
+       "from": 1,
+       "to": 12,
+       "in": [
+        {
+         "t": "Email pra-info (no. container, Empty/Full, size/type, SJT/SP2)",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "Working Order (WO) di WIMS",
+         "sig": 0
+        },
+        {
+         "t": "Tiket Bongkar",
+         "sig": 0
+        },
+        {
+         "t": "Gate Pass QR/barcode (hanya Gate Otomatis)",
+         "sig": 0
+        }
+       ],
+       "sys": "",
+       "manual": "1) Pelanggan/forwarder mengirim pra-info ke AO via email (no. container, status Empty/Full, size/type, SJT/SP2) sebagai pemberitahuan ada container yang akan masuk. 2) AO melakukan input Working Order (WO) di WIMS dan menyerahkan tiket bongkar.",
+       "otomatis": "1) Pelanggan/forwarder mengirim pra-info ke AO via email. 2) Pelanggan/forwarder/supir mengajukan permintaan GATE PASS ke CS (no. container, nopol, nama supir). CS mencocokkan dengan pra-info dan data WIMS, lalu menerbitkan Gate Pass (QR/barcode).",
+       "pic_manual": [
+        "Pelanggan",
+        "AO"
+       ],
+       "pic_otomatis": [
+        "Pelanggan",
+        "AO",
+        "CS"
+       ],
+       "catatan": "Full: wajib no. seal. Empty: wajib info shipping line/depo asal.",
+       "pending": false
+      },
+      {
+       "id": "CY-A1",
+       "no": 1,
+       "name": "Kedatangan di Gerbang",
+       "cond": "",
+       "pic": [
+        "Security",
+        "Supir",
+        "Sistem"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [
+        9,
+        10
+       ],
+       "from": 9,
+       "to": 10,
+       "in": [
+        {
+         "t": "SJT",
+         "sig": 0
+        },
+        {
+         "t": "Gate Pass (Gate Otomatis)",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "Logbook (manual) atau Log Gate (otomatis)",
+         "sig": 0
+        }
+       ],
+       "sys": "",
+       "manual": "Security memeriksa tujuan SJT dan kecocokan nopol, mencatat nopol, nama supir, no. container di logbook.",
+       "otomatis": "Supir scan Gate Pass di gate; sistem mencocokkan data Gate Pass. Security memeriksa nopol dan no. container secara visual dan mencatat di log gate.",
+       "pic_manual": [
+        "Security"
+       ],
+       "pic_otomatis": [
+        "Supir",
+        "Sistem",
+        "Security"
+       ],
+       "catatan": "Full: cek kondisi seal utuh.",
+       "pending": false
+      },
+      {
+       "id": "CY-A2",
+       "no": 2,
+       "name": "Lapor Dokumen",
+       "cond": "",
+       "pic": [
+        "AO"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [
+        11,
+        13
+       ],
+       "from": 11,
+       "to": 13,
+       "in": [
+        {
+         "t": "SJT",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "SJT ber-cap dan jam lapor (manual)",
+         "sig": 0
+        }
+       ],
+       "sys": "",
+       "manual": "Supir lapor ke AO; AO cek kelengkapan SJT, beri cap dan jam lapor, arahkan ke Gate Officer.",
+       "otomatis": "Tidak diperlukan: verifikasi dokumen sudah dilakukan CS saat penerbitan Gate Pass.",
+       "pic_manual": [
+        "AO"
+       ],
+       "pic_otomatis": [],
+       "catatan": "",
+       "pending": false
+      },
+      {
+       "id": "CY-A3",
+       "no": 3,
+       "name": "Gate In",
+       "cond": "",
+       "pic": [
+        "AO",
+        "Sistem"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [
+        14
+       ],
+       "from": 14,
+       "to": 14,
+       "in": [
+        {
+         "t": "SJT",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "Tiket Bongkar",
+         "sig": 0
+        }
+       ],
+       "sys": "Input Gate In ke WIMS",
+       "manual": "AO menginput data Gate In container sesuai SJT ke WIMS.",
+       "otomatis": "Gate In tercatat otomatis di WIMS saat scan; tiket bongkar tercetak/digital, palang terbuka.",
+       "pic_manual": [
+        "AO"
+       ],
+       "pic_otomatis": [
+        "Sistem"
+       ],
+       "catatan": "",
+       "pending": false
+      },
+      {
+       "id": "CY-A4",
+       "no": 4,
+       "name": "Inspeksi Container",
+       "cond": "usulan",
+       "pic": [
+        "Checker / Tallyman"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [],
+       "from": 0,
+       "to": 0,
+       "in": [],
+       "out": [
+        {
+         "t": "Form Inspeksi Container",
+         "sig": 0
+        }
+       ],
+       "sys": "",
+       "manual": "Checker/Tallyman memeriksa kondisi fisik (damage) dan seal memakai Form Inspeksi Container.",
+       "otomatis": "Sama: inspeksi fisik manual memakai Form Inspeksi Container.",
+       "pic_manual": [
+        "Checker / Tallyman"
+       ],
+       "pic_otomatis": [
+        "Checker / Tallyman"
+       ],
+       "catatan": "Full: no. seal sesuai dokumen. Empty: kebersihan dan kelayakan box.",
+       "pending": false
+      },
+      {
+       "id": "CY-A5",
+       "no": 5,
+       "name": "Bongkar dan Penumpukan",
+       "cond": "",
+       "pic": [
+        "Operator RS"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [
+        15
+       ],
+       "from": 15,
+       "to": 15,
+       "in": [
+        {
+         "t": "Tiket Bongkar",
+         "sig": 0
+        }
+       ],
+       "out": [],
+       "sys": "",
+       "manual": "Supir serahkan bon bongkar ke Operator RS; RS menurunkan container dan menempatkan di blok/slot lapangan MKT.",
+       "otomatis": "Sama.",
+       "pic_manual": [
+        "Operator RS"
+       ],
+       "pic_otomatis": [
+        "Operator RS"
+       ],
+       "catatan": "Pisahkan blok stack Empty dan Full.",
+       "pending": false
+      },
+      {
+       "id": "CY-A6",
+       "no": 6,
+       "name": "Update Lokasi",
+       "cond": "usulan",
+       "pic": [
+        "AO",
+        "Operator RS"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [],
+       "from": 0,
+       "to": 0,
+       "in": [],
+       "out": [],
+       "sys": "Update lokasi stack (blok/row/tier) di WIMS",
+       "manual": "Update posisi stack (blok/row/tier) di WIMS.",
+       "otomatis": "Sama (opsional via handheld).",
+       "pic_manual": [
+        "AO",
+        "Operator RS"
+       ],
+       "pic_otomatis": [
+        "Operator RS"
+       ],
+       "catatan": "",
+       "pending": false
+      },
+      {
+       "id": "CY-A7",
+       "no": 7,
+       "name": "Gate Out Truck",
+       "cond": "usulan",
+       "pic": [
+        "Supir",
+        "AO",
+        "Security",
+        "Sistem"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [],
+       "from": 0,
+       "to": 0,
+       "in": [],
+       "out": [
+        {
+         "t": "EIR",
+         "sig": 0
+        }
+       ],
+       "sys": "Jam keluar dicatat di WIMS",
+       "manual": "1) Supir lapor ke AO; AO mencatat jam keluar di WIMS. 2) Supir menerima EIR dan menyerahkannya kepada Security. 3) Security mengecek truck dalam keadaan kosong (container sudah dibongkar).",
+       "otomatis": "Scan Gate Pass di gate keluar; jam keluar tercatat otomatis.",
+       "pic_manual": [
+        "Supir",
+        "AO",
+        "Security"
+       ],
+       "pic_otomatis": [
+        "Sistem",
+        "Security"
+       ],
+       "catatan": "",
+       "pending": false
+      }
+     ]
+    },
+    {
+     "name": "Pengambilan Empty / Full Container di CY MKT",
+     "meta": "SOP-OPS-CY-001 · area MKT Medan · Gate Manual vs Gate Otomatis",
+     "periodic": false,
+     "restart": true,
+     "stages": [
+      {
+       "id": "CY-B0",
+       "no": 0,
+       "name": "Pra-Kedatangan",
+       "cond": "",
+       "pic": [
+        "Pelanggan",
+        "AO",
+        "CS"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [
+        16,
+        22
+       ],
+       "from": 16,
+       "to": 22,
+       "in": [
+        {
+         "t": "Email pra-info (no. container, Empty/Full, size/type, DO/SJT/stuffing list)",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "Working Order (WO) di WIMS",
+         "sig": 0
+        },
+        {
+         "t": "Tiket Muat",
+         "sig": 0
+        },
+        {
+         "t": "Gate Pass (Gate Otomatis)",
+         "sig": 0
+        }
+       ],
+       "sys": "",
+       "manual": "1) Pelanggan/forwarder mengirim pra-info ke AO via email (no. container, status Empty/Full, size/type, DO/SJT/stuffing list) sebagai pemberitahuan ada container yang akan diambil. 2) AO melakukan input Working Order (WO) di WIMS dan menyerahkan tiket muat.",
+       "otomatis": "1) Pra-info ke AO via email. 2) Pelanggan/forwarder/supir mengajukan permintaan GATE PASS ke CS (nopol, nama supir). CS cek status container di WIMS (ada, bebas hold, billing lunas) sesuai pra-info, lalu terbitkan Gate Pass.",
+       "pic_manual": [
+        "Pelanggan",
+        "AO"
+       ],
+       "pic_otomatis": [
+        "Pelanggan",
+        "AO",
+        "CS"
+       ],
+       "catatan": "Empty: cukup release order shipping line. Full: DO + stuffing list.",
+       "pending": false
+      },
+      {
+       "id": "CY-B1",
+       "no": 1,
+       "name": "Kedatangan di Gerbang",
+       "cond": "",
+       "pic": [
+        "Security",
+        "Supir",
+        "Sistem"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [
+        23
+       ],
+       "from": 23,
+       "to": 23,
+       "in": [
+        {
+         "t": "SJT",
+         "sig": 0
+        },
+        {
+         "t": "Gate Pass (Gate Otomatis)",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "Logbook (manual) atau Log Gate (otomatis)",
+         "sig": 0
+        }
+       ],
+       "sys": "",
+       "manual": "Security memeriksa tujuan SJT dan kecocokan nopol, mencatat nopol dan nama supir di logbook.",
+       "otomatis": "Supir scan Gate Pass di gate; sistem mencocokkan data Gate Pass. Security memeriksa nopol secara visual.",
+       "pic_manual": [
+        "Security"
+       ],
+       "pic_otomatis": [
+        "Supir",
+        "Sistem",
+        "Security"
+       ],
+       "catatan": "",
+       "pending": false
+      },
+      {
+       "id": "CY-B2",
+       "no": 2,
+       "name": "Lapor Dokumen",
+       "cond": "",
+       "pic": [
+        "AO"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [
+        24,
+        25
+       ],
+       "from": 24,
+       "to": 25,
+       "in": [
+        {
+         "t": "SJT",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "SJT ber-cap dan jam lapor (manual)",
+         "sig": 0
+        }
+       ],
+       "sys": "",
+       "manual": "Supir lapor ke AO; AO cek kelengkapan, beri cap dan jam lapor, arahkan ke Gate Officer.",
+       "otomatis": "Tidak diperlukan: sudah diverifikasi CS saat Gate Pass.",
+       "pic_manual": [
+        "AO"
+       ],
+       "pic_otomatis": [],
+       "catatan": "",
+       "pending": false
+      },
+      {
+       "id": "CY-B3",
+       "no": 3,
+       "name": "Gate In",
+       "cond": "",
+       "pic": [
+        "Gate Officer",
+        "Sistem"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [
+        17,
+        26
+       ],
+       "from": 17,
+       "to": 26,
+       "in": [],
+       "out": [
+        {
+         "t": "Tiket Muat",
+         "sig": 0
+        }
+       ],
+       "sys": "Gate In di WIMS; job order muat ke Operator RS",
+       "manual": "Gate Officer input data di WIMS dan serahkan tiket muat ke supir; info ke Operator RS.",
+       "otomatis": "Gate In otomatis di WIMS; job order muat terkirim ke Operator RS; tiket muat tercetak/digital.",
+       "pic_manual": [
+        "Gate Officer"
+       ],
+       "pic_otomatis": [
+        "Sistem"
+       ],
+       "catatan": "",
+       "pending": false
+      },
+      {
+       "id": "CY-B4",
+       "no": 4,
+       "name": "Muat Container",
+       "cond": "",
+       "pic": [
+        "Operator RS"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [
+        19,
+        27
+       ],
+       "from": 19,
+       "to": 27,
+       "in": [
+        {
+         "t": "Tiket Muat",
+         "sig": 0
+        }
+       ],
+       "out": [],
+       "sys": "",
+       "manual": "Supir serahkan tiket muat ke Operator RS; RS ambil container dari lapangan dan muat ke truck.",
+       "otomatis": "Sama.",
+       "pic_manual": [
+        "Operator RS"
+       ],
+       "pic_otomatis": [
+        "Operator RS"
+       ],
+       "catatan": "Empty: pilih box layak pakai sesuai size/type.",
+       "pending": false
+      },
+      {
+       "id": "CY-B5",
+       "no": 5,
+       "name": "Konfirmasi Muat",
+       "cond": "",
+       "pic": [
+        "Supir",
+        "Gate Officer",
+        "Sistem"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [
+        19,
+        20
+       ],
+       "from": 19,
+       "to": 20,
+       "in": [],
+       "out": [],
+       "sys": "Status muat diperbarui di WIMS",
+       "manual": "Supir laporkan no. container yang dimuat ke Gate Officer; Gate Officer update WIMS.",
+       "otomatis": "Status muat terupdate otomatis (handheld RS/scan).",
+       "pic_manual": [
+        "Supir",
+        "Gate Officer"
+       ],
+       "pic_otomatis": [
+        "Sistem"
+       ],
+       "catatan": "",
+       "pending": false
+      },
+      {
+       "id": "CY-B6",
+       "no": 6,
+       "name": "Gate Out",
+       "cond": "",
+       "pic": [
+        "Security",
+        "Gate Officer",
+        "Sistem"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-CY-001 (draf)",
+       "sheet": "CY",
+       "refs": [
+        21
+       ],
+       "from": 21,
+       "to": 21,
+       "in": [
+        {
+         "t": "SJT",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "Form Inspeksi Container",
+         "sig": 0
+        },
+        {
+         "t": "Logbook (manual) atau Log Gate (otomatis)",
+         "sig": 0
+        }
+       ],
+       "sys": "",
+       "manual": "Security cek fisik no. container vs SJT dan seal, catat logbook; Gate Officer catat Gate Out dan isi Form Inspeksi Container.",
+       "otomatis": "Scan Gate Pass di gate keluar, Gate Out tercatat otomatis; Security memeriksa fisik no. container vs SJT dan seal.",
+       "pic_manual": [
+        "Security",
+        "Gate Officer"
+       ],
+       "pic_otomatis": [
+        "Sistem",
+        "Security"
+       ],
+       "catatan": "Full: cek seal wajib. Empty: cek kondisi box.",
        "pending": false
       }
      ]

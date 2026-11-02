@@ -20,6 +20,8 @@ dengan tiga tab (Alur Proses Umum, Peta Proses Audit SOP, Gap Analysis).
 | `scripts/build.py` | Membangun `dist/*.html` dari data dan template. `--check` membandingkan tanpa menulis. |
 | `data/medan_ho_mapping.json` | **Pemetaan draf** 170 langkah SOP Medan ke SOP Utama HO (sama / mirip / hanya di Medan, dengan kecocokan dan catatan). Dibangun oleh `scripts/make_medan_mapping.py`, yang juga tempat mengubah pemetaan. |
 | `scripts/make_medan_mapping.py` | Spesifikasi pemetaan Medan ke HO per langkah. Ubah di sini lalu jalankan ulang. |
+| `data/sop_full_container_draft.json`, `data/cy_handling_medan_source.json`, `data/cy_mkt_pemetaan_source.json` | Snapshot dua draf SOP dan audit CY Handling Medan (Notion dan Google Sheets, 2026-11-02). Detail di HANDOFF.md. |
+| `scripts/apply_sop_drafts.py` | Memperbarui `data/flows.json` dari dua draf SOP. |
 | `scripts/make_dataset_v3.py` | Membangun `audit_dataset_v3.json` dari sumber lima cabang. |
 | `scripts/validate_data.py` | Cek tiap langkah template HO masuk tepat satu tahap alur, referensi tema ada di data, dan jumlah baris sama dengan sumber. Jalankan setelah mengubah data. |
 | `scripts/make_xlsx_peta.py` | Membangun `dist/Peta_Proses_Audit_SOP_Review.xlsx` dari `data/flows.json` dan `data/audit_dataset_jkt_v2.json` (butuh openpyxl). Hitung ulang rumus dengan LibreOffice setelahnya. |

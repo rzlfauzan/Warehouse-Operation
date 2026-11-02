@@ -1,7 +1,7 @@
 # HANDOFF: Audit SOP MKT (5 cabang) - peta proses, alur umum, gap analysis
 
 Dokumen ini untuk AI agent yang melanjutkan proyek. Baca seluruhnya sebelum mengubah apa pun.
-Status per 2026-10-30. Bahasa kerja dengan pengguna: **Bahasa Indonesia**.
+Status per 2026-11-02. Bahasa kerja dengan pengguna: **Bahasa Indonesia**.
 
 ## 0. Cara memakai handoff ini
 Awali dengan:
@@ -25,7 +25,8 @@ Bahan: Excel review untuk SOP HO + Medan, dan dokumen draf dua SOP baru (penarik
 | Apa | Lokasi |
 |---|---|
 | **Halaman gabungan (utama)** | https://claude.ai/artifact/RaJCuk43QDT4b116daeoEN (Artifact, versi 5). Terakhir terdeteksi berstatus "Anyone with the link"; pengguna yang mengatur akses lewat menu Share. |
-| Draf SOP (A: penarikan full container ke UTC/CY, B: CY Handling) | https://claude.ai/artifact/EiwxvfMtCb7eKWZ47tHP8H (Claude Docs, bisa diedit/dikomentari) |
+| Draf SOP (A: penarikan full container ke UTC/CY, B: CY Handling) | **Master sekarang di Notion pengguna**: halaman "Draf SOP: Penarikan Full Container ke UTC/CY dan CY Handling" (id `40c7a445-53dc-817c-9bc7-d62bbad4bdc3`, dibaca lewat Notion MCP `notion-fetch`). Salinan awal di Claude Docs https://claude.ai/artifact/EiwxvfMtCb7eKWZ47tHP8H sudah usang; jangan diedit. |
+| Sumber CY Handling | Google Sheets `1PDrWSS3LQVwGZnCQg1s6hac9vlTruYpIThOMVMNU9Mg` (MKT MDN // Audit Checklist): sheet `PEMETAAN PROSES CY MKT`, `FLOWCHART CY MKT`, dan audit `CY HANDLING MEDAN` (dibaca lewat Google Sheets MCP `get_values`). |
 | Halaman lama (hanya Jakarta, sudah tidak dipelihara) | Alur https://claude.ai/artifact/NhcRGKS439K5Zp3t4hSCoB , Peta https://claude.ai/artifact/BJT6LtxNaK9XCRtYchj9AT , Gap https://claude.ai/artifact/Vd7wieaYLfAgGT24NAWoGG . Saran: dihentikan setelah pengguna puas. |
 | Kode sumber | GitHub `rzlfauzan/Warehouse-Operation` (**privat**), branch `main`, commit terakhir `3504bce`. |
 | Excel review | `dist/Peta_Proses_Audit_SOP_Review.xlsx` (enam+ sheet, lihat bagian 6). Sudah dikirim ke chat; kirim ulang bila diubah. |
@@ -38,7 +39,10 @@ data/
   flows.json                               32 tahap alur HO (PIC, area, dokumen masuk/keluar, rentang langkah audit)
   gap_config.json                          klasifikasi gap, 14 tema, teks flag, kategori, NOTES (catatan di luar NC)
   medan_ho_mapping.json                    pemetaan draf 170 langkah Medan -> SOP HO (dibangun scripts/make_medan_mapping.py)
-  audit_dataset_jkt_source.json, _v2.json  riwayat Jakarta saja (v2 masih dipakai halaman lama + draf T2 penarikan full)
+  sop_full_container_draft.json            draf Rev.02 penarikan full container (10 langkah), snapshot dari Notion 2026-11-02
+  cy_handling_medan_source.json            27 langkah audit CY HANDLING MEDAN (SOP-OPS-CY-001), snapshot dari Google Sheets
+  cy_mkt_pemetaan_source.json              pemetaan proses CY MKT (15 tahap, Gate Manual vs Otomatis), snapshot dari Google Sheets
+  audit_dataset_jkt_source.json, _v2.json  riwayat Jakarta saja (hanya dipakai tiga halaman lama)
 src/
   app.tpl.html  markup+CSS halaman gabungan (placeholder __PAYLOAD__ dan __APP_JS__)
   app.js        SEMUA logika halaman gabungan (disisipkan saat build)
@@ -46,7 +50,8 @@ src/
 scripts/
   build.py              bangun dist/*.html; --check membandingkan tanpa menulis
   validate_data.py      cek konsistensi data (WAJIB dijalankan setelah mengubah data)
-  make_dataset_v3.py    sumber -> v3
+  make_dataset_v3.py    sumber -> v3 (juga memuat T2 dari sop_full_container_draft.json dan sheet CY Medan)
+  apply_sop_drafts.py   memperbarui data/flows.json dari dua draf SOP (kartu penarikan full + proses CY); idempotent
   make_medan_mapping.py spesifikasi pemetaan Medan->HO (ubah di sini, jalankan ulang)
   make_xlsx_peta.py     bangun Excel (butuh openpyxl; hitung ulang rumus dengan LibreOffice)
   legacy_derive_v2_and_peta.py   sejarah, tidak dijalankan
@@ -73,7 +78,9 @@ README.md  ringkasan; HANDOFF.md  dokumen ini
 7. Redaksi: gunakan kata umum (sama/mirip/hanya di Medan, penanggung jawab, diperiksa), hindari istilah teknis (padanan, overclaim, self-assessment, cakupan, owner, kode flag).
 8. Satuan hitung Gap: per langkah per cabang (JKT DC per unit). Satu langkah NC di tiga cabang dihitung tiga kali.
 9. Visual Peta: garis putus kuning = status perlu ditinjau (`status_conflict*`, `sop_*`); titik kuning = COMPLY tapi menyimpang; diagonal abu-abu = N/A dikerjakan pihak lain (`na_not_performed_by_mkt`); bingkai ganda merah + ikon = `integrity_risk_reported_by_auditor` (Medan Export 11, dugaan fraud; jangan disembunyikan); ikon ↔ = pelaksana aktual beda dari SOP.
-10. Area kerja per tahap (Gudang MKT, Port/Pelayaran, Depo, Bea Cukai) adalah penilaian dari isi langkah dan sudah dikoreksi pengguna; "Kantor/Pelanggan" sengaja tidak dipakai. Tab Trucking Support memuat penarikan empty (diaudit) dan penarikan full (draf).
+10. **Penarikan full container (T2, langkah 9-18)** kini mengikuti draf Rev.02 hasil edit pengguna di Notion (10 langkah, aktor Staff Trucking/Supir, tanpa SPK ke vendor; pembuat Warehouse Operation Department Head, pemeriksa Warehouse Operation Division Head, penyetuju Management Representative). Tetap PENDING (belum diaudit). Pemetaan Medan->HO memakai nomor T9-T18.
+11. **CY Handling** = proses baru `CY` di tab Alur (15 tahap: A penerimaan 0-7, B pengambilan 0-6; tiap kartu memuat varian Gate Manual vs Gate Otomatis, PIC, dokumen masuk/keluar yang saya pisahkan dari kolom "Dokumen / Sistem"; tahap bertanda "usulan" belum ada di SOP-OPS-CY-001) dan sheet audit `CY` hanya untuk Medan (27 langkah, compliance resmi 69,2% = rekap sheet sumber). Status resmi = kolom Status Genba; kolom Status = dokumen (`doc_status`). Delapan langkah audit (2-8, 18) di luar area MKT (penarikan dari pelabuhan, order truck) tidak dipetakan ke tahap. Cabang lain belum punya data CY Handling; sheet CY HANDLING mereka belum dikirim.
+12. Area kerja per tahap (Gudang MKT, Port/Pelayaran, Depo, Bea Cukai) adalah penilaian dari isi langkah dan sudah dikoreksi pengguna; "Kantor/Pelanggan" sengaja tidak dipakai. Tab Trucking Support memuat penarikan empty (diaudit) dan penarikan full (draf).
 
 ## 6. Cara kerja halaman gabungan (src/app.js)
 - State global `S` (site, view rep/adj, dcloc, tab, proc, alur/peta/gap). Navigasi lintas tab hanya lewat `go(tab, opsi)`; URL hanya membawa `#alur|#peta|#gap`.
@@ -90,12 +97,13 @@ README.md  ringkasan; HANDOFF.md  dokumen ini
 5. Terbitkan: `Artifact` publish `dist/mkt_audit_sop.html`. Dari sesi baru, **baca dulu** artifact (`action: read`) lalu publish dengan `url` = tautan di atas; tanpa `url` akan membuat artifact baru.
 6. Commit (akhiri pesan dengan baris atribusi yang diminta sesi) dan `git push -u origin main`. Token `gh` di sesi lama tidak valid; repositori dilampirkan lewat `add_repo` (clone `https://github.com/rzlfauzan/warehouse-operation`).
 
-**Angka kunci untuk regresi** (Semua cabang, As reported): 807 langkah diaudit = 506 COMPLY + 199 NON-COMPLY + 102 N/A; diperiksa 705; NC = A 184 + B 15; Adjusted: NC 213, A 198. Catatan di luar NC = 113 (pihak lain 67, menyimpang 15, status perlu ditinjau 14, gap WMS N/A 5, SOP usang 5, seharusnya N/A 3, perbaikan 3, risiko integritas 1). Compliance resmi: JKT Export 90,0 / Import 76,7 / DC Semper 60,8 / Marcen 79,2; SUB Export 88,0 / Import 97,6 / DC 74,5; MKS DC 73,6; SRG Export 46,9 / Import 100 / DC 24,5; MDN Export 72,2 / Import 72,9 / DC 67,3. `validate_data.py`: 5 cabang, 16 sheet, 796 langkah, 14 tema.
+**Angka kunci untuk regresi** (Semua cabang, As reported; sudah termasuk CY Handling Medan): 834 langkah diaudit = 524 COMPLY + 207 NON-COMPLY + 103 N/A; diperiksa 731; NC = A 192 + B 15; Adjusted: NC 221, A 206. Catatan di luar NC = 113. Tanpa CY (sama dengan sebelum 2026-11-02): 807 = 506 + 199 + 102; diperiksa 705; A 184, B 15; Adjusted A 198. Compliance resmi: JKT Export 90,0 / Import 76,7 / DC Semper 60,8 / Marcen 79,2; SUB Export 88,0 / Import 97,6 / DC 74,5; MKS DC 73,6; SRG Export 46,9 / Import 100 / DC 24,5; MDN Export 72,2 / Import 72,9 / DC 67,3 / **CY Handling 69,2 (18 C, 8 NC, 1 N/A; cocok dengan rekap sheet sumber)**. `validate_data.py`: 5 cabang, 17 sheet, 811 langkah, 14 tema.
 
 ## 8. Pekerjaan berikutnya (urut saran)
+0. **Bagian B (CY Handling) di Notion** masih kerangka (tabel Penerimaan/Pengeluaran Empty/Full hampir kosong). Data untuk mengisinya sudah ada di `data/cy_mkt_pemetaan_source.json`. Tawarkan mengisi tabel itu di Notion bila pengguna mau; jangan mengedit Notion tanpa diminta.
 1. **Menunggu jawaban pengguna**: (a) pembagi persentase kartu gap: 705 (diperiksa, dipakai sekarang) vs 807 (seluruh diaudit); (b) tema gap lintas proses: pertahankan / ringkas satu baris per tema / hapus; (c) tinjauan pemetaan Medan (21 langkah kecocokan rendah, 24 hanya Medan) lewat Excel; (d) apakah klasifikasi B terlalu konservatif.
-2. **Terima butir 6 Prosedur** SOP Penarikan Full Container ke UTC (hanya Pendahuluan yang ada). Lalu perbarui tabel di dokumen draf, `flows.json` (kartu 4-7 Trucking), dan checklist T2 di `make_dataset_v3.py`/data (langkah 9-22).
-3. **Sheet "CY Handling"** dari form audit belum diterima; Bagian B dokumen draf baru kerangka. Minta sheet itu, lalu isi dan tambahkan ke alur/audit bila perlu.
+2. **Penarikan full container**: pengguna sudah merevisi prosedur di Notion (Rev.02, 10 langkah). Bila direvisi lagi: ubah `data/sop_full_container_draft.json`, lalu `apply_sop_drafts.py`, `make_dataset_v3.py`, `make_medan_mapping.py` (nomor T9-T18), validasi, build. Pertanyaan terbuka di dokumen Notion (closing time per terminal, format SJT/Bon Muat, foto container, nomor IK Discrepancies) masih milik pengguna.
+3. **CY Handling**: data Medan sudah masuk. Minta sheet CY HANDLING cabang lain (JKT, SUB, MKS, SRG) bila ada; sheet `CY` baru ada di Medan. Peta dan Gap otomatis menampilkan sheet baru begitu ditambahkan di `make_dataset_v3.py`.
 4. **Tinjau/ konfirmasi pemetaan Medan->HO** dengan pemilik SOP, lalu (setelah SOP Medan diselaraskan) audit ulang pada template yang sama.
 5. **Excel review per cabang** (sekarang hanya Jakarta/HO + sheet Medan). Sinkronisasi dokumen draf (Claude Docs) ke halaman/Excel masih manual.
 6. Hentikan tiga halaman lama setelah pengguna puas; periksa pengaturan akses halaman utama (sekarang "Anyone with the link").
