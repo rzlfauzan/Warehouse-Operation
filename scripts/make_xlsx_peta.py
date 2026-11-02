@@ -126,7 +126,7 @@ dv=DataValidation(type='list',formula1='"Ya,Tidak,Perlu cek"',allow_blank=True);
 # Pemetaan Medan -> HO
 REL=MAPJ['meta']['rel'];CONF=MAPJ['meta']['conf']
 mdn={(x['sheet'],i['no']):(i,x) for x in V3['sheets'] if x['site']=='MDN' for i in x['items']}
-ho={(x['sheet'],i['no']):(i,x) for x in V3['sheets'] if x['site']=='JKT' for i in x['items']}
+ho={(x['sheet'],i['no']):(i,x) for x in V3['sheets'] if x['site']=='JKT' and x['sheet']!='CY' for i in x['items']}
 SHN={'EXPORT':'Export','IMPORT':'Import','DC':'DC','TRUCKING':'Trucking'}
 wm=wb.create_sheet('Pemetaan Medan-HO')
 hm=['Proses Medan','No','Seksi','Aktor Medan','Langkah SOP Medan','Sama dengan di SOP HO','Langkah SOP HO','Hubungan','Kecocokan','Catatan','Setuju?','Langkah HO menurut reviewer','Catatan reviewer','Reviewer']
