@@ -36,6 +36,8 @@ DATA.sheets.forEach(s=>{
 });
 const STAGES=[];FL.procs.forEach(p=>p.phases.forEach(ph=>ph.stages.forEach(st=>STAGES.push(Object.assign({proc:p.key,phase:ph.name},st)))));
 const stageOf=(sheet,no)=>STAGES.find(s=>s.sheet===sheet&&(s.refs?s.refs.includes(no):(s.from<=no&&no<=s.to)));
+const cyStage=(no,tpl)=>STAGES.find(s=>s.sheet==='CY'&&(tpl==='HO'?s.hoNo===no:s.refs.includes(no)));
+const stageOfO=o=>o.sheet==='CY'?cyStage(o.no,o.tpl):(o.tpl==='HO'?stageOf(o.sheet,o.no):null);
 const sheetOf=code=>DATA.sheets.find(s=>s.sheet===code&&s.site===S.site);
 const SECNAME={};DATA.sheets.forEach(s=>s.sections.forEach(x=>{SECNAME[(s.template==='MDN_TEMPLATE'?'MDN':'HO')+'|'+x.id]=x.id+' '+x.name}));
 const inScope=o=>S.site==='ALL'||o.site===S.site;
@@ -127,11 +129,12 @@ function mdnBadge(st,prefix){
 }
 function ncBadge(st){
   if(st.sheet==='CY'){
+    if(S.site!=='ALL'&&tplOfSite(S.site)==='HO')return '<span class="ncb pe" title="Alur CY Handling dari draf; belum diaudit di cabang ini">belum diaudit</span>';
     if(!st.refs.length)return '<span class="ncb pe" title="Belum ada langkah audit di SOP-OPS-CY-001">usulan</span>';
-    const os=siteObs().filter(o=>o.sheet==='CY'&&st.refs.includes(o.no));
+    const os=siteObs().filter(o=>o.sheet==='CY'&&o.tpl==='MDN'&&st.refs.includes(o.no));
     if(!os.length)return '<span class="ncb pe">tidak diaudit</span>';
     const n=os.filter(isNC).length;
-    return `<button type="button" class="ncb${n?'':' z'}" data-gapcy="${st.id}" title="Hasil audit Medan pada langkah ${st.refs.join(', ')}">${S.site==='ALL'?'Medan ':''}${n} NC</button>`;
+    return `<button type="button" class="ncb${n?'':' z'}" data-gapcy="${st.id}" title="Hasil audit Medan pada langkah ${st.refs.join(', ')}${S.site==='ALL'?'. Cabang lain belum diaudit.':''}">${S.site==='ALL'?'Medan ':''}${n} NC</button>`;
   }
   if(S.site!=='ALL'&&tplOfSite(S.site)==='MDN')return mdnBadge(st,'');
   const os=stageObs(st),med=S.site==='ALL'?mdnBadge(st,'Medan '):'';
@@ -154,7 +157,7 @@ function alurCard(st,idx,seq){
    ${st.out.length?`<div class="cblk out"><div class="bl">Dokumen keluar</div><ul>${docs(st.out)}</ul></div>`:''}
    ${st.sys?`<div class="sys">${esc(st.sys)}</div>`:''}
    ${st.manual?`<details class="cblk var"><summary>Gate manual vs otomatis</summary><div><b>Manual</b> (${esc(st.pic_manual.join(', '))}): ${esc(st.manual)}</div><div><b>Otomatis</b> (${esc(st.pic_otomatis.join(', ')||'tanpa PIC')}): ${esc(st.otomatis)}</div>${st.catatan?`<div><b>Catatan:</b> ${esc(st.catatan)}</div>`:''}</details>`:''}
-   <div class="c-f"><span>${esc(st.sop)}</span>${st.sheet==='CY'?(st.refs.length?`<button type="button" class="lnk" data-peta="${st.id}" title="Buka langkah audit Medan di Peta">langkah ${st.refs.join(', ')} →</button>`:'<span>belum ada langkah audit</span>'):mdn?`<span>langkah ${st.from}–${st.to} (HO)</span>`:`<button type="button" class="lnk" data-peta="${st.id}" title="Buka langkah audit di Peta">langkah ${st.from}–${st.to} →</button>`}${ncBadge(st)}</div></article>`;
+   <div class="c-f"><span>${esc(st.sop)}</span>${st.sheet==='CY'?(S.site!=='ALL'&&tplOfSite(S.site)==='HO'?`<button type="button" class="lnk" data-peta="${st.id}" title="Buka langkah ini di Peta (belum diaudit)">langkah ${st.hoNo} →</button>`:st.refs.length?`<button type="button" class="lnk" data-peta="${st.id}" title="Buka langkah audit Medan di Peta">langkah ${st.refs.join(', ')} →</button>`:'<span>belum ada langkah audit</span>'):mdn?`<span>langkah ${st.from}–${st.to} (HO)</span>`:`<button type="button" class="lnk" data-peta="${st.id}" title="Buka langkah audit di Peta">langkah ${st.from}–${st.to} →</button>`}${ncBadge(st)}</div></article>`;
 }
 function renderAlur(){
   const p=FL.procs.find(x=>x.key===S.proc);let idx=0;
@@ -174,7 +177,7 @@ function renderAlur(){
   $('alur-flow').innerHTML=p.phases.map(ph=>`<section class="phase"><div class="ph-h"><span class="ph-n">${esc(ph.name)}</span><span class="ph-m">${esc(ph.meta)}</span></div>
     <div class="rowx">${ph.stages.map(st=>alurCard(st,ph.restart?st.no:(ph.periodic?0:++idx),!ph.periodic)).join('')}</div></section>`).join('');
   $('alur-foot').textContent='Urutan kartu mengikuti alur kerja nyata di SOP HO. Nomor langkah audit mengikuti nomor di Peta Proses Audit SOP. Jumlah NC mengikuti pilihan cabang dan status di atas.'+(p.note?' '+p.note:'');
-  $('alur-flow').querySelectorAll('[data-peta]').forEach(b=>b.onclick=()=>{const st=STAGES.find(x=>x.id===b.dataset.peta);go('peta',st.sheet==='CY'?{site:'MDN',proc:'CY',nos:st.refs}:{proc:st.sheet,range:[st.from,st.to]})});
+  $('alur-flow').querySelectorAll('[data-peta]').forEach(b=>b.onclick=()=>{const st=STAGES.find(x=>x.id===b.dataset.peta);go('peta',st.sheet==='CY'?(S.site!=='ALL'&&tplOfSite(S.site)==='HO'?{proc:'CY',nos:[st.hoNo]}:{site:'MDN',proc:'CY',nos:st.refs}):{proc:st.sheet,range:[st.from,st.to]})});
   $('alur-flow').querySelectorAll('[data-gapcy]').forEach(b=>b.onclick=()=>{const st=STAGES.find(x=>x.id===b.dataset.gapcy);go('gap',{all:true,f:{range:{tpl:'MDN',site:'MDN',sheet:'CY',a:Math.min(...st.refs),b:Math.max(...st.refs),nos:st.refs,label:`${st.name} (CY Handling ${st.refs.join(', ')})`}}})});
   $('alur-flow').querySelectorAll('[data-gapmap]').forEach(b=>b.onclick=()=>go('gap',{all:true,f:{mapStage:b.dataset.gapmap}}));
   $('alur-flow').querySelectorAll('[data-gap]').forEach(b=>b.onclick=()=>{const st=STAGES.find(x=>x.id===b.dataset.gap);
@@ -287,14 +290,14 @@ function renderDrawer(sh){
   if(!it){d.hidden=true;return}
   d.hidden=false;
   const tpl=tplOfSite(S.site),sec=sh.sections.find(s=>s.id===it.section),os=itemObs(S.proc,it.no),mp=tpl==='MDN'?MAPBY[S.proc+'-'+it.no]:null;
-  const st=S.proc==='CY'?stageOf('CY',it.no):tpl==='HO'?stageOf(S.proc,it.no):(mp&&mp.ho[0]?stageOf(mp.ho[0].sheet,mp.ho[0].no):null);
+  const st=S.proc==='CY'?cyStage(it.no,tpl):tpl==='HO'?stageOf(S.proc,it.no):(mp&&mp.ho[0]?stageOf(mp.ho[0].sheet,mp.ho[0].no):null);
   const gt=os.map(gtype).find(Boolean),themes=GC.THEMES.filter(t=>os.some(o=>themeHit(t,o)));
   let right='';
   if(S.site==='JKT'&&S.proc==='DC'){
     right+='<div class="locs">'+os.map(o=>`<div>${pill(eff(o))} <b>${LOCN[o.loc]}</b>${o.finding?': '+esc(o.finding):''}</div>`).join('')+'</div>';
   }else{
     const o=os[0],s=eff(o);
-    right+=`<div>${pill(s)} ${o.finding?esc(o.finding):`<i style="color:var(--muted)">${s==='PENDING'?'Belum diaudit. Item ini diturunkan dari Pendahuluan SOP, bukan dari langkah Prosedur.':'Tidak ada catatan temuan.'}</i>`}</div>`;
+    right+=`<div>${pill(s)} ${o.finding?esc(o.finding):`<i style="color:var(--muted)">${s==='PENDING'?'Belum diaudit. Langkah ini diturunkan dari draf SOP, bukan hasil audit.':'Tidak ada catatan temuan.'}</i>`}</div>`;
     if(o.doc)right+=`<div class="fbx plain"><b>Menurut dokumen:</b> ${pill(o.doc)} ${o.doc!==o.raw?`<span class="fgl">berbeda dari lapangan (${o.raw})</span>`:'sama dengan lapangan'}</div>`;
   }
   if(it.auditor_note)right+=`<div class="fbx plain"><b>Catatan auditor:</b> ${esc(it.auditor_note)}</div>`;
@@ -328,6 +331,7 @@ function renderCmp(){
     DATA.sheets.filter(s=>s.site===code).sort((x,y)=>PROCS.indexOf(x.sheet)-PROCS.indexOf(y.sheet)).forEach(s=>{
       if(code==='JKT'&&s.sheet==='DC')['SEMPER','MARCEN','DOKUMEN'].forEach(l=>rows.push({label:'DC '+LOCN[l],f:o=>o.sheet==='DC'&&o.loc===l}));
       else if(s.sheet==='TRUCKING'){rows.push({label:'Trucking: penarikan empty',f:o=>o.sheet==='TRUCKING'&&o.sec==='T1'});if(S.site!=='ALL')rows.push({label:'Trucking: penarikan full',f:o=>o.sheet==='TRUCKING'&&o.sec==='T2'})}
+      else if(s.sheet==='CY'&&S.site==='ALL'&&s.items.every(i=>i.status==='PENDING'))return;
       else rows.push({label:SHN[s.sheet]==='DC'?'DC':SHN[s.sheet],f:o=>o.sheet===s.sheet&&o.loc!=='DOKUMEN'});
     });
     groups.push({code,rows});
@@ -432,7 +436,7 @@ function renderMap(){
 /* heatmap tahap x status */
 function renderHm(){
   const v=vis(),tpls=scopeTpls();
-  const groups=[['EXPORT','HO'],['IMPORT','HO'],['DC','HO'],['TRUCKING','HO'],['EXPORT','MDN'],['IMPORT','MDN'],['DC','MDN'],['CY','MDN']].filter(([sh,tp])=>tpls.has(tp));
+  const groups=[['EXPORT','HO'],['IMPORT','HO'],['DC','HO'],['TRUCKING','HO'],['CY','HO'],['EXPORT','MDN'],['IMPORT','MDN'],['DC','MDN'],['CY','MDN']].filter(([sh,tp])=>tpls.has(tp));
   let h='<thead><tr><th>Tahap</th><th class="n">COMPLY</th><th class="n">NON-COMPLY</th><th class="n">N/A</th><th class="n">Belum diaudit</th><th class="n">NC %</th></tr></thead><tbody>';
   groups.forEach(([sh,tp])=>{
     const sheet=DATA.sheets.find(s=>s.sheet===sh&&(s.template==='MDN_TEMPLATE'?'MDN':'HO')===tp);if(!sheet)return;
@@ -443,7 +447,7 @@ function renderHm(){
       if(!n)return;
       const cell=(k,col)=>{const x=c[k]||0,p=n?x/n:0;return `<td class="n${k==='PENDING'&&x?' pe':''}" style="${k!=='PENDING'&&x?`background:color-mix(in srgb,var(${col}) ${Math.round(p*55)}%,var(--surface))`:''}" title="${x} dari ${n} (${Math.round(p*100)}%)">${x||'·'}</td>`};
       const rate=pct(c['COMPLY']||0,c['NON-COMPLY']||0);
-      const st=tp==='HO'?STAGES.find(s=>s.sheet===sh&&s.from<=sec.from_no&&sec.from_no<=s.to):null;
+      const st=tp==='HO'&&sh!=='CY'?STAGES.find(s=>s.sheet===sh&&s.from<=sec.from_no&&sec.from_no<=s.to):null;
       h+=`<tr data-sec="${tp}|${sh}|${sec.id}"><td><span class="sid">${sec.id}</span><span class="sn">${esc(sec.name)}</span>${st?`<button type="button" class="lnk" data-alur="${st.id}">Alur</button>`:''}</td>${cell('COMPLY','--ok')}${cell('NON-COMPLY','--nc')}${cell('N/A','--na')}${cell('PENDING','--na')}<td class="n">${rate==null?'-':fmt(100-rate)}</td></tr>`;
     });
   });
@@ -514,7 +518,7 @@ function renderList(){
   $('gap-fb').querySelectorAll('[data-clear]').forEach(b=>b.onclick=()=>{f[b.dataset.clear]=k0(b.dataset.clear);renderGap()});
   $('gap-allchk').onchange=e=>{f.all=e.target.checked;renderGap()};
   $('gap-lt').innerHTML='<thead><tr><th>Cabang</th><th>Proses</th><th>No</th><th>Tahap</th><th>Aktor</th><th>Kat</th><th>Status</th><th>Jenis</th><th>Langkah dan temuan</th></tr></thead><tbody>'+
-   shown.map(o=>{const s=eff(o),g=gtype(o),stg=o.tpl==='HO'?stageOf(o.sheet,o.no):null;
+   shown.map(o=>{const s=eff(o),g=gtype(o),stg=stageOfO(o);
      return `<tr><td>${o.site}</td><td>${esc(procOf(o))}</td><td class="mono"><a href="#peta" data-peta="${o.site}|${o.sheet}|${o.no}|${o.loc||''}" title="Buka di Peta">${o.no}</a>${o.orig?`<br><small style="color:var(--muted)">${o.orig}</small>`:''}</td><td>${stg?`<a href="#alur" data-alur="${stg.id}" title="${esc(stg.name)}">${esc(o.sec)}</a>`:esc(o.sec)}</td><td>${esc(o.actor)}${o.actual&&o.actual!==o.actor?`<br><small class="fgl">aktual: ${esc(o.actual)}</small>`:''}</td><td>${o.cat}</td><td><span class="st ${CLS[s]}">${s}</span>${S.view==='adj'&&s!==o.raw?`<br><small class="fgl">awal ${o.raw}</small>`:''}</td><td>${g?`<span class="tp s t${g}">${g.toUpperCase()}</span>`:''}</td>
      <td>${esc(o.crit)}${o.finding?`<br><b>Temuan:</b> ${esc(o.finding)}`:''}${o.note&&o.loc!=='MARCEN'?`<br><small style="color:var(--muted)">Auditor: ${esc(o.note)}</small>`:''}${o.flag?`<br><span class="fgl">⚑ ${esc(FLAGTXT[o.flag]||o.flag)}</span>`:''}</td></tr>`}).join('')+'</tbody>';
   $('gap-lt').querySelectorAll('a[data-peta]').forEach(a=>a.onclick=e=>{e.preventDefault();const [site,sh,no,loc]=a.dataset.peta.split('|');go('peta',{site,proc:sh,sel:+no,...(loc&&loc!=='null'?{loc}:{})})});

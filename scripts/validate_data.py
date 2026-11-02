@@ -16,7 +16,7 @@ for s in D['sheets']:
         continue
     for i in s['items']:
         hit = [st['id'] for p in FL['procs'] for ph in p['phases'] for st in ph['stages']
-               if st['sheet'] == s['sheet'] and st['from'] <= i['no'] <= st['to']]
+               if st['sheet'] == s['sheet'] and ((st.get('hoNo') == i['no']) if s['sheet'] == 'CY' else (st['from'] <= i['no'] <= st['to']))]
         if len(hit) != 1:
             errs.append(f"{s['site']} {s['sheet']} {i['no']}: masuk {len(hit)} tahap {hit}")
 
@@ -50,7 +50,7 @@ for m in MP:
 
 # 3. jumlah baris sumber = jumlah langkah terisi (JKT DC dua unit; langkah PENDING bukan dari sumber)
 n_app = sum(len(s['items']) * (2 if s['site'] == 'JKT' and s['sheet'] == 'DC' else 1) for s in D['sheets'] if s['sheet'] != 'CY') \
-    - sum(1 for s in D['sheets'] for i in s['items'] if i['status'] == 'PENDING')
+    - sum(1 for s in D['sheets'] if s['sheet'] != 'CY' for i in s['items'] if i['status'] == 'PENDING')
 if n_app != len(SRC['results']):
     errs.append(f"baris aplikasi {n_app} != baris sumber {len(SRC['results'])}")
 

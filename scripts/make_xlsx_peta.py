@@ -9,7 +9,7 @@ from openpyxl.utils import get_column_letter as L
 D=json.load(open(ROOT/'data/audit_dataset_v3.json'))
 V3=json.load(open(ROOT/'data/audit_dataset_v3.json'))
 MAPJ=json.load(open(ROOT/'data/medan_ho_mapping.json'))
-D['sheets']=[x for x in D['sheets'] if x['site']=='JKT' or (x['site']=='MDN' and x['sheet']=='CY')]  # Jakarta (SOP Utama HO) + CY Handling (sumber Medan)
+D['sheets']=[x for x in D['sheets'] if (x['site']=='JKT' and x['sheet']!='CY') or (x['site']=='MDN' and x['sheet']=='CY')]  # Jakarta (SOP Utama HO) + CY Handling (sumber Medan)
 FLOWS=json.load(open(ROOT/'data/flows.json'))
 AREA=FLOWS['areas']
 def cy_sys(st):

@@ -89,6 +89,28 @@ sheets.append(dict(site='MDN', sheet='CY', template='MDN_TEMPLATE',
                 status=MCY[x['status_genba']], doc_status=MCY[x['status_doc']], finding=x['finding'], auditor_note='', qa_flag='',
                 actor_actual='', root_cause='') for x in CYSRC['langkah']]))
 
+# sheet CY Handling untuk cabang ber-template HO: alur dari pemetaan proses CY MKT, dianggap BELUM DIAUDIT
+PM = json.loads((ROOT / 'data/cy_mkt_pemetaan_source.json').read_text(encoding='utf-8'))
+CYCAT = {'Pra-Kedatangan': 'DOC', 'Kedatangan di Gerbang': 'COMP', 'Lapor Dokumen': 'DOC', 'Gate In': 'SYS', 'Inspeksi Container': 'COMP',
+         'Bongkar dan Penumpukan': 'OPS', 'Update Lokasi': 'SYS', 'Gate Out Truck': 'COMP', 'Muat Container': 'OPS', 'Konfirmasi Muat': 'SYS', 'Gate Out': 'COMP'}
+def cy_pending_sheet(code):
+    secs, items, n = [], [], 0
+    for al in PM['alur']:
+        sid = 'CY' + al['id']
+        first = n + 1
+        for t in al['tahap']:
+            n += 1
+            note = f"Gate otomatis ({', '.join(t['pic_otomatis']) or 'tanpa PIC'}): {t['otomatis']}" + (f" Catatan: {t['catatan']}" if t['catatan'] else '')
+            items.append(dict(no=n, section=sid, sop_ref='SOP-OPS-CY-001 (draf)' + (', usulan' if t.get('usulan') else ''), category=CYCAT[t['tahap']],
+                criterion=f"{t['tahap']}: {t['manual']}", actor=' / '.join(t['pic_manual']), status='PENDING', doc_status=None, finding='',
+                auditor_note=note, qa_flag='', actor_actual='', root_cause=''))
+        secs.append(dict(id=sid, name=al['nama'], sop='SOP-OPS-CY-001 (draf)', from_no=first, to_no=n))
+    return dict(site=code, sheet='CY', template='JKT_TEMPLATE',
+                note='Alur CY Handling diambil dari pemetaan proses CY MKT (draf, area MKT Medan). Belum diaudit di cabang ini. Aktor dan dokumen mengikuti varian Gate Manual; varian Gate Otomatis ada di catatan tiap langkah.',
+                sop_refs=['SOP-OPS-CY-001 (draf)'], sections=secs, items=items)
+for code in [x['code'] for x in SRC['sites'] if x['template'] == 'JKT_TEMPLATE']:
+    sheets.append(cy_pending_sheet(code))
+
 sites = [{k: s[k] for k in ('code', 'name', 'audit_no', 'date', 'template') if k in s} | {'note': s.get('note', ''), 'units': s.get('units', {}),
          'sheets': [x['sheet'] for x in sheets if x['site'] == s['code']]} for s in SRC['sites']]
 for x in sites:

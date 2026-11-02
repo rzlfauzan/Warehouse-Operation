@@ -71,7 +71,7 @@ for al in PM['alur']:
                     'pic': pics, 'areas': ['G'], 'sop': 'SOP-OPS-CY-001 (draf)', 'sheet': 'CY', 'refs': refs,
                     'from': min(refs) if refs else 0, 'to': max(refs) if refs else 0, 'in': docs(ins), 'out': docs(outs), 'sys': sysx,
                     'manual': t['manual'], 'otomatis': t['otomatis'], 'pic_manual': t['pic_manual'], 'pic_otomatis': t['pic_otomatis'],
-                    'catatan': t['catatan'], 'pending': False})
+                    'catatan': t['catatan'], 'pending': False, 'hoNo': (1 if al['id'] == 'A' else 9) + t['no']})
     phases.append({'name': al['nama'], 'meta': 'SOP-OPS-CY-001 · area MKT Medan · Gate Manual vs Gate Otomatis', 'periodic': False, 'restart': True, 'stages': sts})
 cy = {'key': 'CY', 'label': 'CY Handling',
       'note': 'Draf berasal dari pemetaan proses CY area MKT Medan (Google Sheets). Tahap bertanda "usulan" belum ada di SOP-OPS-CY-001. Langkah audit hanya ada untuk Medan (27 langkah); 8 langkah audit di luar area MKT (penarikan dari pelabuhan, order truck) tidak dipetakan ke tahap.',

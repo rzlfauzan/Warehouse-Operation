@@ -1465,7 +1465,8 @@
         "CS"
        ],
        "catatan": "Full: wajib no. seal. Empty: wajib info shipping line/depo asal.",
-       "pending": false
+       "pending": false,
+       "hoNo": 1
       },
       {
        "id": "CY-A1",
@@ -1516,7 +1517,8 @@
         "Security"
        ],
        "catatan": "Full: cek kondisi seal utuh.",
-       "pending": false
+       "pending": false,
+       "hoNo": 2
       },
       {
        "id": "CY-A2",
@@ -1557,7 +1559,8 @@
        ],
        "pic_otomatis": [],
        "catatan": "",
-       "pending": false
+       "pending": false,
+       "hoNo": 3
       },
       {
        "id": "CY-A3",
@@ -1600,7 +1603,8 @@
         "Sistem"
        ],
        "catatan": "",
-       "pending": false
+       "pending": false,
+       "hoNo": 4
       },
       {
        "id": "CY-A4",
@@ -1635,7 +1639,8 @@
         "Checker / Tallyman"
        ],
        "catatan": "Full: no. seal sesuai dokumen. Empty: kebersihan dan kelayakan box.",
-       "pending": false
+       "pending": false,
+       "hoNo": 5
       },
       {
        "id": "CY-A5",
@@ -1672,7 +1677,8 @@
         "Operator RS"
        ],
        "catatan": "Pisahkan blok stack Empty dan Full.",
-       "pending": false
+       "pending": false,
+       "hoNo": 6
       },
       {
        "id": "CY-A6",
@@ -1704,7 +1710,8 @@
         "Operator RS"
        ],
        "catatan": "",
-       "pending": false
+       "pending": false,
+       "hoNo": 7
       },
       {
        "id": "CY-A7",
@@ -1745,7 +1752,8 @@
         "Security"
        ],
        "catatan": "",
-       "pending": false
+       "pending": false,
+       "hoNo": 8
       }
      ]
     },
@@ -1809,7 +1817,8 @@
         "CS"
        ],
        "catatan": "Empty: cukup release order shipping line. Full: DO + stuffing list.",
-       "pending": false
+       "pending": false,
+       "hoNo": 9
       },
       {
        "id": "CY-B1",
@@ -1859,7 +1868,8 @@
         "Security"
        ],
        "catatan": "",
-       "pending": false
+       "pending": false,
+       "hoNo": 10
       },
       {
        "id": "CY-B2",
@@ -1900,7 +1910,8 @@
        ],
        "pic_otomatis": [],
        "catatan": "",
-       "pending": false
+       "pending": false,
+       "hoNo": 11
       },
       {
        "id": "CY-B3",
@@ -1939,7 +1950,8 @@
         "Sistem"
        ],
        "catatan": "",
-       "pending": false
+       "pending": false,
+       "hoNo": 12
       },
       {
        "id": "CY-B4",
@@ -1977,7 +1989,8 @@
         "Operator RS"
        ],
        "catatan": "Empty: pilih box layak pakai sesuai size/type.",
-       "pending": false
+       "pending": false,
+       "hoNo": 13
       },
       {
        "id": "CY-B5",
@@ -2013,7 +2026,8 @@
         "Sistem"
        ],
        "catatan": "",
-       "pending": false
+       "pending": false,
+       "hoNo": 14
       },
       {
        "id": "CY-B6",
@@ -2063,7 +2077,8 @@
         "Security"
        ],
        "catatan": "Full: cek seal wajib. Empty: cek kondisi box.",
-       "pending": false
+       "pending": false,
+       "hoNo": 15
       }
      ]
     }
