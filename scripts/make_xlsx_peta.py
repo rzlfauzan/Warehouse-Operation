@@ -9,7 +9,7 @@ from openpyxl.utils import get_column_letter as L
 D=json.load(open(ROOT/'data/audit_dataset_v3.json'))
 V3=json.load(open(ROOT/'data/audit_dataset_v3.json'))
 MAPJ=json.load(open(ROOT/'data/medan_ho_mapping.json'))
-D['sheets']=[x for x in D['sheets'] if (x['site']=='JKT' and x['sheet']!='CY') or (x['site']=='MDN' and x['sheet']=='CY')]  # Jakarta (SOP Utama HO) + CY Handling (sumber Medan)
+D['sheets']=[x for x in D['sheets'] if x['site']=='JKT' or (x['site']=='MDN' and x['sheet']=='CY')]  # Jakarta (SOP Utama HO) + CY Handling (sumber Medan)
 FLOWS=json.load(open(ROOT/'data/flows.json'))
 AREA=FLOWS['areas']
 def cy_sys(st):
@@ -27,13 +27,14 @@ def stage_rows(fl):
                 n+=1
                 out.append(dict(flow=p['label'],phase=ph['name'],no=None if ph.get('periodic') else st['no'],name=st['name'],cond=st['cond'],
                     pic=st['pic'],main=AREA[st['areas'][0]],others=[AREA[a] for a in st['areas'][1:]],sop=st['sop'],
-                    ref=[st['sheet'],st['from'],st['to']],refs=st.get('refs'),**{'in':st['in'],'out':st['out']},sys=cy_sys(st)))
+                    ref=[st['sheet'],st['from'],st['to']],refs=st.get('refs'),hoNo=st.get('hoNo'),**{'in':st['in'],'out':st['out']},sys=cy_sys(st)))
     return out
 rows=stage_rows(FLOWS)
 F='Arial'
-SHEETS={s['sheet']:s for s in D['sheets']}
-PROC=[('Export','EXPORT'),('Import','IMPORT'),('Trucking Support','TRUCKING'),('DC','DC'),('CY Handling','CY')]
-FLOWN={'Export':'Export','Import':'Import','Trucking Support':'Trucking Support','DC':'DC (Distribution Center)','CY Handling':'CY Handling'}
+SHEETS={s['sheet']:s for s in D['sheets'] if s['site']=='JKT'}
+SHEETS['CY_MDN']=next(s for s in D['sheets'] if s['site']=='MDN' and s['sheet']=='CY')  # CY Handling Medan (27 langkah audit asli)
+PROC=[('Export','EXPORT'),('Import','IMPORT'),('Trucking Support','TRUCKING'),('DC','DC'),('CY Handling','CY'),('CY Medan','CY_MDN')]
+FLOWN={'Export':'Export','Import':'Import','Trucking Support':'Trucking Support','DC':'DC (Distribution Center)','CY Handling':'CY Handling','CY Medan':'CY Handling'}
 hf=Font(name=F,size=10,bold=True,color='FFFFFF'); navy=PatternFill('solid',fgColor='0B4A6F'); brown=PatternFill('solid',fgColor='7A5C00')
 yel=PatternFill('solid',fgColor='FFF9C4'); stagef=PatternFill('solid',fgColor='E9EEF3')
 areaf={'Gudang MKT':'DCE8F7','Port / Pelayaran':'D3F0F0','Depo':'FBE3D4','Bea Cukai':'F6D5E8'}
@@ -56,7 +57,7 @@ for name,code in PROC:
     covered=set(); nstage=0
     for st in stages:
         a,b=st['ref'][1],st['ref'][2]
-        its=[i for i in items if (i['no'] in st['refs'] if st.get('refs') is not None else a<=i['no']<=b)]; covered|={i['no'] for i in its}
+        its=[i for i in items if ((i['no']==st['hoNo']) if code=='CY' else (i['no'] in st['refs']) if code=='CY_MDN' else a<=i['no']<=b)]; covered|={i['no'] for i in its}
         label=(f"{st['no']}. " if st['no'] is not None else 'Periodik: ')+st['name']+(f" ({st['cond']})" if st['cond'] else '')
         secs=sorted({i['section'] for i in its})
         area=st['main']+(' + '+', '.join(st['others']) if st['others'] else '')
@@ -71,7 +72,7 @@ for name,code in PROC:
             ws.append([label,i['section'],None,None,i['no'],i['actor'],i['category'],i['sop_ref'],k,None,None,None,None,None,None,'Belum direview'])
             ws.cell(ws.max_row,1).font=Font(name=F,size=9,color='7A8793')
     rest=[i for i in items if i['no'] not in covered]
-    if rest and code=='CY':
+    if rest and code=='CY_MDN':
         lab='Di luar tahap pemetaan (area pelabuhan, order truck)'
         ws.append([lab,', '.join(sorted({i['section'] for i in rest})),'Gudang MKT',None,None,None,None,'SOP-OPS-CY-001','Langkah audit yang tidak dipetakan ke tahap CY area MKT',None,None,None,None,None,None,'Belum direview'])
         r=ws.max_row
@@ -179,13 +180,13 @@ put(1,1,'Peta Proses Audit SOP: lembar review',size=14,bold=True)
 put(2,1,'Sumber: form audit SOP FRM-OPS-001-0001 (Jakarta, Agustus 2026), untuk SOP Warehouse dan Multimode MKT. Isi tahap dan dokumen sama dengan halaman Alur Proses Umum MKT. Hasil audit tidak dimuat.',color='5A6B78')
 wp.merge_cells('A2:D2'); wp.row_dimensions[2].height=30
 put(4,1,'Cara pakai',bold=True)
-steps=['Satu sheet per proses: Export, Import, Trucking Support, DC, CY Handling. Tiap tahap alur diawali satu baris berlatar abu (area kerja, PIC, dokumen masuk dan keluar), diikuti langkah audit di bawahnya.',
+steps=['Satu sheet per proses: Export, Import, Trucking Support, DC, CY Handling, CY Medan. Tiap tahap alur diawali satu baris berlatar abu (area kerja, PIC, dokumen masuk dan keluar), diikuti langkah audit di bawahnya.',
  'Dokumen masuk dan keluar dimuat per tahap, bukan per langkah, karena dokumennya milik tahap. Langkah audit (No, Aktor, Acuan SOP) mengikuti nomor di Peta Proses Audit SOP.',
  'Sheet "Dokumen" memuat satu baris per dokumen untuk catatan per dokumen (nama resmi, perlu TTD).',
  'Kolom berwarna kuning adalah kolom review dan satu-satunya yang perlu diisi. "Perlu diubah?" dan "Status review" memakai dropdown.',
  '(TTD) berarti dokumen perlu tanda tangan. "(perkiraan)" berarti penempatan dokumen di tahap itu belum dipastikan.',
  'Sheet "Pemetaan Medan-HO" memuat draf pemetaan 170 langkah SOP Medan ke SOP Utama HO, dan "HO tidak ada di Medan" memuat langkah HO yang belum ada di SOP Medan. Isi kolom kuning untuk menyetujui atau mengubah pemetaan.',
- 'Trucking Support langkah 1 sampai 8 (penarikan empty) asalnya Export 37 sampai 44. Langkah 9 sampai 18 (penarikan full container) belum diaudit; isinya draf Rev.02 dari Notion. Sheet CY Handling berasal dari pemetaan proses CY MKT Medan (varian Gate Manual dan Gate Otomatis ada di kolom keterangan), dengan langkah audit 27 butir SOP-OPS-CY-001 milik Medan.']
+ 'Trucking Support langkah 1 sampai 8 (penarikan empty) asalnya Export 37 sampai 44. Langkah 9 sampai 18 (penarikan full container) belum diaudit; isinya draf Rev.02 dari Notion. Sheet CY Handling = alur CY dari pemetaan proses CY MKT (15 langkah, belum diaudit di cabang HO), sama dengan yang ada di tab Peta untuk Jakarta, Surabaya, Makassar, dan Semarang. Sheet CY Medan = 27 langkah audit SOP-OPS-CY-001 milik Medan beserta hasilnya, disusun di bawah tahap alur yang sama (varian Gate Manual dan Gate Otomatis ada di kolom keterangan).']
 for i,s in enumerate(steps):
     put(5+i,1,f'{i+1}. '+s);wp.merge_cells(start_row=5+i,start_column=1,end_row=5+i,end_column=4);wp.row_dimensions[5+i].height=30
 r=12
