@@ -224,10 +224,8 @@ th.r,td.r{text-align:right}
     <div class="navhead"><b>Navigasi</b><button class="iconbtn" id="navClose" aria-label="Tutup menu" type="button">✕</button></div>
     <h6>Audit</h6>
     <a href="#" data-v="dokumen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg>Dokumen audit</a>
-    <a href="#" data-v="layanan" id="navDoc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Isi audit</a>
-    <a href="#" data-v="ringkasan" id="navSum"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Ringkasan</a>
     <h6>Referensi</h6>
-    <a href="audit_mobile_alur.html" class="navlink" id="navAlur"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6.5"/></svg>Alur, Peta &amp; Gap SOP</a>
+    <a href="audit_mobile_alur.html" class="navlink" id="navAlur"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6.5"/></svg>Business Process</a>
     <a href="#" data-v="bantuan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>Bantuan</a>
   </nav>
   <main id="main"><div class="wrap" id="view"></div></main>
@@ -368,7 +366,7 @@ function restoreBackup(){
   try { const v = JSON.parse(localStorage.getItem(qKey()) || '{}');
     for (const k in v){ const x = v[k]; Q[k] = x; const a = (S.D.ans[x.part] = S.D.ans[x.part] || {})[x.no] || {};
       S.D.ans[x.part][x.no] = Object.assign(a, x); }
-    if (Object.keys(Q).length){ toast('Isian yang belum terkirim dipulihkan dan dikirim ulang'); schedule(300); }
+    if (Object.keys(Q).length){ toast('Isian yang tertunda dikirim ulang'); schedule(300); }
   } catch(e){}
 }
 function setSaved(state, msg){
@@ -413,8 +411,7 @@ function go(v, push){
   if (['layanan','isi','ringkasan'].includes(v) && !S.D) v = 'dokumen';
   if (v === 'isi' && !curPart()) v = 'layanan';
   S.view = v;
-  document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', a.dataset.v === v || (v === 'isi' && a.dataset.v === 'layanan')));
-  $('#navDoc').classList.toggle('dis', !S.D); $('#navSum').classList.toggle('dis', !S.D);
+  document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', a.dataset.v === v || (['layanan','isi','ringkasan'].includes(v) && a.dataset.v === 'dokumen')));
   closeNav();
   ({dokumen:vDocs, layanan:vParts, isi:vFill, ringkasan:vSum, bantuan:vHelp})[v]();
   if (v !== 'isi') window.scrollTo(0, 0);
@@ -457,13 +454,13 @@ async function vDocs(){
   const byUpd = (a,b) => (b.upd||0) - (a.upd||0);
   const now = S.docs.filter(d => !isHist(d)).sort(byUpd), old = S.docs.filter(isHist).sort((a,b) => String(a.no).localeCompare(String(b.no)));
   $('#view').innerHTML = `
-    <div class="ph"><div><h1>Dokumen Audit</h1><p>Satu dokumen per kunjungan audit cabang, dengan nomor formulir sendiri.</p></div>
+    <div class="ph"><div><h1>Dokumen Audit</h1></div>
       ${canWrite() ? '<button class="btn pri" id="newBtn" type="button">+ Buat dokumen audit</button>' : ''}</div>
-    ${canWrite() ? '' : `<div class="err">Akun ${esc(S.user.email)} belum terdaftar sebagai auditor, jadi hanya bisa melihat. Minta admin menambahkan email ini di sheet PENGGUNA.</div>`}
-    <div class="card"><div class="thead">Audit berjalan</div>
-      <div class="docs">${now.map(row).join('') || `<div class="empty">Belum ada dokumen audit baru.${canWrite() ? ' Tekan <b>Buat dokumen audit</b> untuk mulai.' : ''}</div>`}</div></div>
-    <div class="card"><div class="thead">Audit Juli–September 2026 (impor)</div>
-      <div class="docs">${old.map(row).join('') || '<div class="empty">Data audit sebelumnya belum diimpor. Admin bisa menjalankan setup() sekali lagi.</div>'}</div></div>
+    ${canWrite() ? '' : `<div class="err">${esc(S.user.email)} belum terdaftar sebagai auditor, jadi Anda hanya bisa melihat. Minta admin menambahkan email ini di sheet PENGGUNA.</div>`}
+    <div class="card"><div class="thead">Sedang berjalan</div>
+      <div class="docs">${now.map(row).join('') || '<div class="empty">Belum ada audit baru.</div>'}</div></div>
+    <div class="card"><div class="thead">Arsip Juli sampai September 2026</div>
+      <div class="docs">${old.map(row).join('') || '<div class="empty">Arsip belum diimpor. Admin perlu menjalankan setup() sekali lagi.</div>'}</div></div>
     <p class="foot">© 2026 MKT · Audit SOP Warehouse &amp; Multimode</p>`;
   const nb = $('#newBtn'); if (nb) nb.onclick = openNew;
   document.querySelectorAll('[data-doc]').forEach(b => b.onclick = () => { S.part = null; openDoc(b.dataset.doc); });
@@ -473,15 +470,15 @@ function openNew(){
   $('#layer').innerHTML = `<div class="sheet" id="sheet"><form class="card" id="newForm" novalidate>
     <h2>Buat dokumen audit</h2>
     <div class="fgrid">
-      <div class="f"><label for="fNo">No. formulir</label><input class="in" id="fNo" readonly value="${esc(S.nextNo)}"><small>Nomor final diberikan server saat disimpan.</small></div>
+      <div class="f"><label for="fNo">No. formulir</label><input class="in" id="fNo" readonly value="${esc(S.nextNo)}"></div>
       <div class="f"><label for="fSite">Cabang</label><select class="in" id="fSite">${DATA.sites.map(s => `<option value="${s.code}">${esc(s.name)}</option>`).join('')}</select></div>
       <div class="f"><label for="fDate">Tanggal audit</label><input class="in" type="date" id="fDate" value="${today}"></div>
       <div class="f"><label for="fAud">Lead auditor</label><input class="in" id="fAud" readonly value="${esc(S.user.nama)}"><small>${esc(S.user.email)}</small></div>
       <div class="f full"><label for="fPartner">Auditor pendamping (opsional)</label><input class="in" id="fPartner" placeholder="Nama auditor kedua"></div>
-      <div class="f full"><span style="font-size:12.5px;font-weight:600">Bagian yang disiapkan, belum pernah diaudit</span>
+      <div class="f full"><span style="font-size:12.5px;font-weight:600">Ikut diaudit (belum pernah diaudit sebelumnya)</span>
         <label class="chk"><input type="checkbox" id="fCy"><span>CY Handling<small id="cyNote"></small></span></label>
-        <label class="chk" id="fullRow"><input type="checkbox" id="fFull"><span>Penarikan full container (Trucking)<small>Checklist dari draf Rev.02, langkah 9–18.</small></span></label>
-        <small>Pilihan ini tidak bisa diubah setelah dokumen dibuat.</small></div>
+        <label class="chk" id="fullRow"><input type="checkbox" id="fFull"><span>Penarikan full container (Trucking)<small>Langkah 9 sampai 18, draf Rev.02</small></span></label>
+        <small>Tidak bisa diubah setelah dokumen dibuat.</small></div>
     </div>
     <div id="newErr"></div>
     <div class="row"><button class="btn ghost" type="button" id="cancel">Batal</button><button class="btn pri" type="submit" id="mk">Buat dokumen</button></div>
@@ -489,7 +486,7 @@ function openNew(){
   const sync = () => { const c = $('#fSite').value, s = site(c);
     $('#fullRow').hidden = !s.sheets.includes('TRUCKING'); if (!s.sheets.includes('TRUCKING')) $('#fFull').checked = false;
     $('#fCy').checked = c === 'MDN';
-    $('#cyNote').textContent = c === 'MDN' ? 'Medan sudah diaudit Agustus (27 langkah SOP Medan).' : 'Checklist dari draf SOP-OPS-CY-001, 15 langkah.'; };
+    $('#cyNote').textContent = c === 'MDN' ? '27 langkah, SOP Medan' : '15 langkah, draf SOP-OPS-CY-001'; };
   $('#fSite').onchange = sync; sync();
   const close = () => $('#layer').innerHTML = '';
   $('#cancel').onclick = close;
@@ -513,7 +510,7 @@ function docHead(){
     <div class="kv"><small>Status</small><b><span class="pill ${d.status === 'final' ? 'p-final">Final, terkunci' : 'p-draft">Draft'}</span></b></div>
     <div class="kv"><small>SOP acuan</small><b>${sopTxt(d)}</b></div>
     <div class="kv"><small>Lead auditor</small><b>${esc(d.leadName || '–')}</b></div>
-    ${isHist(d) ? '<div class="kv" style="grid-column:span 2"><small>Sumber</small><b>Impor hasil audit 2026 (FRM-OPS-001-0001 s.d. 0005)</b></div>' : ''}</div>`;
+    </div>`;
 }
 function vParts(){
   const d = S.D.doc, s = site(d.site);
@@ -521,13 +518,13 @@ function vParts(){
     const never = sheetOf(d.site, p.sheet).items.every(i => (prevOf(i,p).g || 'P') === 'P');
     return `<button class="part" data-part="${p.key}" type="button">
       <h3>${esc(p.label)}</h3>
-      ${never ? '<span class="pill p-opt" style="align-self:flex-start">Disiapkan, belum pernah diaudit</span>' : ''}
+      ${never ? '<span class="pill p-opt" style="align-self:flex-start">Belum pernah diaudit</span>' : ''}
       <div class="k"><span>${isHist(d) ? (t.C+t.NC+t.NA) + ' langkah diaudit' : t.done + '/' + t.total + ' langkah'}</span><span>Comply ${pctTxt(t.pct)}</span></div>
       <div class="bar"><i style="width:${pr}%"></i></div>
       ${t.need ? `<span class="warn">${t.need} NC belum ada temuan</span>` : ''}</button>`; }).join('');
   $('#view').innerHTML = `
     <div class="crumb"><a href="#" data-go="dokumen">Dokumen audit</a><span>/</span><span>${esc(d.no)}</span></div>
-    <div class="ph"><div><h1>${esc(s.name)}</h1><p>${isHist(d) ? 'Hasil audit ' + fmtDate(d.date) + '. Hanya bisa dibaca.' : 'Pilih layanan untuk mulai mengisi. Dua auditor bisa mengisi layanan berbeda bersamaan.'}${isMdn(d) ? ' Langkah audit memakai SOP cabang Medan.' : ''}</p></div>
+    <div class="ph"><div><h1>${esc(s.name)}</h1>${isHist(d) ? '<p>Arsip, hanya bisa dibaca.</p>' : ''}</div>
       <button class="btn" type="button" data-go="ringkasan">Lihat ringkasan</button></div>
     ${docHead()}
     <div class="parts">${cards}</div>`;
@@ -556,13 +553,13 @@ function vFill(){
       <div class="bar"><i id="subbar" style="width:${pr}%"></i></div>
       <div class="chips" role="tablist" aria-label="Tahap">${chips}</div>
     </div></div>
-    ${S.D.doc.status === 'final' ? '<div class="locked">Dokumen sudah dikunci. Isian hanya bisa dibaca.</div>' : (!canWrite() ? '<div class="err">Mode lihat saja: akun belum terdaftar sebagai auditor.</div>' : '')}
-    <div class="sechead"><b>${esc(sec.name)}</b><small>${esc(sec.sop)}${sec.opt ? ' · disiapkan, belum pernah diaudit' : ''}</small></div>
+    ${S.D.doc.status === 'final' ? '<div class="locked">Dokumen terkunci.</div>' : (!canWrite() ? '<div class="err">Akun Anda belum terdaftar sebagai auditor, jadi hanya bisa melihat.</div>' : '')}
+    <div class="sechead"><b>${esc(sec.name)}</b><small>${esc(sec.sop)}${sec.opt ? ' · belum pernah diaudit' : ''}</small></div>
     <div class="seg2" role="group" aria-label="Saring langkah">
       ${[['all','Semua'],['todo','Belum lengkap'],['nc','Ada NC']].map(([k,l]) => `<button class="chip ${filt === k ? 'on' : ''}" data-f="${k}" type="button">${l}</button>`).join('')}</div>
     <div id="steps" style="display:flex;flex-direction:column;gap:12px">${list.map(i => stepCard(p, i, lock)).join('') || '<div class="card empty">Tidak ada langkah dengan saringan ini.</div>'}</div>
-    ${nx ? `<button class="btn block" id="nextSec" data-to="${nx.id}" type="button">Lanjut ke ${esc(nx.id)} · ${esc(nx.name)} →</button>`
-         : `<button class="btn pri block" type="button" data-go="layanan">Selesai di layanan ini</button>`}`;
+    ${nx ? `<button class="btn block" id="nextSec" data-to="${nx.id}" type="button">Lanjut ke ${esc(nx.id)}: ${esc(nx.name)}</button>`
+         : `<button class="btn pri block" type="button" data-go="layanan">Kembali ke daftar layanan</button>`}`;
   if (Object.keys(Q).length) setSaved('pending'); else if (S.D.doc.upd) setSaved('ok');
   document.querySelectorAll('[data-sec]').forEach(b => b.onclick = () => { S.sec = b.dataset.sec; vFill(); window.scrollTo(0,0); });
   document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { filt = b.dataset.f; vFill(); });
@@ -576,7 +573,7 @@ function segBtns(n, field, val, lock){
 function stepCard(p, i, lock){
   const a = ansOf(p, i.n), pv = prevOf(i, p), s = site(S.D.doc.site), need = needsNote(a);
   const prev = isHist(S.D.doc) ? '' : pv.g && pv.g !== 'P'
-    ? `<div class="prev"><span>Audit ${esc(s.date)}:</span>${pv.d && pv.d !== 'P' ? `<span class="pill p-${pv.d}">Dok ${SHORT[pv.d]}</span>` : ''}<span class="pill p-${pv.g}">Lap ${SHORT[pv.g]}</span>${pv.f ? `<q>${esc(pv.f)}</q>` : ''}</div>`
+    ? `<div class="prev"><span>Audit ${fmtDate(s.date)}:</span>${pv.d && pv.d !== 'P' ? `<span class="pill p-${pv.d}">Dok ${SHORT[pv.d]}</span>` : ''}<span class="pill p-${pv.g}">Lap ${SHORT[pv.g]}</span>${pv.f ? `<q>${esc(pv.f)}</q>` : ''}</div>`
     : `<div class="prev"><span class="pill p-P">Belum pernah diaudit</span></div>`;
   const open = a.f || a.a || (a.ph && a.ph.length) || need;
   return `<article class="card step ${isDone(a) ? 'done' : ''} ${need ? 'need' : ''}" id="st${i.n}">
@@ -587,9 +584,9 @@ function stepCard(p, i, lock){
     ${prev}
     <div class="extra" data-x="${i.n}" ${open ? '' : 'hidden'}>
       <div class="f"><label for="f${i.n}">Temuan${(a.d === 'NC' || a.g === 'NC') ? ' (wajib untuk NC)' : ''}</label>
-        <textarea class="in" id="f${i.n}" data-n="${i.n}" data-field="f" rows="2" maxlength="2000" placeholder="Apa yang dilihat di lapangan atau di dokumen" ${lock ? 'readonly' : ''}>${esc(a.f)}</textarea>
-        ${need ? '<span class="need-msg">Isi temuan untuk langkah NC ini.</span>' : ''}</div>
-      <div class="f" style="margin-top:10px"><label for="a${i.n}">Pelaksana aktual (isi bila beda dari PIC SOP)</label>
+        <textarea class="in" id="f${i.n}" data-n="${i.n}" data-field="f" rows="2" maxlength="2000" placeholder="Tulis yang Anda temukan" ${lock ? 'readonly' : ''}>${esc(a.f)}</textarea>
+        ${need ? '<span class="need-msg">Temuan wajib diisi untuk NC.</span>' : ''}</div>
+      <div class="f" style="margin-top:10px"><label for="a${i.n}">Pelaksana aktual, kalau beda dari PIC</label>
         <input class="in" id="a${i.n}" data-n="${i.n}" data-field="a" value="${esc(a.a)}" maxlength="200" placeholder="${esc(i.a)}" ${lock ? 'readonly' : ''}></div>
       <div class="f" style="margin-top:10px"><label>Foto (opsional, maks. 3)</label>
         <div class="thumbs">${(a.ph || []).map((q, k) => `<figure><a href="${esc(q.url)}" target="_blank" rel="noopener"><img src="${q.th || ''}" alt="Foto langkah ${i.n}"></a><button type="button" data-delph="${i.n}" data-k="${k}" aria-label="Hapus foto" ${lock ? 'hidden' : ''}>✕</button></figure>`).join('')}</div>
@@ -661,7 +658,7 @@ function vSum(){
   if (T.done < T.total) blockers.push(`${T.total - T.done} langkah belum lengkap (status dokumen dan lapangan)`);
   $('#view').innerHTML = `
     <div class="crumb"><a href="#" data-go="dokumen">Dokumen audit</a><span>/</span><a href="#" data-go="layanan">${esc(d.no)}</a><span>/</span><span>Ringkasan</span></div>
-    <div class="ph"><div><h1>Ringkasan ${esc(s.name)}</h1><p>Compliance resmi dihitung dari status lapangan: C ÷ (C + NC). N/A tidak dihitung.</p></div></div>
+    <div class="ph"><div><h1>Ringkasan ${esc(s.name)}</h1><p>Compliance = C ÷ (C + NC) dari status lapangan. N/A tidak dihitung.</p></div></div>
     ${docHead()}
     <div class="kpis">
       <div class="card"><small>Compliance lapangan</small><div class="big">${pctTxt(T.pct)}</div></div>
@@ -674,11 +671,11 @@ function vSum(){
       : !canWrite() ? '' : `${blockers.length ? `<div class="alert">Belum bisa dikunci: ${blockers.join('; ')}.</div>` : ''}
          <div class="row" style="margin-top:12px"><button class="btn pri" id="lockBtn" type="button" ${blockers.length ? 'disabled' : ''}>Kunci dokumen</button></div>`}</div>
     ${canWrite() ? `<div class="card pad" style="display:flex;flex-direction:column;gap:10px"><b>Ekspor hasil</b>
-      <span style="color:var(--muted)">Menyimpan hasil dokumen ini sebagai file JSON di folder Drive aplikasi, untuk diarsipkan ke repo dan dibandingkan di Gap Analysis.</span>
+      <span style="color:var(--muted)">File JSON di Drive, untuk arsip dan Gap Analysis.</span>
       <div id="expOut"></div><div class="row" style="justify-content:flex-start"><button class="btn" id="expBtn" type="button">Simpan JSON ke Drive</button></div></div>` : ''}`;
   const lb = $('#lockBtn');
   if (lb) lb.onclick = () => { $('#lockBox').innerHTML = `<div class="card pad" style="display:flex;flex-direction:column;gap:12px">
-      <b>Kunci ${esc(d.no)}?</b><span style="color:var(--muted)">Setelah dikunci, isian tidak bisa diubah oleh siapa pun.</span><div id="lkErr"></div>
+      <b>Kunci ${esc(d.no)}?</b><span style="color:var(--muted)">Isian tidak bisa diubah lagi setelah dikunci.</span><div id="lkErr"></div>
       <div class="row"><button class="btn ghost" id="lkNo" type="button">Batal</button><button class="btn solid" id="lkYes" type="button">Ya, kunci</button></div></div>`;
     $('#lkNo').onclick = vSum;
     $('#lkYes').onclick = async () => { const b = $('#lkYes'); b.disabled = true; b.textContent = 'Mengunci…';
@@ -694,14 +691,14 @@ function vSum(){
 
 /* ---------- bantuan ---------- */
 function vHelp(){
-  $('#view').innerHTML = `<div class="ph"><div><h1>Bantuan</h1><p>Cara memakai form audit di HP.</p></div></div>
+  $('#view').innerHTML = `<div class="ph"><div><h1>Bantuan</h1></div></div>
     <div class="card pad" style="display:flex;flex-direction:column;gap:10px;max-width:68ch">
-      <span><b>1.</b> Buat satu dokumen per kunjungan cabang. Nomor formulir diberikan otomatis.</span>
-      <span><b>2.</b> Pilih layanan, lalu isi tiap langkah: status <b>Dokumen</b> dan <b>Lapangan</b> (C, NC, atau N/A). Ketuk lagi untuk membatalkan pilihan.</span>
-      <span><b>3.</b> Langkah NC wajib diberi temuan. Foto opsional, maksimal 3 per langkah, tersimpan di Google Drive.</span>
-      <span><b>4.</b> Isian tersimpan otomatis. Kalau sinyal putus, isian disimpan dulu di HP dan dikirim ulang.</span>
-      <span><b>5.</b> Dua auditor bisa mengisi layanan berbeda di dokumen yang sama. Buka ulang daftar layanan untuk melihat isian auditor lain.</span>
-      <span><b>6.</b> Setelah semua lengkap, kunci dokumen di halaman Ringkasan. Dokumen terkunci tidak bisa diubah.</span>
+      <span><b>1.</b> Buat satu dokumen untuk setiap kunjungan ke cabang. Nomor formulir terisi sendiri.</span>
+      <span><b>2.</b> Buka layanan, lalu pilih C, NC, atau N/A untuk Dokumen dan Lapangan di tiap langkah. Ketuk pilihan yang sama untuk membatalkannya.</span>
+      <span><b>3.</b> Setiap NC perlu temuan. Foto boleh dilampirkan, paling banyak 3 per langkah.</span>
+      <span><b>4.</b> Isian langsung tersimpan. Kalau sinyal hilang, HP menyimpannya dulu dan mengirim ulang begitu tersambung.</span>
+      <span><b>5.</b> Dua auditor boleh mengisi dokumen yang sama asal layanannya berbeda. Buka lagi daftar layanan untuk melihat isian rekan Anda.</span>
+      <span><b>6.</b> Kalau semua langkah sudah terisi, kunci dokumen dari halaman Ringkasan.</span>
     </div>`;
 }
 

@@ -287,13 +287,13 @@ thead th{background:#FFFBEB!important;color:#461902!important}
 </style>
 </head>
 <body>
-<div class="wmsbar"><span class="lg">MKT</span><b>Alur, Peta &amp; Gap SOP</b><a class="back" href="<?= appUrl ?>" target="_top">← Form audit</a></div>
+<div class="wmsbar"><span class="lg">MKT</span><b>Business Process</b><a class="back" href="<?= appUrl ?>" target="_top">← Form audit</a></div>
 
 
 <div class="wrap">
   <header>
     <div>
-      <h1>Audit SOP MKT</h1>
+      <h1>Business Process</h1>
       <div class="sub" id="meta"></div>
     </div>
     <button class="theme" id="themeBtn" type="button">Tema: otomatis</button>
@@ -309,8 +309,8 @@ thead th{background:#FFFBEB!important;color:#461902!important}
   <div class="banner" id="sitenote" hidden></div>
 
   <div class="tabs" id="tabs" role="tablist">
-    <button type="button" role="tab" data-tab="alur" id="tab-alur">Alur Proses Umum</button>
-    <button type="button" role="tab" data-tab="peta" id="tab-peta">Peta Proses Audit SOP</button>
+    <button type="button" role="tab" data-tab="alur" id="tab-alur">Process Flow</button>
+    <button type="button" role="tab" data-tab="peta" id="tab-peta">Audit Process Map</button>
     <button type="button" role="tab" data-tab="gap" id="tab-gap">Gap Analysis</button>
   </div>
 
@@ -347,36 +347,36 @@ thead th{background:#FFFBEB!important;color:#461902!important}
   <!-- ===== GAP ===== -->
   <div class="panel-t" id="panel-gap" role="tabpanel" aria-labelledby="tab-gap" hidden style="gap:26px">
     <p class="lead">Dihitung per langkah per cabang (DC Jakarta: per unit Semper atau Marcen). Angka resmi memakai status hasil lapangan.</p>
-    <section class="gsec" id="gap-s1"><h2>Compliance per proses</h2>
+    <section class="gsec" id="gap-s1"><h2>Compliance by process</h2>
       <p class="lead">Resmi = COMPLY ÷ (COMPLY + NON-COMPLY), N/A tidak dihitung. "Diperiksa" = porsi langkah yang bukan N/A.</p>
       <div class="panel"><div class="glegend" style="margin-bottom:12px"><span><i class="dot"></i>Resmi</span><span><i class="dot a"></i>Adjusted</span><span>Garis penghubung menunjukkan selisih</span></div><div class="cmp" id="gap-cmp"></div></div></section>
-    <section class="gsec" id="gap-s2"><h2>Jenis gap dan penanggung jawab</h2>
+    <section class="gsec" id="gap-s2"><h2>Gap types and owners</h2>
       <p class="lead">Fokus pada NON-COMPLY dari langkah yang diperiksa (COMPLY + NON-COMPLY; N/A tidak dihitung). Jenis gap adalah usulan, perlu dikonfirmasi auditor.</p>
       <div class="kpis" id="gap-strip"></div>
       <div class="g3" id="gap-g3"></div></section>
-    <section class="gsec" id="gap-snote"><h2>Catatan di luar NON-COMPLY</h2>
+    <section class="gsec" id="gap-snote"><h2>Notes outside NON-COMPLY</h2>
       <p class="lead">Langkah COMPLY atau N/A yang membawa catatan. Tidak dihitung sebagai NON-COMPLY, tetapi menunjukkan gap lain. Klik angka untuk melihat langkahnya.</p>
       <div class="panel scroll"><table class="hm" id="gap-notes"></table></div></section>
-    <section class="gsec" id="gap-smx"><h2>Matriks langkah x cabang</h2>
+    <section class="gsec" id="gap-smx"><h2>Step by branch matrix</h2>
       <p class="lead">Langkah SOP HO per cabang. Klik sel untuk membuka di Peta. MDN* = Medan lewat pemetaan draf.</p>
       <div class="row"><div class="seg" id="gap-mx-sheet"></div><span id="gap-mx-opt" class="row"></span><span class="lead mono" id="gap-mx-n"></span></div>
       <div class="panel scroll" style="max-height:560px;overflow-y:auto"><table class="hm mx" id="gap-mx"></table></div></section>
-    <section class="gsec" id="gap-smap" hidden><h2>Pemetaan langkah Medan ke SOP HO</h2>
+    <section class="gsec" id="gap-smap" hidden><h2>Medan steps mapped to HO SOP</h2>
       <p class="lead">Draf pemetaan langkah Medan ke SOP HO, belum dikonfirmasi pemilik SOP. <b>Sama</b> = kegiatan sama, <b>mirip</b> = sebagian sama, <b>hanya di Medan</b> = tidak ada di SOP HO.</p>
       <div class="panel scroll"><table class="hm" id="gap-map1"></table></div>
       <div class="panel scroll"><table class="hm" id="gap-map2"></table></div>
       <details class="th" id="gap-map3"></details>
       <details class="th" id="gap-map4"></details></section>
-    <section class="gsec" id="gap-s3"><h2>Heatmap tahap proses x status</h2>
+    <section class="gsec" id="gap-s3"><h2>Stage by status heatmap</h2>
       <p class="lead">Jumlah langkah per status di tiap tahap. Klik baris untuk melihat daftarnya.</p>
       <div class="panel scroll"><table class="hm" id="gap-hm"></table></div></section>
-    <section class="gsec" id="gap-s4"><h2>Peringkat NON-COMPLY</h2>
+    <section class="gsec" id="gap-s4"><h2>NON-COMPLY ranking</h2>
       <p class="lead">NON-COMPLY dihitung per cabang. "x dari y" = jumlah NON-COMPLY dari y langkah yang diperiksa (COMPLY + NON-COMPLY).</p>
       <div class="rk" id="gap-rk"></div></section>
-    <section class="gsec" id="gap-s5"><h2>Tema gap lintas proses</h2>
+    <section class="gsec" id="gap-s5"><h2>Cross-process gap themes</h2>
       <p class="lead">Masalah yang berulang di banyak proses atau cabang. Klik chip untuk membuka langkahnya di Peta.</p>
       <div id="gap-themes" style="display:flex;flex-direction:column;gap:8px"></div></section>
-    <section class="gsec" id="gap-s7"><h2>Daftar temuan</h2>
+    <section class="gsec" id="gap-s7"><h2>Findings</h2>
       <div class="gfb" id="gap-fb"></div>
       <div class="panel scroll" style="max-height:640px;overflow-y:auto"><table class="lt" id="gap-lt"></table></div></section>
   </div>

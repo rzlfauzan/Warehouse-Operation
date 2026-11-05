@@ -63,17 +63,32 @@ thead th{background:#FFFBEB!important;color:#461902!important}
 .wmsbar .back:hover{background:#FFF1F2}
 </style>"""
 U = U.replace('</style>', BAR_CSS, 1)
+EN = [('<h1>Audit SOP MKT</h1>','<h1>Business Process</h1>'),
+      ('data-tab="alur" id="tab-alur">Alur Proses Umum<','data-tab="alur" id="tab-alur">Process Flow<'),
+      ('data-tab="peta" id="tab-peta">Peta Proses Audit SOP<','data-tab="peta" id="tab-peta">Audit Process Map<'),
+      ('<h2>Compliance per proses</h2>','<h2>Compliance by process</h2>'),
+      ('<h2>Jenis gap dan penanggung jawab</h2>','<h2>Gap types and owners</h2>'),
+      ('<h2>Catatan di luar NON-COMPLY</h2>','<h2>Notes outside NON-COMPLY</h2>'),
+      ('<h2>Matriks langkah x cabang</h2>','<h2>Step by branch matrix</h2>'),
+      ('<h2>Pemetaan langkah Medan ke SOP HO</h2>','<h2>Medan steps mapped to HO SOP</h2>'),
+      ('<h2>Heatmap tahap proses x status</h2>','<h2>Stage by status heatmap</h2>'),
+      ('<h2>Peringkat NON-COMPLY</h2>','<h2>NON-COMPLY ranking</h2>'),
+      ('<h2>Tema gap lintas proses</h2>','<h2>Cross-process gap themes</h2>'),
+      ('<h2>Daftar temuan</h2>','<h2>Findings</h2>')]
+for a, b in EN:
+    assert U.count(a) == 1, a
+    U = U.replace(a, b)
 assert '<?' not in U
 cut = U.index('</style>') + len('</style>')
 head, rest = U[:cut].replace('<title>Audit SOP MKT</title>\n', ''), U[cut:]
 def page(extra_head, bar):
     return ('<!DOCTYPE html>\n<html lang="id">\n<head>\n<meta charset="utf-8">\n<meta name="color-scheme" content="light">\n'
             + extra_head + head + '\n</head>\n<body>\n' + bar + rest + '\n</body>\n</html>\n')
-bar = '<div class="wmsbar"><span class="lg">MKT</span><b>Alur, Peta &amp; Gap SOP</b>{}</div>\n'
+bar = '<div class="wmsbar"><span class="lg">MKT</span><b>Business Process</b>{}</div>\n'
 (H/'gas/Alur.html').write_text(page('<base target="_top">\n',
     bar.format('<a class="back" href="<?= appUrl ?>" target="_top">← Form audit</a>')))
 (R/'dist/audit_mobile_alur.html').write_text(page(
-    '<title>MKT Alur &amp; Gap SOP</title>\n<meta name="viewport" content="width=device-width, initial-scale=1">\n',
+    '<title>MKT Business Process</title>\n<meta name="viewport" content="width=device-width, initial-scale=1">\n',
     bar.format('<button class="back" type="button" onclick="history.back()">← Form audit</button>')))
 
 # ---------- pratinjau form audit ----------

@@ -27,7 +27,7 @@ function doGet(e) {
   var t = HtmlService.createTemplateFromFile(page === 'alur' ? 'Alur' : 'Index');
   t.appUrl = base; t.alurUrl = base + '?page=alur';
   return t.evaluate()
-    .setTitle(page === 'alur' ? 'MKT Alur & Gap SOP' : APP_TITLE)
+    .setTitle(page === 'alur' ? 'MKT Business Process' : APP_TITLE)
     .addMetaTag('viewport', 'width=device-width, initial-scale=1, viewport-fit=cover')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DEFAULT);
 }
