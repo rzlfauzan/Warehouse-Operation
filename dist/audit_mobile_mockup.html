@@ -3,7 +3,7 @@
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#FEFDFB">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
 <style>
 /* Gaya mengacu clay.com (catatan referensi 5 Nov 2026), disesuaikan untuk aplikasi kerja:
    kertas off-white, tinta hitam hangat, krem untuk permukaan sekunder, lime untuk pilihan aktif,
@@ -15,7 +15,8 @@
   --lime:#CBD810; --lime-soft:#EEF5A6; --blue:#3355FF; --sky:#EAF3FF; --sand:#F0E6D2;
   --ok:#1F8A5B; --ok-bg:#E3F4EA; --nc:#D93025; --nc-bg:#FDECEA; --na:#5F5C56; --na-bg:#F3F2ED;
   --pend:#8A6A00; --pend-bg:#FBF3D2;
-  --font:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --teal:#16A0A6; --navy:#1B3A57; --footer:#0D0403;
+  --font:"Plus Jakarta Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
   --rb:12px; --rc:24px; --rs:18px; --pill:999px; --h:44px;
   --shadow:0 1px 2px rgba(29,28,26,.04),0 8px 24px rgba(29,28,26,.06);
 }
@@ -35,14 +36,15 @@ button{cursor:pointer}
 .iconbtn{width:42px;height:42px;border-radius:50%;border:0;background:transparent;display:grid;place-items:center;color:var(--ink)}
 .iconbtn:hover{background:var(--cream)}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}
-.logo{width:34px;height:34px;border-radius:10px;background:var(--ink);color:#fff;font-weight:600;font-size:11.5px;letter-spacing:.02em;display:grid;place-items:center}
-.brand b{font-weight:600;font-size:16px;letter-spacing:-.02em;white-space:nowrap}
-.brand span{color:var(--muted);font-size:13px;white-space:nowrap;margin-left:4px}
+.logo{width:50px;height:30px;border-radius:4px;object-fit:cover;flex:none;box-shadow:0 0 0 1px var(--line)}
+.ttl{display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.ttl small{color:var(--teal);font-size:11px;font-weight:700;letter-spacing:.08em;white-space:nowrap}
+.ttl b{color:var(--navy);font-size:18px;font-weight:700;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top .sp{flex:1}
 .user{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;min-width:0}
 .user .av{width:36px;height:36px;border-radius:50%;background:var(--lime-soft);color:var(--ink);font-weight:600;font-size:13px;display:grid;place-items:center;flex:none}
 .user .em{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px}
-@media (max-width:560px){.user .em,.brand span{display:none}}
+@media (max-width:560px){.user .em{display:none}.ttl b{font-size:16px}}
 
 /* sidebar */
 .shell{display:flex;min-height:calc(100% - 68px)}
@@ -64,7 +66,7 @@ button{cursor:pointer}
 @media (min-width:1024px){#menuBtn{display:none}.navhead{display:none}}
 @media (prefers-reduced-motion:reduce){.nav{transition:none}}
 
-main{flex:1;min-width:0;padding-block:20px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{flex:1;min-width:0;padding-block:20px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wrap{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 .crumb{font-size:13px;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap}
 .crumb a{color:var(--muted);text-decoration:none}.crumb a:hover{color:var(--ink)}
@@ -167,7 +169,7 @@ textarea.in{height:auto;min-height:84px;padding:12px 14px;resize:vertical;line-h
 .crit{font-weight:500;font-size:16px;line-height:1.4;letter-spacing:-.01em}
 .sm{display:flex;flex-wrap:wrap;gap:4px 12px;color:var(--muted);font-size:12.5px;margin-top:6px}
 .by{color:var(--faint);font-size:12px;margin-top:2px}
-.ans{display:grid;grid-template-columns:80px 1fr;gap:8px 10px;align-items:center}
+.ans{display:grid;grid-template-columns:96px 1fr;gap:8px 10px;align-items:center}
 .ans > span{font-size:13px;font-weight:500;color:var(--muted)}
 .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .seg button{height:46px;border-radius:var(--rb);border:1px solid transparent;background:var(--cream);font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px}
@@ -210,12 +212,17 @@ th.r,td.r{text-align:right}
 .alert{border-radius:var(--rb);padding:12px 14px;background:var(--nc-bg);color:var(--nc);font-weight:500;font-size:14px}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:var(--rb);font-size:14px;z-index:60;max-width:90vw;box-shadow:var(--shadow)}
 .navlink{display:flex;align-items:center;gap:10px}
+.pfoot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--footer);color:#fff;
+  padding-block:18px calc(18px + env(safe-area-inset-bottom,0px));padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.pfoot b{font-size:13px;font-weight:700;letter-spacing:.03em}
+.pfoot a{color:#fff;text-decoration:none;font-size:14px}
+.pfoot a:hover{text-decoration:underline}
 </style>
 <div style="background:#EEF5A6;color:#1D1C1A;font-size:12px;padding:6px 16px;text-align:center">Pratinjau: server tiruan, isian hanya di browser ini.</div>
 
 <header class="top">
   <button class="iconbtn" id="menuBtn" aria-label="Buka menu" type="button"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-  <div class="brand"><div class="logo">MKT</div><div><b>Audit SOP</b> <span>Warehouse &amp; Multimode</span></div></div>
+  <div class="brand"><img class="logo" src="data:image/png;base64,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" alt="Samudera Indonesia" width="50" height="30"><div class="ttl"><small>PORTAL OPERASIONAL</small><b>Audit SOP Operasional</b></div></div>
   <div class="sp"></div>
   <div class="user"><span class="em" id="userEm"></span><div class="av" id="userAv">AU</div></div>
 </header>
@@ -231,6 +238,7 @@ th.r,td.r{text-align:right}
   </nav>
   <main id="main"><div class="wrap" id="view"></div></main>
 </div>
+<footer class="pfoot"><b>PT MASAJI KARGOSENTRA TAMA</b><a href="https://samudera.id" target="_blank" rel="noopener">samudera.id</a></footer>
 <div id="layer"></div>
 
 <script>
@@ -252,7 +260,7 @@ const DATA = {"lead":"Irsam Ardiantoro","sites":[{"code":"JKT","name":"Jakarta",
     sh.sections.forEach(x => { if (!(x.opt && !(p.sheet === 'CY' ? doc.cy : doc.full))) ids[x.id] = 1; }); return sh.items.filter(i => ids[i.s]); }
   function sum(doc){ const t = {total:0,done:0,C:0,NC:0,NA:0,need:0,ncd:0}, ans = db.res[doc.id] || {};
     parts(doc).forEach(p => items(doc,p).forEach(i => { const a = (ans[p.key]||{})[i.n] || {}; t.total++;
-      if (a.d && a.g) t.done++; if (a.g) t[a.g]++; if (a.d === 'NC') t.ncd++; if ((a.d==='NC'||a.g==='NC') && !(a.f||'').trim()) t.need++; })); return t; }
+      if (a.g) t.done++; if (a.g) t[a.g]++; if (a.d === 'NC') t.ncd++; if (a.g==='NC' && !(a.f||'').trim() && doc.id.indexOf('hist-') !== 0) t.need++; })); return t; }
   function newDoc(site, date, partner, cy, full){ const no = 'FRM-OPS-001-' + String(db.next++).padStart(4,'0');
     const d = {id: Math.random().toString(36).slice(2,10), no, site, date, lead: user.email, leadName: user.nama, partner, cy, full, status:'draft', created: Date.now(), upd: Date.now()};
     db.docs.push(d); db.res[d.id] = {}; return d; }
@@ -336,8 +344,8 @@ function partItems(doc, p){
 }
 const prevOf = (item, p) => p.unit ? (item.p[p.unit.toLowerCase()] || {}) : item.p;
 const ansOf = (p, n) => (S.D.ans[p.key] || {})[n] || {};
-const isDone = a => !!(a.d && a.g);
-const needsNote = a => (a.d === 'NC' || a.g === 'NC') && !String(a.f || '').trim() && !(S.D && isHist(S.D.doc)); // data impor lama tidak ditagih temuan
+const isDone = a => !!a.g; // satu status: observasi lapangan
+const needsNote = a => a.g === 'NC' && !String(a.f || '').trim() && !(S.D && isHist(S.D.doc)); // data impor lama tidak ditagih temuan
 function stats(p){
   const {items} = partItems(S.D.doc, p); const t = {total: items.length, done:0, C:0, NC:0, NA:0, need:0, ncd:0};
   for (const i of items){ const a = ansOf(p, i.n);
@@ -352,8 +360,15 @@ function docStats(){
 }
 const pctTxt = v => v == null ? '–' : (v*100).toFixed(1).replace('.', ',') + '%';
 const MON = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-const fmtDate = s => { const m = /^(\d{4})-(\d{2})-(\d{2})(?:\/(\d{2}))?$/.exec(String(s || ''));
-  return m ? (+m[3]) + (m[4] ? '–' + (+m[4]) : '') + ' ' + MON[+m[2]-1] + ' ' + m[1] : String(s || ''); };
+const DAY = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const fmtDate = v => { // "Selasa, 8 Des 2026" atau "Senin–Selasa, 3–4 Agu 2026"
+  const s = String(v || ''), m = /^(\d{4})-(\d{2})-(\d{2})(?:\/(\d{2}))?/.exec(s); let y, mo, a, b = null;
+  if (m){ y = +m[1]; mo = +m[2] - 1; a = +m[3]; b = m[4] ? +m[4] : null; }
+  else { const t = new Date(s); if (isNaN(t)) return s; y = t.getFullYear(); mo = t.getMonth(); a = t.getDate(); }
+  const dn = x => DAY[new Date(y, mo, x).getDay()];
+  return (b ? dn(a) + '–' + dn(b) + ', ' + a + '–' + b : dn(a) + ', ' + a) + ' ' + MON[mo] + ' ' + y; };
+const barCol = pr => `hsl(${Math.round(Math.max(0, Math.min(100, pr)) * 1.3)} 68% 44%)`; // 0% merah, 100% hijau
+const barI = pr => `<i style="width:${pr}%;background:${barCol(pr)}"></i>`;
 const isHist = d => String(d.id).indexOf('hist-') === 0;
 const isMdn = d => (site(d.site) || {}).template === 'MDN_TEMPLATE';
 const sopTxt = d => isMdn(d) ? 'SOP cabang Medan' : 'SOP Utama (Head Office)';
@@ -445,13 +460,13 @@ async function vDocs(){
   catch(e){ return failView(e, vDocs); }
   if (S.view !== 'dokumen') return;
   const row = d => {
-    const s = site(d.site), t = d.sum, h = isHist(d), pr = t.total ? Math.round((h ? t.C+t.NC+t.NA : t.done)/t.total*100) : 0, pct = (t.C+t.NC) ? t.C/(t.C+t.NC) : null;
+    const s = site(d.site), t = d.sum, pr = t.total ? Math.round(t.done/t.total*100) : 0, pct = (t.C+t.NC) ? t.C/(t.C+t.NC) : null;
     return `<button class="doc" data-doc="${esc(d.id)}" type="button">
       <span class="no">${esc(d.no)}</span>
       <span>${isMdn(d) ? '<span class="pill p-mdn">SOP Medan</span> ' : ''}<span class="pill ${d.status === 'final' ? 'p-final">Final' : 'p-draft">Draft'}</span></span>
       <span class="meta"><span><b>${esc(s ? s.name : d.site)}</b></span><span>${fmtDate(d.date)}</span>
-        <span>${h ? (t.C+t.NC+t.NA) + ' langkah diaudit' : t.done + '/' + t.total + ' langkah'}</span><span>Lapangan comply ${pctTxt(pct)}</span><span>${esc(d.leadName || '')}</span></span>
-      ${h ? '' : `<span class="bar"><i style="width:${pr}%"></i></span>`}</button>`; };
+        <span>${t.done + '/' + t.total + ' langkah'}</span><span>Compliance ${pctTxt(pct)}</span><span>${esc(d.leadName || '')}</span></span>
+      <span class="bar">${barI(pr)}</span></button>`; };
   const byUpd = (a,b) => (b.upd||0) - (a.upd||0);
   const now = S.docs.filter(d => !isHist(d)).sort(byUpd), old = S.docs.filter(isHist).sort((a,b) => String(a.no).localeCompare(String(b.no)));
   $('#view').innerHTML = `
@@ -462,7 +477,7 @@ async function vDocs(){
       <div class="docs">${now.map(row).join('') || '<div class="empty">Belum ada audit baru.</div>'}</div></div>
     <div class="card"><div class="thead">Arsip Juli sampai September 2026</div>
       <div class="docs">${old.map(row).join('') || '<div class="empty">Arsip belum diimpor. Admin perlu menjalankan setup() sekali lagi.</div>'}</div></div>
-    <p class="foot">© 2026 MKT · Audit SOP Warehouse &amp; Multimode</p>`;
+`;
   const nb = $('#newBtn'); if (nb) nb.onclick = openNew;
   document.querySelectorAll('[data-doc]').forEach(b => b.onclick = () => { S.part = null; openDoc(b.dataset.doc); });
 }
@@ -520,8 +535,8 @@ function vParts(){
     return `<button class="part" data-part="${p.key}" type="button">
       <h3>${esc(p.label)}</h3>
       ${never ? '<span class="pill p-opt" style="align-self:flex-start">Belum pernah diaudit</span>' : ''}
-      <div class="k"><span>${isHist(d) ? (t.C+t.NC+t.NA) + ' langkah diaudit' : t.done + '/' + t.total + ' langkah'}</span><span>Comply ${pctTxt(t.pct)}</span></div>
-      <div class="bar"><i style="width:${pr}%"></i></div>
+      <div class="k"><span>${t.done + '/' + t.total + ' langkah'}</span><span>Comply ${pctTxt(t.pct)}</span></div>
+      <div class="bar">${barI(pr)}</div>
       ${t.need ? `<span class="warn">${t.need} NC belum ada temuan</span>` : ''}</button>`; }).join('');
   $('#view').innerHTML = `
     <div class="crumb"><a href="#" data-go="dokumen">Dokumen audit</a><span>/</span><span>${esc(d.no)}</span></div>
@@ -543,7 +558,7 @@ function vFill(){
   const sec = secs.find(x => x.id === S.sec);
   let list = items.filter(i => i.s === sec.id);
   if (filt === 'todo') list = list.filter(i => !isDone(ansOf(p,i.n)));
-  if (filt === 'nc') list = list.filter(i => { const a = ansOf(p,i.n); return a.d === 'NC' || a.g === 'NC'; });
+  if (filt === 'nc') list = list.filter(i => { const a = ansOf(p,i.n); return a.g === 'NC'; });
   const pr = t.total ? Math.round(t.done/t.total*100) : 0;
   const ix = secs.indexOf(sec), nx = secs[ix + 1];
   $('#view').innerHTML = `
@@ -551,7 +566,7 @@ function vFill(){
       <div class="subrow"><button class="iconbtn" data-go="layanan" aria-label="Kembali ke daftar layanan" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>
         <div class="t"><b>${esc(p.label)} · ${esc(s.name)}</b><small id="subcount">${esc(d.no)} · ${t.done}/${t.total} langkah</small></div>
         <span class="saved" id="saved"></span></div>
-      <div class="bar"><i id="subbar" style="width:${pr}%"></i></div>
+      <div class="bar"><i id="subbar" style="width:${pr}%;background:${barCol(pr)}"></i></div>
       <div class="chips" role="tablist" aria-label="Tahap">${chips}</div>
     </div></div>
     ${S.D.doc.status === 'final' ? '<div class="locked">Dokumen terkunci.</div>' : (!canWrite() ? '<div class="err">Akun Anda belum terdaftar sebagai auditor, jadi hanya bisa melihat.</div>' : '')}
@@ -574,17 +589,17 @@ function segBtns(n, field, val, lock){
 function stepCard(p, i, lock){
   const a = ansOf(p, i.n), pv = prevOf(i, p), s = site(S.D.doc.site), need = needsNote(a);
   const prev = isHist(S.D.doc) ? '' : pv.g && pv.g !== 'P'
-    ? `<div class="prev"><span>Audit ${fmtDate(s.date)}:</span>${pv.d && pv.d !== 'P' ? `<span class="pill p-${pv.d}">Dok ${SHORT[pv.d]}</span>` : ''}<span class="pill p-${pv.g}">Lap ${SHORT[pv.g]}</span>${pv.f ? `<q>${esc(pv.f)}</q>` : ''}</div>`
+    ? `<div class="prev"><span>Audit ${fmtDate(s.date)}:</span><span class="pill p-${pv.g}">${SHORT[pv.g]}</span>${pv.f ? `<q>${esc(pv.f)}</q>` : ''}</div>`
     : `<div class="prev"><span class="pill p-P">Belum pernah diaudit</span></div>`;
   const open = a.f || a.a || (a.ph && a.ph.length) || need;
   return `<article class="card step ${isDone(a) ? 'done' : ''} ${need ? 'need' : ''}" id="st${i.n}">
     <div class="sh"><span class="num">${i.n}</span><div style="min-width:0"><div class="crit">${esc(i.c)}</div>
       <div class="sm"><span>PIC: ${esc(i.a)}</span><span>${esc(i.r)}</span><span>${CAT[i.k] || esc(i.k)}</span></div>
       ${a.by && a.t && !isHist(S.D.doc) ? `<div class="by">Diisi ${esc(String(a.by).split('@')[0])} · ${timeTxt(a.t)}</div>` : ''}</div></div>
-    <div class="ans"><span>Dokumen</span>${segBtns(i.n, 'd', a.d, lock)}<span>Lapangan</span>${segBtns(i.n, 'g', a.g, lock)}</div>
+    <div class="ans"><span>Status Audit</span>${segBtns(i.n, 'g', a.g, lock)}</div>
     ${prev}
     <div class="extra" data-x="${i.n}" ${open ? '' : 'hidden'}>
-      <div class="f"><label for="f${i.n}">Temuan${(a.d === 'NC' || a.g === 'NC') ? ' (wajib untuk NC)' : ''}</label>
+      <div class="f"><label for="f${i.n}">Temuan${a.g === 'NC' ? ' (wajib untuk NC)' : ''}</label>
         <textarea class="in" id="f${i.n}" data-n="${i.n}" data-field="f" rows="2" maxlength="2000" placeholder="Tulis yang Anda temukan" ${lock ? 'readonly' : ''}>${esc(a.f)}</textarea>
         ${need ? '<span class="need-msg">Temuan wajib diisi untuk NC.</span>' : ''}</div>
       <div class="f" style="margin-top:10px"><label for="a${i.n}">Pelaksana aktual, kalau beda dari PIC</label>
@@ -622,7 +637,7 @@ function refreshStep(p, n){
   old.replaceWith(tmp.firstElementChild);
   const t = stats(p);
   $('#subcount').textContent = `${S.D.doc.no} · ${t.done}/${t.total} langkah`;
-  $('#subbar').style.width = (t.total ? Math.round(t.done/t.total*100) : 0) + '%';
+  const spr = t.total ? Math.round(t.done/t.total*100) : 0; $('#subbar').style.width = spr + '%'; $('#subbar').style.background = barCol(spr);
   const its = partItems(S.D.doc, p).items.filter(x => x.s === i.s), dn = its.filter(x => isDone(ansOf(p,x.n))).length;
   const ch = document.querySelector(`[data-sec="${i.s}"] .c`); if (ch) ch.textContent = `${dn}/${its.length}`;
 }
@@ -648,27 +663,28 @@ function addPhoto(p, n, file){
 function vSum(){
   const d = S.D.doc, s = site(d.site), T = docStats(), final = d.status === 'final';
   const rows = parts(d).map(p => { const t = stats(p);
-    return `<tr><td class="l">${esc(p.label)}</td><td class="r">${t.done}/${t.total}</td><td class="r">${t.C}</td><td class="r">${t.NC}</td><td class="r">${t.NA}</td><td class="r">${t.ncd}</td><td class="r"><b>${pctTxt(t.pct)}</b></td></tr>`; }).join('');
+    const st = final || t.done === t.total ? '<span class="pill p-final">Selesai</span>' : t.done ? '<span class="pill p-draft">Berjalan</span>' : '<span class="pill p-opt">Belum mulai</span>';
+    return `<tr><td class="l">${esc(p.label)}</td><td class="r">${t.total}</td><td class="r">${t.C}</td><td class="r">${t.NC}</td><td class="r">${t.NA}</td><td class="r"><b>${pctTxt(t.pct)}</b></td><td>${st}</td></tr>`; }).join('');
   const ncs = [];
   parts(d).forEach(p => partItems(d, p).items.forEach(i => { const a = ansOf(p, i.n);
-    if (a.d === 'NC' || a.g === 'NC') ncs.push(`<div><b>${esc(p.label)} · ${i.n}. ${esc(i.c)}</b>
-      <small>${[a.d === 'NC' ? 'Dokumen NC' : '', a.g === 'NC' ? 'Lapangan NC' : '', a.a ? 'Pelaksana: ' + esc(a.a) : ''].filter(Boolean).join(' · ')}</small>
+    if (a.g === 'NC') ncs.push(`<div><b>${esc(p.label)} · ${i.n}. ${esc(i.c)}</b>
+      ${a.a ? `<small>Pelaksana: ${esc(a.a)}</small>` : ''}
       <span>${a.f ? esc(a.f) : '<span class="need-msg">Temuan belum diisi</span>'}</span></div>`); }));
   const blockers = [];
   if (T.need) blockers.push(`${T.need} langkah NC belum ada temuan`);
-  if (T.done < T.total) blockers.push(`${T.total - T.done} langkah belum lengkap (status dokumen dan lapangan)`);
+  if (T.done < T.total) blockers.push(`${T.total - T.done} langkah belum diisi`);
   $('#view').innerHTML = `
     <div class="crumb"><a href="#" data-go="dokumen">Dokumen audit</a><span>/</span><a href="#" data-go="layanan">${esc(d.no)}</a><span>/</span><span>Ringkasan</span></div>
-    <div class="ph"><div><h1>Ringkasan ${esc(s.name)}</h1><p>Compliance = C ÷ (C + NC) dari status lapangan. N/A tidak dihitung.</p></div></div>
+    <div class="ph"><div><h1>Ringkasan ${esc(s.name)}</h1><p>% Compliance = Comply ÷ (Comply + Non Comply). N/A tidak dihitung.</p></div></div>
     ${docHead()}
     <div class="kpis">
-      <div class="card"><small>Compliance lapangan</small><div class="big">${pctTxt(T.pct)}</div></div>
-      <div class="card"><small>${isHist(d) ? 'Langkah diaudit' : 'Langkah lengkap'}</small><div class="big">${isHist(d) ? T.C+T.NC+T.NA : T.done}<span style="font-size:15px;color:var(--muted)">/${T.total}</span></div></div>
-      <div class="card"><small>NC lapangan</small><div class="big" style="color:var(--nc)">${T.NC}</div></div>
-      <div class="card"><small>NC dokumen</small><div class="big" style="color:var(--nc)">${T.ncd}</div></div></div>
-    <div class="card tbl"><table><thead><tr><th>Layanan</th><th class="r">Lengkap</th><th class="r">C</th><th class="r">NC</th><th class="r">N/A</th><th class="r">NC dok</th><th class="r">Comply</th></tr></thead><tbody>${rows}</tbody></table></div>
-    <div class="card"><div class="thead">Daftar NON-COMPLY (${ncs.length})</div><div class="nclist">${ncs.join('') || '<div><small>Belum ada NC.</small></div>'}</div></div>
-    <div id="lockBox">${final ? `<div class="locked">Dikunci ${new Date(d.locked).toLocaleString('id-ID')} oleh ${esc(d.lockedBy)}.</div>`
+      <div class="card"><small>% Compliance</small><div class="big">${pctTxt(T.pct)}</div></div>
+      <div class="card"><small>Langkah diisi</small><div class="big">${T.done}<span style="font-size:15px;color:var(--muted)">/${T.total}</span></div></div>
+      <div class="card"><small>Non Comply</small><div class="big" style="color:var(--nc)">${T.NC}</div></div>
+      <div class="card"><small>N/A</small><div class="big">${T.NA}</div></div></div>
+    <div class="card tbl"><table><thead><tr><th>Services</th><th class="r">Total Item</th><th class="r">Comply</th><th class="r">Non Comply</th><th class="r">N/A</th><th class="r">% Compliance</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="card"><div class="thead">Non Comply (${ncs.length})</div><div class="nclist">${ncs.join('') || '<div><small>Belum ada NC.</small></div>'}</div></div>
+    <div id="lockBox">${final ? `<div class="locked">Dikunci ${fmtDate(new Date(d.locked).toString())} pukul ${timeTxt(d.locked)} oleh ${esc(d.lockedBy)}.</div>`
       : !canWrite() ? '' : `${blockers.length ? `<div class="alert">Belum bisa dikunci: ${blockers.join('; ')}.</div>` : ''}
          <div class="row" style="margin-top:12px"><button class="btn pri" id="lockBtn" type="button" ${blockers.length ? 'disabled' : ''}>Kunci dokumen</button></div>`}</div>
     ${canWrite() ? `<div class="card pad" style="display:flex;flex-direction:column;gap:10px"><b>Ekspor hasil</b>
@@ -695,7 +711,7 @@ function vHelp(){
   $('#view').innerHTML = `<div class="ph"><div><h1>Bantuan</h1></div></div>
     <div class="card pad" style="display:flex;flex-direction:column;gap:10px;max-width:68ch">
       <span><b>1.</b> Buat satu dokumen untuk setiap kunjungan ke cabang. Nomor formulir terisi sendiri.</span>
-      <span><b>2.</b> Buka layanan, lalu pilih C, NC, atau N/A untuk Dokumen dan Lapangan di tiap langkah. Ketuk pilihan yang sama untuk membatalkannya.</span>
+      <span><b>2.</b> Buka layanan, lalu pilih Status Audit (C, NC, atau N/A) di tiap langkah berdasarkan observasi lapangan. Ketuk pilihan yang sama untuk membatalkannya.</span>
       <span><b>3.</b> Setiap NC perlu temuan. Foto boleh dilampirkan, paling banyak 3 per langkah.</span>
       <span><b>4.</b> Isian langsung tersimpan. Kalau sinyal hilang, HP menyimpannya dulu dan mengirim ulang begitu tersambung.</span>
       <span><b>5.</b> Dua auditor boleh mengisi dokumen yang sama asal layanannya berbeda. Buka lagi daftar layanan untuk melihat isian rekan Anda.</span>

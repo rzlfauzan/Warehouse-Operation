@@ -40,8 +40,8 @@ function partItems(doc, p){
 }
 const prevOf = (item, p) => p.unit ? (item.p[p.unit.toLowerCase()] || {}) : item.p;
 const ansOf = (p, n) => (S.D.ans[p.key] || {})[n] || {};
-const isDone = a => !!(a.d && a.g);
-const needsNote = a => (a.d === 'NC' || a.g === 'NC') && !String(a.f || '').trim() && !(S.D && isHist(S.D.doc)); // data impor lama tidak ditagih temuan
+const isDone = a => !!a.g; // satu status: observasi lapangan
+const needsNote = a => a.g === 'NC' && !String(a.f || '').trim() && !(S.D && isHist(S.D.doc)); // data impor lama tidak ditagih temuan
 function stats(p){
   const {items} = partItems(S.D.doc, p); const t = {total: items.length, done:0, C:0, NC:0, NA:0, need:0, ncd:0};
   for (const i of items){ const a = ansOf(p, i.n);
@@ -56,8 +56,15 @@ function docStats(){
 }
 const pctTxt = v => v == null ? '–' : (v*100).toFixed(1).replace('.', ',') + '%';
 const MON = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-const fmtDate = s => { const m = /^(\d{4})-(\d{2})-(\d{2})(?:\/(\d{2}))?$/.exec(String(s || ''));
-  return m ? (+m[3]) + (m[4] ? '–' + (+m[4]) : '') + ' ' + MON[+m[2]-1] + ' ' + m[1] : String(s || ''); };
+const DAY = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const fmtDate = v => { // "Selasa, 8 Des 2026" atau "Senin–Selasa, 3–4 Agu 2026"
+  const s = String(v || ''), m = /^(\d{4})-(\d{2})-(\d{2})(?:\/(\d{2}))?/.exec(s); let y, mo, a, b = null;
+  if (m){ y = +m[1]; mo = +m[2] - 1; a = +m[3]; b = m[4] ? +m[4] : null; }
+  else { const t = new Date(s); if (isNaN(t)) return s; y = t.getFullYear(); mo = t.getMonth(); a = t.getDate(); }
+  const dn = x => DAY[new Date(y, mo, x).getDay()];
+  return (b ? dn(a) + '–' + dn(b) + ', ' + a + '–' + b : dn(a) + ', ' + a) + ' ' + MON[mo] + ' ' + y; };
+const barCol = pr => `hsl(${Math.round(Math.max(0, Math.min(100, pr)) * 1.3)} 68% 44%)`; // 0% merah, 100% hijau
+const barI = pr => `<i style="width:${pr}%;background:${barCol(pr)}"></i>`;
 const isHist = d => String(d.id).indexOf('hist-') === 0;
 const isMdn = d => (site(d.site) || {}).template === 'MDN_TEMPLATE';
 const sopTxt = d => isMdn(d) ? 'SOP cabang Medan' : 'SOP Utama (Head Office)';
@@ -149,13 +156,13 @@ async function vDocs(){
   catch(e){ return failView(e, vDocs); }
   if (S.view !== 'dokumen') return;
   const row = d => {
-    const s = site(d.site), t = d.sum, h = isHist(d), pr = t.total ? Math.round((h ? t.C+t.NC+t.NA : t.done)/t.total*100) : 0, pct = (t.C+t.NC) ? t.C/(t.C+t.NC) : null;
+    const s = site(d.site), t = d.sum, pr = t.total ? Math.round(t.done/t.total*100) : 0, pct = (t.C+t.NC) ? t.C/(t.C+t.NC) : null;
     return `<button class="doc" data-doc="${esc(d.id)}" type="button">
       <span class="no">${esc(d.no)}</span>
       <span>${isMdn(d) ? '<span class="pill p-mdn">SOP Medan</span> ' : ''}<span class="pill ${d.status === 'final' ? 'p-final">Final' : 'p-draft">Draft'}</span></span>
       <span class="meta"><span><b>${esc(s ? s.name : d.site)}</b></span><span>${fmtDate(d.date)}</span>
-        <span>${h ? (t.C+t.NC+t.NA) + ' langkah diaudit' : t.done + '/' + t.total + ' langkah'}</span><span>Lapangan comply ${pctTxt(pct)}</span><span>${esc(d.leadName || '')}</span></span>
-      ${h ? '' : `<span class="bar"><i style="width:${pr}%"></i></span>`}</button>`; };
+        <span>${t.done + '/' + t.total + ' langkah'}</span><span>Compliance ${pctTxt(pct)}</span><span>${esc(d.leadName || '')}</span></span>
+      <span class="bar">${barI(pr)}</span></button>`; };
   const byUpd = (a,b) => (b.upd||0) - (a.upd||0);
   const now = S.docs.filter(d => !isHist(d)).sort(byUpd), old = S.docs.filter(isHist).sort((a,b) => String(a.no).localeCompare(String(b.no)));
   $('#view').innerHTML = `
@@ -166,7 +173,7 @@ async function vDocs(){
       <div class="docs">${now.map(row).join('') || '<div class="empty">Belum ada audit baru.</div>'}</div></div>
     <div class="card"><div class="thead">Arsip Juli sampai September 2026</div>
       <div class="docs">${old.map(row).join('') || '<div class="empty">Arsip belum diimpor. Admin perlu menjalankan setup() sekali lagi.</div>'}</div></div>
-    <p class="foot">© 2026 MKT · Audit SOP Warehouse &amp; Multimode</p>`;
+`;
   const nb = $('#newBtn'); if (nb) nb.onclick = openNew;
   document.querySelectorAll('[data-doc]').forEach(b => b.onclick = () => { S.part = null; openDoc(b.dataset.doc); });
 }
@@ -224,8 +231,8 @@ function vParts(){
     return `<button class="part" data-part="${p.key}" type="button">
       <h3>${esc(p.label)}</h3>
       ${never ? '<span class="pill p-opt" style="align-self:flex-start">Belum pernah diaudit</span>' : ''}
-      <div class="k"><span>${isHist(d) ? (t.C+t.NC+t.NA) + ' langkah diaudit' : t.done + '/' + t.total + ' langkah'}</span><span>Comply ${pctTxt(t.pct)}</span></div>
-      <div class="bar"><i style="width:${pr}%"></i></div>
+      <div class="k"><span>${t.done + '/' + t.total + ' langkah'}</span><span>Comply ${pctTxt(t.pct)}</span></div>
+      <div class="bar">${barI(pr)}</div>
       ${t.need ? `<span class="warn">${t.need} NC belum ada temuan</span>` : ''}</button>`; }).join('');
   $('#view').innerHTML = `
     <div class="crumb"><a href="#" data-go="dokumen">Dokumen audit</a><span>/</span><span>${esc(d.no)}</span></div>
@@ -247,7 +254,7 @@ function vFill(){
   const sec = secs.find(x => x.id === S.sec);
   let list = items.filter(i => i.s === sec.id);
   if (filt === 'todo') list = list.filter(i => !isDone(ansOf(p,i.n)));
-  if (filt === 'nc') list = list.filter(i => { const a = ansOf(p,i.n); return a.d === 'NC' || a.g === 'NC'; });
+  if (filt === 'nc') list = list.filter(i => { const a = ansOf(p,i.n); return a.g === 'NC'; });
   const pr = t.total ? Math.round(t.done/t.total*100) : 0;
   const ix = secs.indexOf(sec), nx = secs[ix + 1];
   $('#view').innerHTML = `
@@ -255,7 +262,7 @@ function vFill(){
       <div class="subrow"><button class="iconbtn" data-go="layanan" aria-label="Kembali ke daftar layanan" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>
         <div class="t"><b>${esc(p.label)} · ${esc(s.name)}</b><small id="subcount">${esc(d.no)} · ${t.done}/${t.total} langkah</small></div>
         <span class="saved" id="saved"></span></div>
-      <div class="bar"><i id="subbar" style="width:${pr}%"></i></div>
+      <div class="bar"><i id="subbar" style="width:${pr}%;background:${barCol(pr)}"></i></div>
       <div class="chips" role="tablist" aria-label="Tahap">${chips}</div>
     </div></div>
     ${S.D.doc.status === 'final' ? '<div class="locked">Dokumen terkunci.</div>' : (!canWrite() ? '<div class="err">Akun Anda belum terdaftar sebagai auditor, jadi hanya bisa melihat.</div>' : '')}
@@ -278,17 +285,17 @@ function segBtns(n, field, val, lock){
 function stepCard(p, i, lock){
   const a = ansOf(p, i.n), pv = prevOf(i, p), s = site(S.D.doc.site), need = needsNote(a);
   const prev = isHist(S.D.doc) ? '' : pv.g && pv.g !== 'P'
-    ? `<div class="prev"><span>Audit ${fmtDate(s.date)}:</span>${pv.d && pv.d !== 'P' ? `<span class="pill p-${pv.d}">Dok ${SHORT[pv.d]}</span>` : ''}<span class="pill p-${pv.g}">Lap ${SHORT[pv.g]}</span>${pv.f ? `<q>${esc(pv.f)}</q>` : ''}</div>`
+    ? `<div class="prev"><span>Audit ${fmtDate(s.date)}:</span><span class="pill p-${pv.g}">${SHORT[pv.g]}</span>${pv.f ? `<q>${esc(pv.f)}</q>` : ''}</div>`
     : `<div class="prev"><span class="pill p-P">Belum pernah diaudit</span></div>`;
   const open = a.f || a.a || (a.ph && a.ph.length) || need;
   return `<article class="card step ${isDone(a) ? 'done' : ''} ${need ? 'need' : ''}" id="st${i.n}">
     <div class="sh"><span class="num">${i.n}</span><div style="min-width:0"><div class="crit">${esc(i.c)}</div>
       <div class="sm"><span>PIC: ${esc(i.a)}</span><span>${esc(i.r)}</span><span>${CAT[i.k] || esc(i.k)}</span></div>
       ${a.by && a.t && !isHist(S.D.doc) ? `<div class="by">Diisi ${esc(String(a.by).split('@')[0])} · ${timeTxt(a.t)}</div>` : ''}</div></div>
-    <div class="ans"><span>Dokumen</span>${segBtns(i.n, 'd', a.d, lock)}<span>Lapangan</span>${segBtns(i.n, 'g', a.g, lock)}</div>
+    <div class="ans"><span>Status Audit</span>${segBtns(i.n, 'g', a.g, lock)}</div>
     ${prev}
     <div class="extra" data-x="${i.n}" ${open ? '' : 'hidden'}>
-      <div class="f"><label for="f${i.n}">Temuan${(a.d === 'NC' || a.g === 'NC') ? ' (wajib untuk NC)' : ''}</label>
+      <div class="f"><label for="f${i.n}">Temuan${a.g === 'NC' ? ' (wajib untuk NC)' : ''}</label>
         <textarea class="in" id="f${i.n}" data-n="${i.n}" data-field="f" rows="2" maxlength="2000" placeholder="Tulis yang Anda temukan" ${lock ? 'readonly' : ''}>${esc(a.f)}</textarea>
         ${need ? '<span class="need-msg">Temuan wajib diisi untuk NC.</span>' : ''}</div>
       <div class="f" style="margin-top:10px"><label for="a${i.n}">Pelaksana aktual, kalau beda dari PIC</label>
@@ -326,7 +333,7 @@ function refreshStep(p, n){
   old.replaceWith(tmp.firstElementChild);
   const t = stats(p);
   $('#subcount').textContent = `${S.D.doc.no} · ${t.done}/${t.total} langkah`;
-  $('#subbar').style.width = (t.total ? Math.round(t.done/t.total*100) : 0) + '%';
+  const spr = t.total ? Math.round(t.done/t.total*100) : 0; $('#subbar').style.width = spr + '%'; $('#subbar').style.background = barCol(spr);
   const its = partItems(S.D.doc, p).items.filter(x => x.s === i.s), dn = its.filter(x => isDone(ansOf(p,x.n))).length;
   const ch = document.querySelector(`[data-sec="${i.s}"] .c`); if (ch) ch.textContent = `${dn}/${its.length}`;
 }
@@ -352,27 +359,28 @@ function addPhoto(p, n, file){
 function vSum(){
   const d = S.D.doc, s = site(d.site), T = docStats(), final = d.status === 'final';
   const rows = parts(d).map(p => { const t = stats(p);
-    return `<tr><td class="l">${esc(p.label)}</td><td class="r">${t.done}/${t.total}</td><td class="r">${t.C}</td><td class="r">${t.NC}</td><td class="r">${t.NA}</td><td class="r">${t.ncd}</td><td class="r"><b>${pctTxt(t.pct)}</b></td></tr>`; }).join('');
+    const st = final || t.done === t.total ? '<span class="pill p-final">Selesai</span>' : t.done ? '<span class="pill p-draft">Berjalan</span>' : '<span class="pill p-opt">Belum mulai</span>';
+    return `<tr><td class="l">${esc(p.label)}</td><td class="r">${t.total}</td><td class="r">${t.C}</td><td class="r">${t.NC}</td><td class="r">${t.NA}</td><td class="r"><b>${pctTxt(t.pct)}</b></td><td>${st}</td></tr>`; }).join('');
   const ncs = [];
   parts(d).forEach(p => partItems(d, p).items.forEach(i => { const a = ansOf(p, i.n);
-    if (a.d === 'NC' || a.g === 'NC') ncs.push(`<div><b>${esc(p.label)} · ${i.n}. ${esc(i.c)}</b>
-      <small>${[a.d === 'NC' ? 'Dokumen NC' : '', a.g === 'NC' ? 'Lapangan NC' : '', a.a ? 'Pelaksana: ' + esc(a.a) : ''].filter(Boolean).join(' · ')}</small>
+    if (a.g === 'NC') ncs.push(`<div><b>${esc(p.label)} · ${i.n}. ${esc(i.c)}</b>
+      ${a.a ? `<small>Pelaksana: ${esc(a.a)}</small>` : ''}
       <span>${a.f ? esc(a.f) : '<span class="need-msg">Temuan belum diisi</span>'}</span></div>`); }));
   const blockers = [];
   if (T.need) blockers.push(`${T.need} langkah NC belum ada temuan`);
-  if (T.done < T.total) blockers.push(`${T.total - T.done} langkah belum lengkap (status dokumen dan lapangan)`);
+  if (T.done < T.total) blockers.push(`${T.total - T.done} langkah belum diisi`);
   $('#view').innerHTML = `
     <div class="crumb"><a href="#" data-go="dokumen">Dokumen audit</a><span>/</span><a href="#" data-go="layanan">${esc(d.no)}</a><span>/</span><span>Ringkasan</span></div>
-    <div class="ph"><div><h1>Ringkasan ${esc(s.name)}</h1><p>Compliance = C ÷ (C + NC) dari status lapangan. N/A tidak dihitung.</p></div></div>
+    <div class="ph"><div><h1>Ringkasan ${esc(s.name)}</h1><p>% Compliance = Comply ÷ (Comply + Non Comply). N/A tidak dihitung.</p></div></div>
     ${docHead()}
     <div class="kpis">
-      <div class="card"><small>Compliance lapangan</small><div class="big">${pctTxt(T.pct)}</div></div>
-      <div class="card"><small>${isHist(d) ? 'Langkah diaudit' : 'Langkah lengkap'}</small><div class="big">${isHist(d) ? T.C+T.NC+T.NA : T.done}<span style="font-size:15px;color:var(--muted)">/${T.total}</span></div></div>
-      <div class="card"><small>NC lapangan</small><div class="big" style="color:var(--nc)">${T.NC}</div></div>
-      <div class="card"><small>NC dokumen</small><div class="big" style="color:var(--nc)">${T.ncd}</div></div></div>
-    <div class="card tbl"><table><thead><tr><th>Layanan</th><th class="r">Lengkap</th><th class="r">C</th><th class="r">NC</th><th class="r">N/A</th><th class="r">NC dok</th><th class="r">Comply</th></tr></thead><tbody>${rows}</tbody></table></div>
-    <div class="card"><div class="thead">Daftar NON-COMPLY (${ncs.length})</div><div class="nclist">${ncs.join('') || '<div><small>Belum ada NC.</small></div>'}</div></div>
-    <div id="lockBox">${final ? `<div class="locked">Dikunci ${new Date(d.locked).toLocaleString('id-ID')} oleh ${esc(d.lockedBy)}.</div>`
+      <div class="card"><small>% Compliance</small><div class="big">${pctTxt(T.pct)}</div></div>
+      <div class="card"><small>Langkah diisi</small><div class="big">${T.done}<span style="font-size:15px;color:var(--muted)">/${T.total}</span></div></div>
+      <div class="card"><small>Non Comply</small><div class="big" style="color:var(--nc)">${T.NC}</div></div>
+      <div class="card"><small>N/A</small><div class="big">${T.NA}</div></div></div>
+    <div class="card tbl"><table><thead><tr><th>Services</th><th class="r">Total Item</th><th class="r">Comply</th><th class="r">Non Comply</th><th class="r">N/A</th><th class="r">% Compliance</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="card"><div class="thead">Non Comply (${ncs.length})</div><div class="nclist">${ncs.join('') || '<div><small>Belum ada NC.</small></div>'}</div></div>
+    <div id="lockBox">${final ? `<div class="locked">Dikunci ${fmtDate(new Date(d.locked).toString())} pukul ${timeTxt(d.locked)} oleh ${esc(d.lockedBy)}.</div>`
       : !canWrite() ? '' : `${blockers.length ? `<div class="alert">Belum bisa dikunci: ${blockers.join('; ')}.</div>` : ''}
          <div class="row" style="margin-top:12px"><button class="btn pri" id="lockBtn" type="button" ${blockers.length ? 'disabled' : ''}>Kunci dokumen</button></div>`}</div>
     ${canWrite() ? `<div class="card pad" style="display:flex;flex-direction:column;gap:10px"><b>Ekspor hasil</b>
@@ -399,7 +407,7 @@ function vHelp(){
   $('#view').innerHTML = `<div class="ph"><div><h1>Bantuan</h1></div></div>
     <div class="card pad" style="display:flex;flex-direction:column;gap:10px;max-width:68ch">
       <span><b>1.</b> Buat satu dokumen untuk setiap kunjungan ke cabang. Nomor formulir terisi sendiri.</span>
-      <span><b>2.</b> Buka layanan, lalu pilih C, NC, atau N/A untuk Dokumen dan Lapangan di tiap langkah. Ketuk pilihan yang sama untuk membatalkannya.</span>
+      <span><b>2.</b> Buka layanan, lalu pilih Status Audit (C, NC, atau N/A) di tiap langkah berdasarkan observasi lapangan. Ketuk pilihan yang sama untuk membatalkannya.</span>
       <span><b>3.</b> Setiap NC perlu temuan. Foto boleh dilampirkan, paling banyak 3 per langkah.</span>
       <span><b>4.</b> Isian langsung tersimpan. Kalau sinyal hilang, HP menyimpannya dulu dan mengirim ulang begitu tersambung.</span>
       <span><b>5.</b> Dua auditor boleh mengisi dokumen yang sama asal layanannya berbeda. Buka lagi daftar layanan untuk melihat isian rekan Anda.</span>

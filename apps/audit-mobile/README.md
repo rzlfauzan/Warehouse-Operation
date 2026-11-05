@@ -45,10 +45,10 @@ Kalau ingin memakai spreadsheet yang sudah ada: sebelum menjalankan `setup`, isi
 
 ## Cara kerja data
 - **DOKUMEN**: satu baris per kunjungan audit cabang. Nomor `FRM-OPS-001-xxxx` dimulai dari 0006 (0001–0005 dipakai audit Agustus–September).
-- **HASIL**: satu baris per dokumen × bagian × langkah. Kolom `status_dokumen` dan `status_lapangan` berisi COMPLY / NON-COMPLY / N/A, ditambah temuan, pelaksana aktual, link foto, siapa yang mengubah, dan kapan.
+- **HASIL**: satu baris per dokumen × bagian × langkah. Mulai audit Desember 2026 hanya ada satu status, **Status Audit** (observasi lapangan), yang disimpan di kolom `status_lapangan` (COMPLY / NON-COMPLY / N/A). Kolom `status_dokumen` hanya terisi untuk arsip Juli–September. Ditambah temuan, pelaksana aktual, link foto, siapa yang mengubah, dan kapan.
 - Simpan otomatis: isian dikirim sekitar 1 detik setelah diketuk. Kalau sinyal putus, isian disimpan dulu di HP lalu dikirim ulang.
 - Dua auditor bisa mengisi layanan berbeda di dokumen yang sama. Penulisan memakai kunci antrean (LockService), jadi tidak saling menimpa.
-- **Kunci dokumen** hanya bisa dilakukan bila semua langkah lengkap dan semua NC punya temuan. Setelah dikunci, server menolak semua perubahan.
+- **Kunci dokumen** hanya bisa dilakukan bila Status Audit semua langkah sudah diisi dan semua NC punya temuan. Setelah dikunci, server menolak semua perubahan.
 - **Ekspor JSON** menyimpan hasil satu dokumen ke folder Drive. File ini dipakai untuk mengarsipkan hasil ke repo dan membandingkan Agustus vs Desember di Gap Analysis.
 
 ## Batasan yang perlu diketahui

@@ -139,7 +139,8 @@ function mustWrite_(u) {
     throw new Error('Akun ' + u.email + ' belum terdaftar sebagai auditor. Minta admin menambahkan email ini di sheet PENGGUNA.');
 }
 function docFromRow_(r) {
-  return { id: String(r.id), no: r.no_formulir, site: r.cabang, date: String(r.tanggal), lead: r.lead_email, leadName: r.lead_nama,
+  var tgl = r.tanggal instanceof Date ? Utilities.formatDate(r.tanggal, 'Asia/Jakarta', 'yyyy-MM-dd') : String(r.tanggal);
+  return { id: String(r.id), no: r.no_formulir, site: r.cabang, date: tgl, lead: r.lead_email, leadName: r.lead_nama,
     partner: r.pendamping, cy: r.ikut_cy === true || r.ikut_cy === 'TRUE', full: r.ikut_full === true || r.ikut_full === 'TRUE',
     status: r.status, created: ms_(r.dibuat), upd: ms_(r.diubah), locked: ms_(r.dikunci), lockedBy: r.dikunci_oleh, _row: r._row };
 }
@@ -173,9 +174,9 @@ function summarize_(doc, ans) {
   partsOf_(doc).forEach(function (p) {
     itemsOf_(doc, p).forEach(function (i) {
       var a = (ans[p.key] || {})[i.n] || {};
-      t.total++; if (a.d && a.g) t.done++;
+      t.total++; if (a.g) t.done++; // satu status: observasi lapangan
       if (a.g === 'C') t.C++; if (a.g === 'NC') t.NC++; if (a.g === 'NA') t.NA++; if (a.d === 'NC') t.ncd++;
-      if ((a.d === 'NC' || a.g === 'NC') && !String(a.f || '').trim()) t.need++;
+      if (a.g === 'NC' && !String(a.f || '').trim() && String(doc.id).indexOf('hist-') !== 0) t.need++;
     });
   });
   return t;

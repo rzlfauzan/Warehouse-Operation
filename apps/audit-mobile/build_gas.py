@@ -47,20 +47,38 @@ WMS_ROOT = """:root{
   --flag:#CBD810; --flag-fg:#5C6300; --ta:#3355FF; --tb:#6250d6; --tc:#8A6A00; --sig:#7a3d9e;
   --in:#8A6A00; --in-bg:#FBF3D2; --out:#145C3C; --out-bg:#E3F4EA;
   --a-G:#3355FF; --a-P:#0b8a8c; --a-D:#c2561a; --a-B:#b0247a;
-  --f-display:'Inter',ui-sans-serif,system-ui,Arial,sans-serif; --f-body:'Inter',ui-sans-serif,system-ui,Arial,sans-serif;
+  --f-display:'Plus Jakarta Sans',ui-sans-serif,system-ui,Arial,sans-serif; --f-body:'Plus Jakarta Sans',ui-sans-serif,system-ui,Arial,sans-serif;
   --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
 }"""
 U, n = re.subn(r':root\{\n  --bg:.*?\n\}', lambda m: WMS_ROOT, U, count=1, flags=re.S)
 assert n == 1
-U = U.replace('family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&', 'family=Inter:wght@400;500;600&')
+U = U.replace('family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&', 'family=Plus+Jakarta+Sans:wght@400;500;600;700&')
 BAR_CSS = """#themeBtn{display:none!important}
 body{background:var(--bg)}
 h1,h2,h3{letter-spacing:-.03em}
 thead th{background:#F3F2ED!important;color:#1D1C1A!important;font-weight:500}
 .wmsbar{position:sticky;top:8px;z-index:40;display:flex;align-items:center;gap:10px;height:58px;padding:0 10px 0 8px;margin:8px 0 16px;
   background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;box-shadow:0 1px 2px rgba(29,28,26,.04),0 8px 24px rgba(29,28,26,.06)}
-.wmsbar .lg{width:34px;height:34px;border-radius:10px;background:#1D1C1A;color:#fff;font:600 11.5px/34px var(--f-body);text-align:center;flex:none}
-.wmsbar b{font:600 16px var(--f-body);letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wmsbar .lg{width:50px;height:30px;border-radius:4px;object-fit:cover;flex:none;box-shadow:0 0 0 1px var(--line)}
+.wmsbar .ttl{display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.wmsbar .ttl small{color:#16A0A6;font:700 11px var(--f-body);letter-spacing:.08em;white-space:nowrap}
+.wmsbar .ttl b{color:#1B3A57;font:700 18px var(--f-body);letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* kontrol diseragamkan dengan form audit */
+.wrap > header h1{font-weight:600;letter-spacing:-.035em}
+.gbar{border-radius:24px;padding:14px 16px;gap:10px 16px}
+.lab{font-family:var(--f-body);letter-spacing:.06em}
+.seg{border:0;border-radius:0;overflow:visible;background:transparent;gap:6px}
+.seg button{border:0!important;border-radius:999px;background:#F3F2ED;padding:8px 14px;font-weight:500;font-size:13.5px}
+.seg button:hover{background:#EAE8E0}
+.seg button[aria-pressed="true"]{background:#EEF5A6;color:#1D1C1A}
+.tabs{border-bottom:1px solid var(--line);gap:6px;padding-block:6px 0}
+.tabs button{font-family:var(--f-body);font-size:16px;font-weight:600;letter-spacing:-.01em;border-radius:12px 12px 0 0}
+.tabs button[aria-selected="true"]{border-bottom-color:#1D1C1A}
+.achip,.chip{border:0;background:#F3F2ED;padding:7px 14px}
+.achip[aria-pressed="true"],.chip[aria-pressed="true"]{background:#EEF5A6;box-shadow:none}
+.pfoot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#0D0403;color:#fff;padding:18px 24px;margin-top:32px}
+.pfoot b{font:700 13px var(--f-body);letter-spacing:.03em}
+.pfoot a{color:#fff;text-decoration:none;font:400 14px var(--f-body)}
 .wmsbar .back{margin-left:auto;height:40px;padding:0 16px;border-radius:12px;border:0;color:#fff;background:#1D1C1A;
   font:500 14px var(--f-body);text-decoration:none;display:inline-flex;align-items:center;cursor:pointer;white-space:nowrap}
 .wmsbar .back:hover{background:#000}
@@ -86,8 +104,10 @@ cut = U.index('</style>') + len('</style>')
 head, rest = U[:cut].replace('<title>Audit SOP MKT</title>\n', ''), U[cut:]
 def page(extra_head, bar):
     return ('<!DOCTYPE html>\n<html lang="id">\n<head>\n<meta charset="utf-8">\n<meta name="color-scheme" content="light">\n'
-            + extra_head + head + '\n</head>\n<body>\n' + bar + rest + '\n</body>\n</html>\n')
-bar = '<div class="wmsbar"><span class="lg">MKT</span><b>Business Process</b>{}</div>\n'
+            + extra_head + head + '\n</head>\n<body>\n' + bar + rest + '\n' + FOOT + '</body>\n</html>\n')
+LOGO = (H/'assets/logo_datauri.txt').read_text().strip()
+bar = '<div class="wmsbar"><img class="lg" src="' + LOGO + '" alt="Samudera Indonesia" width="50" height="30"><div class="ttl"><small>PORTAL OPERASIONAL</small><b>Audit SOP Operasional</b></div>{}</div>\n'
+FOOT = '<footer class="pfoot"><b>PT MASAJI KARGOSENTRA TAMA</b><a href="https://samudera.id" target="_blank" rel="noopener">samudera.id</a></footer>\n'
 (H/'gas/Alur.html').write_text(page('<base target="_top">\n',
     bar.format('<a class="back" href="<?= appUrl ?>" target="_top">Form audit →</a>')))
 (R/'dist/audit_mobile_alur.html').write_text(page(

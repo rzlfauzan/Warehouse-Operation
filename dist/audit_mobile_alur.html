@@ -6,7 +6,7 @@
 <title>MKT Business Process</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: header dengan filter bersama (cabang, status, lokasi DC), bilah tab lengket, lalu tiga panel (Alur, Peta, Gap) yang membaca data yang sama dan saling menautkan. */
 :root{
@@ -19,7 +19,7 @@
   --flag:#CBD810; --flag-fg:#5C6300; --ta:#3355FF; --tb:#6250d6; --tc:#8A6A00; --sig:#7a3d9e;
   --in:#8A6A00; --in-bg:#FBF3D2; --out:#145C3C; --out-bg:#E3F4EA;
   --a-G:#3355FF; --a-P:#0b8a8c; --a-D:#c2561a; --a-B:#b0247a;
-  --f-display:'Inter',ui-sans-serif,system-ui,Arial,sans-serif; --f-body:'Inter',ui-sans-serif,system-ui,Arial,sans-serif;
+  --f-display:'Plus Jakarta Sans',ui-sans-serif,system-ui,Arial,sans-serif; --f-body:'Plus Jakarta Sans',ui-sans-serif,system-ui,Arial,sans-serif;
   --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
 }
 *{box-sizing:border-box}
@@ -283,15 +283,33 @@ h1,h2,h3{letter-spacing:-.03em}
 thead th{background:#F3F2ED!important;color:#1D1C1A!important;font-weight:500}
 .wmsbar{position:sticky;top:8px;z-index:40;display:flex;align-items:center;gap:10px;height:58px;padding:0 10px 0 8px;margin:8px 0 16px;
   background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;box-shadow:0 1px 2px rgba(29,28,26,.04),0 8px 24px rgba(29,28,26,.06)}
-.wmsbar .lg{width:34px;height:34px;border-radius:10px;background:#1D1C1A;color:#fff;font:600 11.5px/34px var(--f-body);text-align:center;flex:none}
-.wmsbar b{font:600 16px var(--f-body);letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wmsbar .lg{width:50px;height:30px;border-radius:4px;object-fit:cover;flex:none;box-shadow:0 0 0 1px var(--line)}
+.wmsbar .ttl{display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.wmsbar .ttl small{color:#16A0A6;font:700 11px var(--f-body);letter-spacing:.08em;white-space:nowrap}
+.wmsbar .ttl b{color:#1B3A57;font:700 18px var(--f-body);letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* kontrol diseragamkan dengan form audit */
+.wrap > header h1{font-weight:600;letter-spacing:-.035em}
+.gbar{border-radius:24px;padding:14px 16px;gap:10px 16px}
+.lab{font-family:var(--f-body);letter-spacing:.06em}
+.seg{border:0;border-radius:0;overflow:visible;background:transparent;gap:6px}
+.seg button{border:0!important;border-radius:999px;background:#F3F2ED;padding:8px 14px;font-weight:500;font-size:13.5px}
+.seg button:hover{background:#EAE8E0}
+.seg button[aria-pressed="true"]{background:#EEF5A6;color:#1D1C1A}
+.tabs{border-bottom:1px solid var(--line);gap:6px;padding-block:6px 0}
+.tabs button{font-family:var(--f-body);font-size:16px;font-weight:600;letter-spacing:-.01em;border-radius:12px 12px 0 0}
+.tabs button[aria-selected="true"]{border-bottom-color:#1D1C1A}
+.achip,.chip{border:0;background:#F3F2ED;padding:7px 14px}
+.achip[aria-pressed="true"],.chip[aria-pressed="true"]{background:#EEF5A6;box-shadow:none}
+.pfoot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#0D0403;color:#fff;padding:18px 24px;margin-top:32px}
+.pfoot b{font:700 13px var(--f-body);letter-spacing:.03em}
+.pfoot a{color:#fff;text-decoration:none;font:400 14px var(--f-body)}
 .wmsbar .back{margin-left:auto;height:40px;padding:0 16px;border-radius:12px;border:0;color:#fff;background:#1D1C1A;
   font:500 14px var(--f-body);text-decoration:none;display:inline-flex;align-items:center;cursor:pointer;white-space:nowrap}
 .wmsbar .back:hover{background:#000}
 </style>
 </head>
 <body>
-<div class="wmsbar"><span class="lg">MKT</span><b>Business Process</b><button class="back" type="button" onclick="history.back()">Form audit →</button></div>
+<div class="wmsbar"><img class="lg" src="data:image/png;base64,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" alt="Samudera Indonesia" width="50" height="30"><div class="ttl"><small>PORTAL OPERASIONAL</small><b>Audit SOP Operasional</b></div><button class="back" type="button" onclick="history.back()">Form audit →</button></div>
 
 
 <div class="wrap">
@@ -926,5 +944,6 @@ render();
 
 </script>
 
+<footer class="pfoot"><b>PT MASAJI KARGOSENTRA TAMA</b><a href="https://samudera.id" target="_blank" rel="noopener">samudera.id</a></footer>
 </body>
 </html>
