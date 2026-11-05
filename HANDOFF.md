@@ -132,3 +132,10 @@ README.md  ringkasan; HANDOFF.md  dokumen ini
 - `make_xlsx_peta.py` memuat `V3` penuh dan memfilter `D` ke Jakarta; jangan menimpa `D` sebelum `V3` dibaca.
 - Template memakai `[hidden]` untuk bagian tersembunyi; skeleton publikasi menambahkan aturan `[hidden]{display:none!important}`, jadi file lokal tampak sedikit berbeda dari versi terbit.
 - Penerbitan ulang tanpa `url` dari sesi lain membuat artifact baru. Selalu baca dulu lalu publish dengan `url`.
+
+## Form audit HP (Google Apps Script) — ditambahkan 2026-11-05
+- Kode di `apps/audit-mobile/gas/` (Code.gs, Index.html, App.html, Data.html, appsscript.json). Panduan deploy: `apps/audit-mobile/README.md`.
+- `apps/audit-mobile/build_gas.py` membangun `gas/Data.html` (master langkah + hasil audit sebelumnya) dan pratinjau `dist/audit_mobile_mockup.html` (server tiruan dari `preview_mock.js`). Artifact pratinjau: https://claude.ai/artifact/QopzpqVHgaAGZxMnTBRvAD
+- Model: dokumen per kunjungan cabang (FRM-OPS-001-0006 dst.), bagian = layanan (+ unit SEMPER/MARCEN untuk DC Jakarta), status dokumen dan lapangan dipisah, temuan wajib bila NC, foto opsional maksimal 3 (Drive), kunci final. CY dan full container (T2) opsional per dokumen.
+- Hanya mode terang (permintaan pengguna). Gaya mengikuti WMS (Plus Jakarta Sans, merah #ED1C24, header tabel krem).
+- Belum: deploy oleh pengguna, uji di HP sungguhan, impor JSON ekspor ke data repo / Gap Analysis, penggabungan dengan dashboard GAS (rencana setelah audit Desember).

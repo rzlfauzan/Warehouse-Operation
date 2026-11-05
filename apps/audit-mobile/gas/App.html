@@ -1,0 +1,419 @@
+<script>
+/* MKT Audit SOP — logika halaman. Server: Code.gs (google.script.run). DATA: Data.html. */
+const LBL = {C:'Comply', NC:'Non-comply', NA:'N/A', P:'Belum diaudit'};
+const SHORT = {C:'C', NC:'NC', NA:'N/A', P:'Pending'};
+const SHEETNAME = {TRUCKING:'Trucking Support', EXPORT:'Export', IMPORT:'Import', DC:'Distribution Center', CY:'CY Handling'};
+const CAT = {DOC:'Dokumen', OPS:'Operasional', SYS:'Sistem/WMS', COMP:'Kepatuhan'};
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const site = c => DATA.sites.find(s => s.code === c);
+const sheetOf = (c, sh) => DATA.sheets.find(s => s.site === c && s.sheet === sh);
+
+/* ---------- server ---------- */
+function API(fn, ...args){
+  return new Promise((res, rej) => google.script.run
+    .withSuccessHandler(res)
+    .withFailureHandler(e => rej(new Error((e && e.message) || String(e) || 'Koneksi ke server gagal.')))[fn](...args));
+}
+
+/* ---------- state ---------- */
+const S = {user:null, docs:[], nextNo:'', D:null, part:null, sec:null, view:'dokumen'};
+const canWrite = () => S.user && (S.user.peran === 'admin' || S.user.peran === 'auditor');
+const isLocked = () => !S.D || S.D.doc.status === 'final' || !canWrite();
+
+/* ---------- logika audit (sama dengan Code.gs) ---------- */
+function parts(doc){
+  const s = site(doc.site), out = [];
+  for (const sh of s.sheets){
+    if (sh === 'CY' && !doc.cy) continue;
+    const units = (s.units || {})[sh];
+    if (units && units.length) units.forEach(u => out.push({key: sh + '|' + u, sheet: sh, unit: u, label: SHEETNAME[sh] + ' · ' + u}));
+    else out.push({key: sh, sheet: sh, unit: null, label: SHEETNAME[sh]});
+  }
+  return out;
+}
+function partItems(doc, p){
+  const sh = sheetOf(doc.site, p.sheet);
+  const secs = sh.sections.filter(x => !(x.opt && !(p.sheet === 'CY' ? doc.cy : doc.full)));
+  const ids = new Set(secs.map(x => x.id));
+  return {secs, items: sh.items.filter(i => ids.has(i.s))};
+}
+const prevOf = (item, p) => p.unit ? (item.p[p.unit.toLowerCase()] || {}) : item.p;
+const ansOf = (p, n) => (S.D.ans[p.key] || {})[n] || {};
+const isDone = a => !!(a.d && a.g);
+const needsNote = a => (a.d === 'NC' || a.g === 'NC') && !String(a.f || '').trim();
+function stats(p){
+  const {items} = partItems(S.D.doc, p); const t = {total: items.length, done:0, C:0, NC:0, NA:0, need:0, ncd:0};
+  for (const i of items){ const a = ansOf(p, i.n);
+    if (isDone(a)) t.done++; if (a.g === 'C') t.C++; if (a.g === 'NC') t.NC++; if (a.g === 'NA') t.NA++;
+    if (a.d === 'NC') t.ncd++; if (needsNote(a)) t.need++; }
+  t.pct = (t.C + t.NC) ? t.C/(t.C + t.NC) : null; return t;
+}
+function docStats(){
+  const t = {total:0, done:0, C:0, NC:0, NA:0, need:0, ncd:0};
+  parts(S.D.doc).forEach(p => { const s = stats(p); for (const k in t) t[k] += s[k]; });
+  t.pct = (t.C + t.NC) ? t.C/(t.C + t.NC) : null; return t;
+}
+const pctTxt = v => v == null ? '–' : (v*100).toFixed(1).replace('.', ',') + '%';
+const fmtDate = s => { try { return new Date(s + 'T00:00').toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'}); } catch(e){ return s; } };
+const timeTxt = t => new Date(t).toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+
+/* ---------- antrean simpan (otomatis, dengan cadangan di HP) ---------- */
+let Q = {}, inflight = false, qTimer = null, fatal = '';
+const qKey = () => 'mkt-audit-q-' + (S.D ? S.D.doc.id : '');
+function backup(){ try { if (S.D) localStorage.setItem(qKey(), JSON.stringify(Q)); } catch(e){} }
+function restoreBackup(){
+  try { const v = JSON.parse(localStorage.getItem(qKey()) || '{}');
+    for (const k in v){ const x = v[k]; Q[k] = x; const a = (S.D.ans[x.part] = S.D.ans[x.part] || {})[x.no] || {};
+      S.D.ans[x.part][x.no] = Object.assign(a, x); }
+    if (Object.keys(Q).length){ toast('Isian yang belum terkirim dipulihkan dan dikirim ulang'); schedule(300); }
+  } catch(e){}
+}
+function setSaved(state, msg){
+  const el = $('#saved'); if (!el) return;
+  el.className = 'saved ' + (state === 'ok' ? '' : state);
+  el.textContent = state === 'ok' ? 'Tersimpan ' + timeTxt(S.D.doc.upd || Date.now())
+    : state === 'pending' ? 'Menyimpan…' : 'Belum tersimpan' + (msg ? ': ' + msg : '');
+}
+function schedule(ms){ clearTimeout(qTimer); qTimer = setTimeout(flush, ms); }
+function queue(p, n, patch){
+  const k = p.key + '|' + n;
+  Q[k] = Object.assign(Q[k] || {part: p.key, no: n}, patch);
+  backup(); setSaved('pending'); schedule(900);
+}
+async function flush(){
+  if (inflight || fatal || !S.D || !Object.keys(Q).length) return;
+  inflight = true; const batch = Q; Q = {}; const id = S.D.doc.id;
+  try {
+    const r = await API('apiSave', id, Object.values(batch));
+    if (S.D && S.D.doc.id === id){ S.D.doc.upd = r.t; setSaved('ok'); }
+  } catch(e){
+    for (const k in batch) Q[k] = Object.assign({}, batch[k], Q[k] || {});
+    if (/terdaftar|dikunci/.test(e.message)){ fatal = e.message; toast(e.message); }
+    setSaved('err', fatal ? '' : 'sinyal/server, dicoba lagi');
+    if (!fatal) schedule(5000);
+  } finally {
+    inflight = false; backup();
+    if (Object.keys(Q).length && !fatal) schedule(1200);
+  }
+}
+async function drain(){
+  for (let i = 0; i < 40 && (inflight || Object.keys(Q).length); i++){
+    if (!inflight) await flush(); await new Promise(r => setTimeout(r, 250));
+    if (fatal) break;
+  }
+  if (Object.keys(Q).length) throw new Error('Masih ada isian yang belum tersimpan. Periksa sinyal lalu coba lagi.');
+}
+window.addEventListener('beforeunload', e => { if (inflight || Object.keys(Q).length){ e.preventDefault(); e.returnValue = ''; } });
+
+/* ---------- navigasi ---------- */
+function go(v, push){
+  if (['layanan','isi','ringkasan'].includes(v) && !S.D) v = 'dokumen';
+  if (v === 'isi' && !curPart()) v = 'layanan';
+  S.view = v;
+  document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', a.dataset.v === v || (v === 'isi' && a.dataset.v === 'layanan')));
+  $('#navDoc').classList.toggle('dis', !S.D); $('#navSum').classList.toggle('dis', !S.D);
+  closeNav();
+  ({dokumen:vDocs, layanan:vParts, isi:vFill, ringkasan:vSum, bantuan:vHelp})[v]();
+  if (v !== 'isi') window.scrollTo(0, 0);
+  if (push !== false) try { google.script.history.push({v}, {}, v); } catch(e){}
+}
+const curPart = () => S.D && parts(S.D.doc).find(p => p.key === S.part);
+function loading(msg){ $('#view').innerHTML = `<div class="loading">${esc(msg || 'Memuat…')}</div>`; }
+function failView(e, retry){
+  $('#view').innerHTML = `<div class="err">${esc(e.message)}</div><div class="row" style="justify-content:flex-start"><button class="btn" id="retry" type="button">Coba lagi</button></div>`;
+  $('#retry').onclick = retry;
+}
+async function openDoc(id, view){
+  loading('Membuka dokumen…');
+  try { await drain(); } catch(e){}
+  try { S.D = await API('apiGetDoc', id); fatal = ''; Q = {}; restoreBackup(); go(view || 'layanan'); }
+  catch(e){ failView(e, () => openDoc(id, view)); }
+}
+async function refreshDoc(){ // ambil isian auditor lain tanpa membuang antrean lokal
+  if (!S.D) return; const id = S.D.doc.id;
+  try { const r = await API('apiGetDoc', id); if (!S.D || S.D.doc.id !== id) return;
+    for (const k in Q){ const x = Q[k]; const a = (r.ans[x.part] = r.ans[x.part] || {})[x.no] || {}; r.ans[x.part][x.no] = Object.assign(a, x); }
+    S.D = r; if (S.view === 'layanan') vParts(); } catch(e){}
+}
+
+/* ---------- daftar dokumen ---------- */
+async function vDocs(){
+  loading('Memuat dokumen audit…');
+  try { await drain(); } catch(e){}
+  try { const r = await API('apiBootstrap'); S.user = r.user; S.docs = r.docs; S.nextNo = r.nextNo; showUser(); }
+  catch(e){ return failView(e, vDocs); }
+  if (S.view !== 'dokumen') return;
+  const rows = S.docs.slice().sort((a,b) => (b.upd||0) - (a.upd||0)).map(d => {
+    const s = site(d.site), t = d.sum, pr = t.total ? Math.round(t.done/t.total*100) : 0, pct = (t.C+t.NC) ? t.C/(t.C+t.NC) : null;
+    return `<button class="doc" data-doc="${esc(d.id)}" type="button">
+      <span class="no">${esc(d.no)}</span>
+      <span><span class="pill ${d.status === 'final' ? 'p-final">Final' : 'p-draft">Draft'}</span></span>
+      <span class="meta"><span><b>${esc(s ? s.name : d.site)}</b></span><span>${fmtDate(d.date)}</span><span>${t.done}/${t.total} langkah</span><span>Lapangan comply ${pctTxt(pct)}</span><span>${esc(d.leadName || '')}</span></span>
+      <span class="bar"><i style="width:${pr}%"></i></span></button>`;
+  }).join('');
+  $('#view').innerHTML = `
+    <div class="ph"><div><h1>Dokumen Audit</h1><p>Satu dokumen per kunjungan audit cabang, dengan nomor formulir sendiri.</p></div>
+      ${canWrite() ? '<button class="btn pri" id="newBtn" type="button">+ Buat dokumen audit</button>' : ''}</div>
+    ${canWrite() ? '' : `<div class="err">Akun ${esc(S.user.email)} belum terdaftar sebagai auditor, jadi hanya bisa melihat. Minta admin menambahkan email ini di sheet PENGGUNA.</div>`}
+    <div class="card"><div class="thead">Dokumen audit</div>
+      <div class="docs">${rows || `<div class="empty">Belum ada dokumen.${canWrite() ? ' Tekan <b>Buat dokumen audit</b> untuk mulai.' : ''}</div>`}</div></div>
+    <div class="card"><div class="thead">Audit sebelumnya (referensi)</div>
+      <div class="tbl"><table><thead><tr><th>No. formulir</th><th>Cabang</th><th>Tanggal</th></tr></thead><tbody>
+      ${DATA.sites.map(s => `<tr><td>${esc(s.audit_no)}</td><td class="l">${esc(s.name)}</td><td>${esc(s.date)}</td></tr>`).join('')}
+      </tbody></table></div></div>`;
+  const nb = $('#newBtn'); if (nb) nb.onclick = openNew;
+  document.querySelectorAll('[data-doc]').forEach(b => b.onclick = () => { S.part = null; openDoc(b.dataset.doc); });
+}
+function openNew(){
+  const today = new Date(Date.now() + 7*3600e3).toISOString().slice(0,10);
+  $('#layer').innerHTML = `<div class="sheet" id="sheet"><form class="card" id="newForm" novalidate>
+    <h2>Buat dokumen audit</h2>
+    <div class="fgrid">
+      <div class="f"><label for="fNo">No. formulir</label><input class="in" id="fNo" readonly value="${esc(S.nextNo)}"><small>Nomor final diberikan server saat disimpan.</small></div>
+      <div class="f"><label for="fSite">Cabang</label><select class="in" id="fSite">${DATA.sites.map(s => `<option value="${s.code}">${esc(s.name)}</option>`).join('')}</select></div>
+      <div class="f"><label for="fDate">Tanggal audit</label><input class="in" type="date" id="fDate" value="${today}"></div>
+      <div class="f"><label for="fAud">Lead auditor</label><input class="in" id="fAud" readonly value="${esc(S.user.nama)}"><small>${esc(S.user.email)}</small></div>
+      <div class="f full"><label for="fPartner">Auditor pendamping (opsional)</label><input class="in" id="fPartner" placeholder="Nama auditor kedua"></div>
+      <div class="f full"><span style="font-size:12.5px;font-weight:600">Bagian yang disiapkan, belum pernah diaudit</span>
+        <label class="chk"><input type="checkbox" id="fCy"><span>CY Handling<small id="cyNote"></small></span></label>
+        <label class="chk" id="fullRow"><input type="checkbox" id="fFull"><span>Penarikan full container (Trucking)<small>Checklist dari draf Rev.02, langkah 9–18.</small></span></label>
+        <small>Pilihan ini tidak bisa diubah setelah dokumen dibuat.</small></div>
+    </div>
+    <div id="newErr"></div>
+    <div class="row"><button class="btn ghost" type="button" id="cancel">Batal</button><button class="btn pri" type="submit" id="mk">Buat dokumen</button></div>
+  </form></div>`;
+  const sync = () => { const c = $('#fSite').value, s = site(c);
+    $('#fullRow').hidden = !s.sheets.includes('TRUCKING'); if (!s.sheets.includes('TRUCKING')) $('#fFull').checked = false;
+    $('#fCy').checked = c === 'MDN';
+    $('#cyNote').textContent = c === 'MDN' ? 'Medan sudah diaudit Agustus (27 langkah SOP Medan).' : 'Checklist dari draf SOP-OPS-CY-001, 15 langkah.'; };
+  $('#fSite').onchange = sync; sync();
+  const close = () => $('#layer').innerHTML = '';
+  $('#cancel').onclick = close;
+  $('#sheet').onclick = e => { if (e.target.id === 'sheet') close(); };
+  $('#newForm').onsubmit = async e => { e.preventDefault();
+    const btn = $('#mk'); btn.disabled = true; btn.textContent = 'Menyimpan…';
+    try {
+      const r = await API('apiCreateDoc', {site: $('#fSite').value, date: $('#fDate').value, partner: $('#fPartner').value.trim(), cy: $('#fCy').checked, full: $('#fFull').checked});
+      close(); S.D = r; Q = {}; fatal = ''; S.part = null; toast('Dokumen ' + r.doc.no + ' dibuat'); go('layanan');
+    } catch(err){ $('#newErr').innerHTML = `<div class="err">${esc(err.message)}</div>`; btn.disabled = false; btn.textContent = 'Buat dokumen'; }
+  };
+}
+
+/* ---------- bagian dalam dokumen ---------- */
+function docHead(){
+  const d = S.D.doc, s = site(d.site);
+  return `<div class="card pad dochead">
+    <div class="kv"><small>No. formulir</small><b>${esc(d.no)}</b></div>
+    <div class="kv"><small>Cabang</small><b>${esc(s.name)}</b></div>
+    <div class="kv"><small>Tanggal</small><b>${fmtDate(d.date)}</b></div>
+    <div class="kv"><small>Status</small><b><span class="pill ${d.status === 'final' ? 'p-final">Final, terkunci' : 'p-draft">Draft'}</span></b></div></div>`;
+}
+function vParts(){
+  const d = S.D.doc, s = site(d.site);
+  const cards = parts(d).map(p => { const t = stats(p), pr = t.total ? Math.round(t.done/t.total*100) : 0;
+    const never = sheetOf(d.site, p.sheet).items.every(i => (prevOf(i,p).g || 'P') === 'P');
+    return `<button class="part" data-part="${p.key}" type="button">
+      <h3>${esc(p.label)}</h3>
+      ${never ? '<span class="pill p-opt" style="align-self:flex-start">Disiapkan, belum pernah diaudit</span>' : ''}
+      <div class="k"><span>${t.done}/${t.total} langkah</span><span>Comply ${pctTxt(t.pct)}</span></div>
+      <div class="bar"><i style="width:${pr}%"></i></div>
+      ${t.need ? `<span class="warn">${t.need} NC belum ada temuan</span>` : ''}</button>`; }).join('');
+  $('#view').innerHTML = `
+    <div class="crumb"><a href="#" data-go="dokumen">Dokumen audit</a><span>/</span><span>${esc(d.no)}</span></div>
+    <div class="ph"><div><h1>${esc(s.name)}</h1><p>Pilih layanan untuk mulai mengisi. Dua auditor bisa mengisi layanan berbeda bersamaan.</p></div>
+      <button class="btn" type="button" data-go="ringkasan">Lihat ringkasan</button></div>
+    ${docHead()}
+    <div class="parts">${cards}</div>`;
+  document.querySelectorAll('[data-part]').forEach(b => b.onclick = () => { S.part = b.dataset.part; S.sec = null; go('isi'); });
+}
+
+/* ---------- isi audit ---------- */
+let filt = 'all';
+function vFill(){
+  const d = S.D.doc, p = curPart(), {secs, items} = partItems(d, p), lock = isLocked();
+  if (!secs.find(x => x.id === S.sec)) S.sec = secs[0].id;
+  const t = stats(p), s = site(d.site);
+  const chips = secs.map(x => { const its = items.filter(i => i.s === x.id), dn = its.filter(i => isDone(ansOf(p,i.n))).length;
+    return `<button class="chip ${x.id === S.sec ? 'on' : ''}" data-sec="${x.id}" type="button">${esc(x.id)} <span class="c">${dn}/${its.length}</span></button>`; }).join('');
+  const sec = secs.find(x => x.id === S.sec);
+  let list = items.filter(i => i.s === sec.id);
+  if (filt === 'todo') list = list.filter(i => !isDone(ansOf(p,i.n)));
+  if (filt === 'nc') list = list.filter(i => { const a = ansOf(p,i.n); return a.d === 'NC' || a.g === 'NC'; });
+  const pr = t.total ? Math.round(t.done/t.total*100) : 0;
+  const ix = secs.indexOf(sec), nx = secs[ix + 1];
+  $('#view').innerHTML = `
+    <div class="sub"><div class="in2">
+      <div class="subrow"><button class="iconbtn" data-go="layanan" aria-label="Kembali ke daftar layanan" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <div class="t"><b>${esc(p.label)} · ${esc(s.name)}</b><small id="subcount">${esc(d.no)} · ${t.done}/${t.total} langkah</small></div>
+        <span class="saved" id="saved"></span></div>
+      <div class="bar"><i id="subbar" style="width:${pr}%"></i></div>
+      <div class="chips" role="tablist" aria-label="Tahap">${chips}</div>
+    </div></div>
+    ${S.D.doc.status === 'final' ? '<div class="locked">Dokumen sudah dikunci. Isian hanya bisa dibaca.</div>' : (!canWrite() ? '<div class="err">Mode lihat saja: akun belum terdaftar sebagai auditor.</div>' : '')}
+    <div class="sechead"><b>${esc(sec.name)}</b><small>${esc(sec.sop)}${sec.opt ? ' · disiapkan, belum pernah diaudit' : ''}</small></div>
+    <div class="seg2" role="group" aria-label="Saring langkah">
+      ${[['all','Semua'],['todo','Belum lengkap'],['nc','Ada NC']].map(([k,l]) => `<button class="chip ${filt === k ? 'on' : ''}" data-f="${k}" type="button">${l}</button>`).join('')}</div>
+    <div id="steps" style="display:flex;flex-direction:column;gap:12px">${list.map(i => stepCard(p, i, lock)).join('') || '<div class="card empty">Tidak ada langkah dengan saringan ini.</div>'}</div>
+    ${nx ? `<button class="btn block" id="nextSec" data-to="${nx.id}" type="button">Lanjut ke ${esc(nx.id)} · ${esc(nx.name)} →</button>`
+         : `<button class="btn pri block" type="button" data-go="layanan">Selesai di layanan ini</button>`}`;
+  if (Object.keys(Q).length) setSaved('pending'); else if (S.D.doc.upd) setSaved('ok');
+  document.querySelectorAll('[data-sec]').forEach(b => b.onclick = () => { S.sec = b.dataset.sec; vFill(); window.scrollTo(0,0); });
+  document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { filt = b.dataset.f; vFill(); });
+  const nb = $('#nextSec'); if (nb) nb.onclick = () => { S.sec = nb.dataset.to; vFill(); window.scrollTo(0,0); };
+  bindSteps(p, lock);
+  const on = document.querySelector('.chip.on[data-sec]'); if (on) on.scrollIntoView({inline:'center', block:'nearest'});
+}
+function segBtns(n, field, val, lock){
+  return `<div class="seg" role="group">${['C','NC','NA'].map(k => `<button type="button" class="${k}" data-n="${n}" data-field="${field}" data-v="${k}" aria-pressed="${val === k}" ${lock ? 'disabled' : ''}>${k === 'C' ? '✓ C' : k === 'NC' ? '✕ NC' : 'N/A'}</button>`).join('')}</div>`;
+}
+function stepCard(p, i, lock){
+  const a = ansOf(p, i.n), pv = prevOf(i, p), s = site(S.D.doc.site), need = needsNote(a);
+  const prev = pv.g && pv.g !== 'P'
+    ? `<div class="prev"><span>Audit ${esc(s.date)}:</span>${pv.d && pv.d !== 'P' ? `<span class="pill p-${pv.d}">Dok ${SHORT[pv.d]}</span>` : ''}<span class="pill p-${pv.g}">Lap ${SHORT[pv.g]}</span>${pv.f ? `<q>${esc(pv.f)}</q>` : ''}</div>`
+    : `<div class="prev"><span class="pill p-P">Belum pernah diaudit</span></div>`;
+  const open = a.f || a.a || (a.ph && a.ph.length) || need;
+  return `<article class="card step ${isDone(a) ? 'done' : ''} ${need ? 'need' : ''}" id="st${i.n}">
+    <div class="sh"><span class="num">${i.n}</span><div style="min-width:0"><div class="crit">${esc(i.c)}</div>
+      <div class="sm"><span>PIC: ${esc(i.a)}</span><span>${esc(i.r)}</span><span>${CAT[i.k] || esc(i.k)}</span></div>
+      ${a.by && a.t ? `<div class="by">Diisi ${esc(String(a.by).split('@')[0])} · ${timeTxt(a.t)}</div>` : ''}</div></div>
+    <div class="ans"><span>Dokumen</span>${segBtns(i.n, 'd', a.d, lock)}<span>Lapangan</span>${segBtns(i.n, 'g', a.g, lock)}</div>
+    ${prev}
+    <div class="extra" data-x="${i.n}" ${open ? '' : 'hidden'}>
+      <div class="f"><label for="f${i.n}">Temuan${(a.d === 'NC' || a.g === 'NC') ? ' (wajib untuk NC)' : ''}</label>
+        <textarea class="in" id="f${i.n}" data-n="${i.n}" data-field="f" rows="2" maxlength="2000" placeholder="Apa yang dilihat di lapangan atau di dokumen" ${lock ? 'readonly' : ''}>${esc(a.f)}</textarea>
+        ${need ? '<span class="need-msg">Isi temuan untuk langkah NC ini.</span>' : ''}</div>
+      <div class="f" style="margin-top:10px"><label for="a${i.n}">Pelaksana aktual (isi bila beda dari PIC SOP)</label>
+        <input class="in" id="a${i.n}" data-n="${i.n}" data-field="a" value="${esc(a.a)}" maxlength="200" placeholder="${esc(i.a)}" ${lock ? 'readonly' : ''}></div>
+      <div class="f" style="margin-top:10px"><label>Foto (opsional, maks. 3)</label>
+        <div class="thumbs">${(a.ph || []).map((q, k) => `<figure><a href="${esc(q.url)}" target="_blank" rel="noopener"><img src="${q.th || ''}" alt="Foto langkah ${i.n}"></a><button type="button" data-delph="${i.n}" data-k="${k}" aria-label="Hapus foto" ${lock ? 'hidden' : ''}>✕</button></figure>`).join('')}</div>
+        ${lock || (a.ph || []).length >= 3 ? '' : `<label class="lnk" for="ph${i.n}" id="phl${i.n}">+ Tambah foto</label><input type="file" id="ph${i.n}" data-ph="${i.n}" accept="image/*" capture="environment" hidden>`}</div>
+    </div>
+    ${open ? '' : `<div class="more"><button class="lnk" type="button" data-open="${i.n}">+ Temuan, pelaksana, foto</button></div>`}
+  </article>`;
+}
+function setAns(p, n, patch){
+  S.D.ans[p.key] = S.D.ans[p.key] || {};
+  S.D.ans[p.key][n] = Object.assign(S.D.ans[p.key][n] || {}, patch, {t: Date.now(), by: S.user.email});
+  queue(p, n, patch);
+}
+function bindSteps(p, lock){
+  const box = $('#steps'); if (lock) return;
+  box.onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.field){ const n = b.dataset.n, cur = ansOf(p, n)[b.dataset.field];
+      setAns(p, n, {[b.dataset.field]: cur === b.dataset.v ? null : b.dataset.v}); refreshStep(p, n); return; }
+    if (b.dataset.open){ const n = b.dataset.open; $(`[data-x="${n}"]`).hidden = false; b.parentElement.remove(); return; }
+    if (b.dataset.delph){ const n = b.dataset.delph, ph = (ansOf(p,n).ph || []).slice(); ph.splice(+b.dataset.k, 1); setAns(p, n, {ph}); refreshStep(p, n); }
+  };
+  box.oninput = e => { const el = e.target; if (el.dataset.field === 'f' || el.dataset.field === 'a') setAns(p, el.dataset.n, {[el.dataset.field]: el.value}); };
+  box.onchange = e => { const el = e.target;
+    if (el.dataset.field === 'f') refreshStep(p, el.dataset.n);
+    if (el.dataset.ph && el.files[0]) addPhoto(p, el.dataset.ph, el.files[0]); };
+}
+function refreshStep(p, n){
+  const i = sheetOf(S.D.doc.site, p.sheet).items.find(x => String(x.n) === String(n));
+  const old = $('#st' + n); if (!old) return;
+  const tmp = document.createElement('div'); tmp.innerHTML = stepCard(p, i, isLocked());
+  old.replaceWith(tmp.firstElementChild);
+  const t = stats(p);
+  $('#subcount').textContent = `${S.D.doc.no} · ${t.done}/${t.total} langkah`;
+  $('#subbar').style.width = (t.total ? Math.round(t.done/t.total*100) : 0) + '%';
+  const its = partItems(S.D.doc, p).items.filter(x => x.s === i.s), dn = its.filter(x => isDone(ansOf(p,x.n))).length;
+  const ch = document.querySelector(`[data-sec="${i.s}"] .c`); if (ch) ch.textContent = `${dn}/${its.length}`;
+}
+function resize(img, max, q){
+  const r = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas');
+  c.width = Math.round(img.width*r); c.height = Math.round(img.height*r);
+  c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); return c.toDataURL('image/jpeg', q);
+}
+function addPhoto(p, n, file){
+  const img = new Image(), url = URL.createObjectURL(file), lbl = $('#phl' + n);
+  if (lbl) lbl.textContent = 'Mengunggah foto…';
+  img.onload = async () => {
+    const full = resize(img, 1600, .8), th = resize(img, 200, .6); URL.revokeObjectURL(url);
+    try { await drain(); const q = await API('apiUploadPhoto', S.D.doc.id, p.key, n, full, th);
+      const ph = (ansOf(p,n).ph || []).concat(q).slice(0, 3); setAns(p, n, {ph}); refreshStep(p, n); toast('Foto tersimpan di Drive'); }
+    catch(e){ toast('Foto gagal diunggah: ' + e.message); if (lbl) lbl.textContent = '+ Tambah foto'; }
+  };
+  img.onerror = () => { toast('File ini tidak bisa dibaca sebagai gambar.'); if (lbl) lbl.textContent = '+ Tambah foto'; };
+  img.src = url;
+}
+
+/* ---------- ringkasan ---------- */
+function vSum(){
+  const d = S.D.doc, s = site(d.site), T = docStats(), final = d.status === 'final';
+  const rows = parts(d).map(p => { const t = stats(p);
+    return `<tr><td class="l">${esc(p.label)}</td><td class="r">${t.done}/${t.total}</td><td class="r">${t.C}</td><td class="r">${t.NC}</td><td class="r">${t.NA}</td><td class="r">${t.ncd}</td><td class="r"><b>${pctTxt(t.pct)}</b></td></tr>`; }).join('');
+  const ncs = [];
+  parts(d).forEach(p => partItems(d, p).items.forEach(i => { const a = ansOf(p, i.n);
+    if (a.d === 'NC' || a.g === 'NC') ncs.push(`<div><b>${esc(p.label)} · ${i.n}. ${esc(i.c)}</b>
+      <small>${[a.d === 'NC' ? 'Dokumen NC' : '', a.g === 'NC' ? 'Lapangan NC' : '', a.a ? 'Pelaksana: ' + esc(a.a) : ''].filter(Boolean).join(' · ')}</small>
+      <span>${a.f ? esc(a.f) : '<span class="need-msg">Temuan belum diisi</span>'}</span></div>`); }));
+  const blockers = [];
+  if (T.need) blockers.push(`${T.need} langkah NC belum ada temuan`);
+  if (T.done < T.total) blockers.push(`${T.total - T.done} langkah belum lengkap (status dokumen dan lapangan)`);
+  $('#view').innerHTML = `
+    <div class="crumb"><a href="#" data-go="dokumen">Dokumen audit</a><span>/</span><a href="#" data-go="layanan">${esc(d.no)}</a><span>/</span><span>Ringkasan</span></div>
+    <div class="ph"><div><h1>Ringkasan ${esc(s.name)}</h1><p>Compliance resmi dihitung dari status lapangan: C ÷ (C + NC). N/A tidak dihitung.</p></div></div>
+    ${docHead()}
+    <div class="kpis">
+      <div class="card"><small>Compliance lapangan</small><div class="big">${pctTxt(T.pct)}</div></div>
+      <div class="card"><small>Langkah lengkap</small><div class="big">${T.done}<span style="font-size:15px;color:var(--muted)">/${T.total}</span></div></div>
+      <div class="card"><small>NC lapangan</small><div class="big" style="color:var(--nc)">${T.NC}</div></div>
+      <div class="card"><small>NC dokumen</small><div class="big" style="color:var(--nc)">${T.ncd}</div></div></div>
+    <div class="card tbl"><table><thead><tr><th>Layanan</th><th class="r">Lengkap</th><th class="r">C</th><th class="r">NC</th><th class="r">N/A</th><th class="r">NC dok</th><th class="r">Comply</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="card"><div class="thead">Daftar NON-COMPLY (${ncs.length})</div><div class="nclist">${ncs.join('') || '<div><small>Belum ada NC.</small></div>'}</div></div>
+    <div id="lockBox">${final ? `<div class="locked">Dikunci ${new Date(d.locked).toLocaleString('id-ID')} oleh ${esc(d.lockedBy)}.</div>`
+      : !canWrite() ? '' : `${blockers.length ? `<div class="alert">Belum bisa dikunci: ${blockers.join('; ')}.</div>` : ''}
+         <div class="row" style="margin-top:12px"><button class="btn pri" id="lockBtn" type="button" ${blockers.length ? 'disabled' : ''}>Kunci dokumen</button></div>`}</div>
+    ${canWrite() ? `<div class="card pad" style="display:flex;flex-direction:column;gap:10px"><b>Ekspor hasil</b>
+      <span style="color:var(--muted)">Menyimpan hasil dokumen ini sebagai file JSON di folder Drive aplikasi, untuk diarsipkan ke repo dan dibandingkan di Gap Analysis.</span>
+      <div id="expOut"></div><div class="row" style="justify-content:flex-start"><button class="btn" id="expBtn" type="button">Simpan JSON ke Drive</button></div></div>` : ''}`;
+  const lb = $('#lockBtn');
+  if (lb) lb.onclick = () => { $('#lockBox').innerHTML = `<div class="card pad" style="display:flex;flex-direction:column;gap:12px">
+      <b>Kunci ${esc(d.no)}?</b><span style="color:var(--muted)">Setelah dikunci, isian tidak bisa diubah oleh siapa pun.</span><div id="lkErr"></div>
+      <div class="row"><button class="btn ghost" id="lkNo" type="button">Batal</button><button class="btn pri" id="lkYes" type="button">Ya, kunci</button></div></div>`;
+    $('#lkNo').onclick = vSum;
+    $('#lkYes').onclick = async () => { const b = $('#lkYes'); b.disabled = true; b.textContent = 'Mengunci…';
+      try { await drain(); S.D = await API('apiLock', d.id); toast('Dokumen dikunci'); vSum(); }
+      catch(e){ $('#lkErr').innerHTML = `<div class="err">${esc(e.message)}</div>`; b.disabled = false; b.textContent = 'Ya, kunci'; } }; };
+  const eb = $('#expBtn');
+  if (eb) eb.onclick = async () => { eb.disabled = true; eb.textContent = 'Menyimpan…';
+    try { await drain(); const r = await API('apiExport', d.id);
+      $('#expOut').innerHTML = `<a class="lnk" href="${esc(r.url)}" target="_blank" rel="noopener">Buka ${esc(r.name)} di Drive</a>`; }
+    catch(e){ $('#expOut').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+    eb.disabled = false; eb.textContent = 'Simpan JSON ke Drive'; };
+}
+
+/* ---------- bantuan ---------- */
+function vHelp(){
+  $('#view').innerHTML = `<div class="ph"><div><h1>Bantuan</h1><p>Cara memakai form audit di HP.</p></div></div>
+    <div class="card pad" style="display:flex;flex-direction:column;gap:10px;max-width:68ch">
+      <span><b>1.</b> Buat satu dokumen per kunjungan cabang. Nomor formulir diberikan otomatis.</span>
+      <span><b>2.</b> Pilih layanan, lalu isi tiap langkah: status <b>Dokumen</b> dan <b>Lapangan</b> (C, NC, atau N/A). Ketuk lagi untuk membatalkan pilihan.</span>
+      <span><b>3.</b> Langkah NC wajib diberi temuan. Foto opsional, maksimal 3 per langkah, tersimpan di Google Drive.</span>
+      <span><b>4.</b> Isian tersimpan otomatis. Kalau sinyal putus, isian disimpan dulu di HP dan dikirim ulang.</span>
+      <span><b>5.</b> Dua auditor bisa mengisi layanan berbeda di dokumen yang sama. Buka ulang daftar layanan untuk melihat isian auditor lain.</span>
+      <span><b>6.</b> Setelah semua lengkap, kunci dokumen di halaman Ringkasan. Dokumen terkunci tidak bisa diubah.</span>
+    </div>`;
+}
+
+/* ---------- shell ---------- */
+let tT; function toast(m){ let el = $('.toast'); if (!el){ el = document.createElement('div'); el.className = 'toast'; el.setAttribute('role','status'); document.body.appendChild(el); }
+  el.textContent = m; el.hidden = false; clearTimeout(tT); tT = setTimeout(() => el.hidden = true, 3200); }
+function closeNav(){ $('#nav').classList.remove('open'); $('#scrim').classList.remove('open'); }
+function showUser(){ if (!S.user) return; $('#userEm').textContent = S.user.email;
+  $('#userAv').textContent = String(S.user.nama || S.user.email).split(/[\s.@]+/).filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join(''); }
+$('#menuBtn').onclick = () => { $('#nav').classList.add('open'); $('#scrim').classList.add('open'); };
+$('#navClose').onclick = closeNav; $('#scrim').onclick = closeNav;
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-go], .nav a[data-v]'); if (!a) return;
+  e.preventDefault(); const v = a.dataset.go || a.dataset.v;
+  if (v === 'layanan') refreshDoc();
+  go(v);
+});
+try { google.script.history.setChangeHandler(e => { if (e.state && e.state.v) go(e.state.v, false); }); } catch(e){}
+$('#userEm').textContent = ''; $('#userAv').textContent = '…';
+go('dokumen');
+</script>
