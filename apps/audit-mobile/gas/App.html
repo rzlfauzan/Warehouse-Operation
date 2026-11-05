@@ -155,7 +155,7 @@ async function vDocs(){
       <span>${isMdn(d) ? '<span class="pill p-mdn">SOP Medan</span> ' : ''}<span class="pill ${d.status === 'final' ? 'p-final">Final' : 'p-draft">Draft'}</span></span>
       <span class="meta"><span><b>${esc(s ? s.name : d.site)}</b></span><span>${fmtDate(d.date)}</span>
         <span>${h ? (t.C+t.NC+t.NA) + ' langkah diaudit' : t.done + '/' + t.total + ' langkah'}</span><span>Lapangan comply ${pctTxt(pct)}</span><span>${esc(d.leadName || '')}</span></span>
-      <span class="bar"><i style="width:${pr}%"></i></span></button>`; };
+      ${h ? '' : `<span class="bar"><i style="width:${pr}%"></i></span>`}</button>`; };
   const byUpd = (a,b) => (b.upd||0) - (a.upd||0);
   const now = S.docs.filter(d => !isHist(d)).sort(byUpd), old = S.docs.filter(isHist).sort((a,b) => String(a.no).localeCompare(String(b.no)));
   $('#view').innerHTML = `

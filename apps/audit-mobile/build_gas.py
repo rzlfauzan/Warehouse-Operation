@@ -39,28 +39,31 @@ U = re.sub(r':root\[data-theme="dark"\]\{.*?\}\n', '', U, flags=re.S)
 assert 'prefers-color-scheme' not in U and 'data-theme="dark"' not in U
 WMS_ROOT = """:root{
   color-scheme:light;
-  --bg:#FAFAFA; --surface:#ffffff; --surface2:#F5F5F5; --fg:#0A0A0A; --muted:#6B6B70; --line:#E7E7E7;
-  --accent:#ED1C24; --accent-fg:#ffffff; --s1:#ED1C24; --grid:#EEEEEE;
-  --ok:#2A9D6F; --ok-bd:#2A9D6F; --ok-bg:#EAF6F0; --ok-fg:#14563C;
-  --nc:#ED1C24; --nc-bd:#ED1C24; --nc-bg:#FFF1F2; --nc-fg:#9B0F15;
-  --na:#8C8C8C; --na-bd:#8C8C8C; --na-bg:#F5F5F5; --na-fg:#434343;
-  --flag:#FDB913; --flag-fg:#8A5A00; --ta:#ED1C24; --tb:#6250d6; --tc:#8A5A00; --sig:#7a3d9e;
-  --in:#8A5A00; --in-bg:#FFF8E1; --out:#14563C; --out-bg:#EAF6F0;
-  --a-G:#2563a8; --a-P:#0b8a8c; --a-D:#c2561a; --a-B:#b0247a;
-  --f-display:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif; --f-body:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;
+  --bg:#FEFDFB; --surface:#ffffff; --surface2:#F3F2ED; --fg:#1D1C1A; --muted:#6B6862; --line:#E6E3DA;
+  --accent:#1D1C1A; --accent-fg:#ffffff; --s1:#3355FF; --grid:#EEECE5;
+  --ok:#1F8A5B; --ok-bd:#1F8A5B; --ok-bg:#E3F4EA; --ok-fg:#145C3C;
+  --nc:#D93025; --nc-bd:#D93025; --nc-bg:#FDECEA; --nc-fg:#8E1C15;
+  --na:#8C887F; --na-bd:#8C887F; --na-bg:#F3F2ED; --na-fg:#4A4741;
+  --flag:#CBD810; --flag-fg:#5C6300; --ta:#3355FF; --tb:#6250d6; --tc:#8A6A00; --sig:#7a3d9e;
+  --in:#8A6A00; --in-bg:#FBF3D2; --out:#145C3C; --out-bg:#E3F4EA;
+  --a-G:#3355FF; --a-P:#0b8a8c; --a-D:#c2561a; --a-B:#b0247a;
+  --f-display:'Inter',ui-sans-serif,system-ui,Arial,sans-serif; --f-body:'Inter',ui-sans-serif,system-ui,Arial,sans-serif;
   --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
 }"""
 U, n = re.subn(r':root\{\n  --bg:.*?\n\}', lambda m: WMS_ROOT, U, count=1, flags=re.S)
 assert n == 1
-U = U.replace('family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&', 'family=Plus+Jakarta+Sans:wght@400;500;600;700&')
+U = U.replace('family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&', 'family=Inter:wght@400;500;600&')
 BAR_CSS = """#themeBtn{display:none!important}
-thead th{background:#FFFBEB!important;color:#461902!important}
-.wmsbar{display:flex;align-items:center;gap:12px;height:56px;background:#fff;border-bottom:1px solid var(--line);margin:0 0 12px}
-.wmsbar .lg{width:30px;height:30px;border-radius:8px;background:#ED1C24;color:#fff;font:700 12px/30px var(--f-body);text-align:center;flex:none}
-.wmsbar b{font:600 15px var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wmsbar .back{margin-left:auto;height:36px;padding:0 16px;border-radius:40px;border:1px solid #ED1C24;color:#ED1C24;background:#fff;
-  font:600 13px var(--f-body);text-decoration:none;display:inline-flex;align-items:center;cursor:pointer;white-space:nowrap}
-.wmsbar .back:hover{background:#FFF1F2}
+body{background:var(--bg)}
+h1,h2,h3{letter-spacing:-.03em}
+thead th{background:#F3F2ED!important;color:#1D1C1A!important;font-weight:500}
+.wmsbar{position:sticky;top:8px;z-index:40;display:flex;align-items:center;gap:10px;height:58px;padding:0 10px 0 8px;margin:8px 0 16px;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;box-shadow:0 1px 2px rgba(29,28,26,.04),0 8px 24px rgba(29,28,26,.06)}
+.wmsbar .lg{width:34px;height:34px;border-radius:10px;background:#1D1C1A;color:#fff;font:600 11.5px/34px var(--f-body);text-align:center;flex:none}
+.wmsbar b{font:600 16px var(--f-body);letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wmsbar .back{margin-left:auto;height:40px;padding:0 16px;border-radius:12px;border:0;color:#fff;background:#1D1C1A;
+  font:500 14px var(--f-body);text-decoration:none;display:inline-flex;align-items:center;cursor:pointer;white-space:nowrap}
+.wmsbar .back:hover{background:#000}
 </style>"""
 U = U.replace('</style>', BAR_CSS, 1)
 EN = [('<h1>Audit SOP MKT</h1>','<h1>Business Process</h1>'),
@@ -86,10 +89,10 @@ def page(extra_head, bar):
             + extra_head + head + '\n</head>\n<body>\n' + bar + rest + '\n</body>\n</html>\n')
 bar = '<div class="wmsbar"><span class="lg">MKT</span><b>Business Process</b>{}</div>\n'
 (H/'gas/Alur.html').write_text(page('<base target="_top">\n',
-    bar.format('<a class="back" href="<?= appUrl ?>" target="_top">← Form audit</a>')))
+    bar.format('<a class="back" href="<?= appUrl ?>" target="_top">Form audit →</a>')))
 (R/'dist/audit_mobile_alur.html').write_text(page(
     '<title>MKT Business Process</title>\n<meta name="viewport" content="width=device-width, initial-scale=1">\n',
-    bar.format('<button class="back" type="button" onclick="history.back()">← Form audit</button>')))
+    bar.format('<button class="back" type="button" onclick="history.back()">Form audit →</button>')))
 
 # ---------- pratinjau form audit ----------
 idx = (H/'gas/Index.html').read_text()
@@ -100,7 +103,7 @@ body = (idx.replace("<?!= include('Data') ?>", data_html + mock).replace("<?!= i
 head2 = re.search(r'<head>(.*?)</head>', body, re.S).group(1)
 head2 = head2.replace('<base target="_top">\n', '').replace('<meta charset="utf-8">\n', '')
 main = re.search(r'<body>(.*?)</body>', body, re.S).group(1)
-banner = '<div style="background:#FFF8E1;color:#8A5A00;font-size:12px;padding:6px 16px;text-align:center">Pratinjau: server tiruan, isian hanya di browser ini.</div>\n'
+banner = '<div style="background:#EEF5A6;color:#1D1C1A;font-size:12px;padding:6px 16px;text-align:center">Pratinjau: server tiruan, isian hanya di browser ini.</div>\n'
 prev = '<title>MKT Audit SOP Mobile</title>\n' + head2 + banner + main
 assert '<?' not in prev
 (R/'dist/audit_mobile_mockup.html').write_text(prev)
