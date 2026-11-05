@@ -138,4 +138,6 @@ README.md  ringkasan; HANDOFF.md  dokumen ini
 - `apps/audit-mobile/build_gas.py` membangun `gas/Data.html` (master langkah + hasil audit sebelumnya) dan pratinjau `dist/audit_mobile_mockup.html` (server tiruan dari `preview_mock.js`). Artifact pratinjau: https://claude.ai/artifact/QopzpqVHgaAGZxMnTBRvAD
 - Model: dokumen per kunjungan cabang (FRM-OPS-001-0006 dst.), bagian = layanan (+ unit SEMPER/MARCEN untuk DC Jakarta), status dokumen dan lapangan dipisah, temuan wajib bila NC, foto opsional maksimal 3 (Drive), kunci final. CY dan full container (T2) opsional per dokumen.
 - Hanya mode terang (permintaan pengguna). Gaya mengikuti WMS (Plus Jakarta Sans, merah #ED1C24, header tabel krem).
+- Hasil audit Juli–September diimpor oleh `importHistory_()` (dipanggil dari `setup()`, aman diulang) sebagai dokumen final `hist-<cabang>`; total cocok 524 C / 207 NC / 103 N/A. Medan memakai template SOP Medan.
+- `gas/Alur.html` = halaman Alur/Peta/Gap bertema WMS (tanpa mode gelap), dilayani `doGet` dengan `?page=alur`.
 - Belum: deploy oleh pengguna, uji di HP sungguhan, impor JSON ekspor ke data repo / Gap Analysis, penggabungan dengan dashboard GAS (rencana setelah audit Desember).

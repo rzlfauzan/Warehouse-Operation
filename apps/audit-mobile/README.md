@@ -8,7 +8,8 @@ Web app untuk mengisi audit SOP langsung dari HP. Login memakai akun Google kant
 | `gas/Code.gs` | Server: setup, simpan isian, unggah foto, kunci, ekspor JSON |
 | `gas/Index.html` | Tampilan dan CSS |
 | `gas/App.html` | Logika halaman |
-| `gas/Data.html` | Master langkah dan hasil audit sebelumnya. **Dibangun otomatis, jangan diedit manual.** |
+| `gas/Data.html` | Master langkah dan hasil audit Juli–September 2026. **Dibangun otomatis, jangan diedit manual.** |
+| `gas/Alur.html` | Halaman Alur, Peta & Gap SOP (tema WMS), dibuka dari menu **Alur, Peta & Gap SOP** (`?page=alur`). **Dibangun otomatis.** |
 | `gas/appsscript.json` | Pengaturan: zona waktu Jakarta, web app dijalankan sebagai pemilik, hanya untuk domain kantor |
 | `build_gas.py` | Membangun `Data.html` dan pratinjau `dist/audit_mobile_mockup.html` dari `data/audit_dataset_v3.json` |
 | `preview_mock.js` | Server tiruan, hanya untuk pratinjau (tidak diunggah ke Apps Script) |
@@ -17,12 +18,14 @@ Web app untuk mengisi audit SOP langsung dari HP. Login memakai akun Google kant
 1. Buka https://script.google.com dengan **akun Google kantor**, lalu pilih **New project**. Beri nama `MKT Audit SOP`.
 2. Buat file sesuai isi folder `gas/`:
    - `Code.gs`: tempel isi `gas/Code.gs`.
-   - Pilih **+ › HTML** tiga kali, beri nama `Index`, `App`, dan `Data` (tanpa `.html`), lalu tempel isinya masing-masing.
+   - Pilih **+ › HTML** empat kali, beri nama persis `Index`, `App`, `Data`, dan `Alur`, lalu tempel isinya masing-masing.
+     Ketik namanya **tanpa** `.html` (editor menambahkannya sendiri). Huruf besar-kecil berpengaruh: `index` berbeda dengan `Index`.
    - Pilih **Project Settings › Show "appsscript.json" manifest file in editor**, lalu tempel isi `gas/appsscript.json`.
 3. Di editor, pilih fungsi `setup` dan tekan **Run**. Izinkan akses ke Sheets dan Drive. Fungsi ini membuat:
    - spreadsheet **MKT Audit SOP – Data** dengan sheet DOKUMEN, HASIL, PENGGUNA, MASTER_LANGKAH;
    - folder Drive **MKT Audit SOP – Foto & Ekspor**;
-   - akun Anda sebagai admin di sheet PENGGUNA.
+   - akun Anda sebagai admin di sheet PENGGUNA;
+   - 5 dokumen final berisi hasil audit Juli–September 2026 (FRM-OPS-001-0001 s.d. 0005), 834 langkah: 524 C, 207 NC, 103 N/A.
 
    Link spreadsheet dan folder muncul di **Execution log**.
 4. Tambahkan auditor di sheet **PENGGUNA**: `email` | `nama` | `peran` (`auditor` atau `admin`) | `aktif` (`TRUE`). Akun yang tidak terdaftar hanya bisa melihat.
@@ -30,6 +33,10 @@ Web app untuk mengisi audit SOP langsung dari HP. Login memakai akun Google kant
 6. Buka link itu di HP, lalu pilih **Tambahkan ke layar utama** supaya bisa dibuka seperti aplikasi.
 
 Kalau ingin memakai spreadsheet yang sudah ada: sebelum menjalankan `setup`, isi **Project Settings › Script properties** dengan `SS_ID` = ID spreadsheet tersebut.
+
+## Kalau muncul error
+- **`No HTML file named Index was found`**: file HTML belum ada atau namanya beda. Jalankan fungsi `cekPemasangan` dari editor; di Execution log akan terlihat file mana yang HILANG. Penyebab paling umum: nama diketik `index` (huruf kecil), `Index.html` (jadi `Index.html.html`), atau file belum dibuat.
+- **Email akun tidak terbaca**: buka link dengan akun Google kantor (bukan akun pribadi), dan pastikan deployment diatur *Who has access* = domain kantor.
 
 ## Update versi
 - Data langkah berubah: jalankan `python3 apps/audit-mobile/build_gas.py`, tempel ulang `Data.html`, lalu jalankan `setup` lagi supaya MASTER_LANGKAH ikut diperbarui. Fungsi ini aman diulang dan tidak menghapus isian.
@@ -49,3 +56,5 @@ Kalau ingin memakai spreadsheet yang sudah ada: sebelum menjalankan `setup`, isi
 - Tidak ada mode offline penuh. Halaman pertama harus dibuka saat ada sinyal.
 - Foto diperkecil di HP (maks. 1600px) sebelum diunggah. Maksimal 3 foto per langkah.
 - Pilihan CY Handling dan penarikan full container ditentukan saat dokumen dibuat dan tidak bisa diubah setelahnya.
+- Cabang Medan memakai checklist SOP cabang Medan (template MDN: Export 57, Import 58, DC 55, CY 27 langkah). Cabang lain memakai SOP Utama (Head Office).
+- Halaman Alur, Peta & Gap masih memakai data audit Juli–September (statis). Angka hasil audit Desember belum masuk ke halaman itu.

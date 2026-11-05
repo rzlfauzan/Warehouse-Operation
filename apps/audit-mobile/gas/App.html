@@ -41,7 +41,7 @@ function partItems(doc, p){
 const prevOf = (item, p) => p.unit ? (item.p[p.unit.toLowerCase()] || {}) : item.p;
 const ansOf = (p, n) => (S.D.ans[p.key] || {})[n] || {};
 const isDone = a => !!(a.d && a.g);
-const needsNote = a => (a.d === 'NC' || a.g === 'NC') && !String(a.f || '').trim();
+const needsNote = a => (a.d === 'NC' || a.g === 'NC') && !String(a.f || '').trim() && !(S.D && isHist(S.D.doc)); // data impor lama tidak ditagih temuan
 function stats(p){
   const {items} = partItems(S.D.doc, p); const t = {total: items.length, done:0, C:0, NC:0, NA:0, need:0, ncd:0};
   for (const i of items){ const a = ansOf(p, i.n);
@@ -55,7 +55,12 @@ function docStats(){
   t.pct = (t.C + t.NC) ? t.C/(t.C + t.NC) : null; return t;
 }
 const pctTxt = v => v == null ? '–' : (v*100).toFixed(1).replace('.', ',') + '%';
-const fmtDate = s => { try { return new Date(s + 'T00:00').toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'}); } catch(e){ return s; } };
+const MON = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const fmtDate = s => { const m = /^(\d{4})-(\d{2})-(\d{2})(?:\/(\d{2}))?$/.exec(String(s || ''));
+  return m ? (+m[3]) + (m[4] ? '–' + (+m[4]) : '') + ' ' + MON[+m[2]-1] + ' ' + m[1] : String(s || ''); };
+const isHist = d => String(d.id).indexOf('hist-') === 0;
+const isMdn = d => (site(d.site) || {}).template === 'MDN_TEMPLATE';
+const sopTxt = d => isMdn(d) ? 'SOP cabang Medan' : 'SOP Utama (Head Office)';
 const timeTxt = t => new Date(t).toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
 
 /* ---------- antrean simpan (otomatis, dengan cadangan di HP) ---------- */
@@ -144,24 +149,25 @@ async function vDocs(){
   try { const r = await API('apiBootstrap'); S.user = r.user; S.docs = r.docs; S.nextNo = r.nextNo; showUser(); }
   catch(e){ return failView(e, vDocs); }
   if (S.view !== 'dokumen') return;
-  const rows = S.docs.slice().sort((a,b) => (b.upd||0) - (a.upd||0)).map(d => {
-    const s = site(d.site), t = d.sum, pr = t.total ? Math.round(t.done/t.total*100) : 0, pct = (t.C+t.NC) ? t.C/(t.C+t.NC) : null;
+  const row = d => {
+    const s = site(d.site), t = d.sum, h = isHist(d), pr = t.total ? Math.round((h ? t.C+t.NC+t.NA : t.done)/t.total*100) : 0, pct = (t.C+t.NC) ? t.C/(t.C+t.NC) : null;
     return `<button class="doc" data-doc="${esc(d.id)}" type="button">
       <span class="no">${esc(d.no)}</span>
-      <span><span class="pill ${d.status === 'final' ? 'p-final">Final' : 'p-draft">Draft'}</span></span>
-      <span class="meta"><span><b>${esc(s ? s.name : d.site)}</b></span><span>${fmtDate(d.date)}</span><span>${t.done}/${t.total} langkah</span><span>Lapangan comply ${pctTxt(pct)}</span><span>${esc(d.leadName || '')}</span></span>
-      <span class="bar"><i style="width:${pr}%"></i></span></button>`;
-  }).join('');
+      <span>${isMdn(d) ? '<span class="pill p-mdn">SOP Medan</span> ' : ''}<span class="pill ${d.status === 'final' ? 'p-final">Final' : 'p-draft">Draft'}</span></span>
+      <span class="meta"><span><b>${esc(s ? s.name : d.site)}</b></span><span>${fmtDate(d.date)}</span>
+        <span>${h ? (t.C+t.NC+t.NA) + ' langkah diaudit' : t.done + '/' + t.total + ' langkah'}</span><span>Lapangan comply ${pctTxt(pct)}</span><span>${esc(d.leadName || '')}</span></span>
+      <span class="bar"><i style="width:${pr}%"></i></span></button>`; };
+  const byUpd = (a,b) => (b.upd||0) - (a.upd||0);
+  const now = S.docs.filter(d => !isHist(d)).sort(byUpd), old = S.docs.filter(isHist).sort((a,b) => String(a.no).localeCompare(String(b.no)));
   $('#view').innerHTML = `
     <div class="ph"><div><h1>Dokumen Audit</h1><p>Satu dokumen per kunjungan audit cabang, dengan nomor formulir sendiri.</p></div>
       ${canWrite() ? '<button class="btn pri" id="newBtn" type="button">+ Buat dokumen audit</button>' : ''}</div>
     ${canWrite() ? '' : `<div class="err">Akun ${esc(S.user.email)} belum terdaftar sebagai auditor, jadi hanya bisa melihat. Minta admin menambahkan email ini di sheet PENGGUNA.</div>`}
-    <div class="card"><div class="thead">Dokumen audit</div>
-      <div class="docs">${rows || `<div class="empty">Belum ada dokumen.${canWrite() ? ' Tekan <b>Buat dokumen audit</b> untuk mulai.' : ''}</div>`}</div></div>
-    <div class="card"><div class="thead">Audit sebelumnya (referensi)</div>
-      <div class="tbl"><table><thead><tr><th>No. formulir</th><th>Cabang</th><th>Tanggal</th></tr></thead><tbody>
-      ${DATA.sites.map(s => `<tr><td>${esc(s.audit_no)}</td><td class="l">${esc(s.name)}</td><td>${esc(s.date)}</td></tr>`).join('')}
-      </tbody></table></div></div>`;
+    <div class="card"><div class="thead">Audit berjalan</div>
+      <div class="docs">${now.map(row).join('') || `<div class="empty">Belum ada dokumen audit baru.${canWrite() ? ' Tekan <b>Buat dokumen audit</b> untuk mulai.' : ''}</div>`}</div></div>
+    <div class="card"><div class="thead">Audit Juli–September 2026 (impor)</div>
+      <div class="docs">${old.map(row).join('') || '<div class="empty">Data audit sebelumnya belum diimpor. Admin bisa menjalankan setup() sekali lagi.</div>'}</div></div>
+    <p class="foot">© 2026 MKT · Audit SOP Warehouse &amp; Multimode</p>`;
   const nb = $('#newBtn'); if (nb) nb.onclick = openNew;
   document.querySelectorAll('[data-doc]').forEach(b => b.onclick = () => { S.part = null; openDoc(b.dataset.doc); });
 }
@@ -207,7 +213,10 @@ function docHead(){
     <div class="kv"><small>No. formulir</small><b>${esc(d.no)}</b></div>
     <div class="kv"><small>Cabang</small><b>${esc(s.name)}</b></div>
     <div class="kv"><small>Tanggal</small><b>${fmtDate(d.date)}</b></div>
-    <div class="kv"><small>Status</small><b><span class="pill ${d.status === 'final' ? 'p-final">Final, terkunci' : 'p-draft">Draft'}</span></b></div></div>`;
+    <div class="kv"><small>Status</small><b><span class="pill ${d.status === 'final' ? 'p-final">Final, terkunci' : 'p-draft">Draft'}</span></b></div>
+    <div class="kv"><small>SOP acuan</small><b>${sopTxt(d)}</b></div>
+    <div class="kv"><small>Lead auditor</small><b>${esc(d.leadName || '–')}</b></div>
+    ${isHist(d) ? '<div class="kv" style="grid-column:span 2"><small>Sumber</small><b>Impor hasil audit 2026 (FRM-OPS-001-0001 s.d. 0005)</b></div>' : ''}</div>`;
 }
 function vParts(){
   const d = S.D.doc, s = site(d.site);
@@ -216,12 +225,12 @@ function vParts(){
     return `<button class="part" data-part="${p.key}" type="button">
       <h3>${esc(p.label)}</h3>
       ${never ? '<span class="pill p-opt" style="align-self:flex-start">Disiapkan, belum pernah diaudit</span>' : ''}
-      <div class="k"><span>${t.done}/${t.total} langkah</span><span>Comply ${pctTxt(t.pct)}</span></div>
+      <div class="k"><span>${isHist(d) ? (t.C+t.NC+t.NA) + ' langkah diaudit' : t.done + '/' + t.total + ' langkah'}</span><span>Comply ${pctTxt(t.pct)}</span></div>
       <div class="bar"><i style="width:${pr}%"></i></div>
       ${t.need ? `<span class="warn">${t.need} NC belum ada temuan</span>` : ''}</button>`; }).join('');
   $('#view').innerHTML = `
     <div class="crumb"><a href="#" data-go="dokumen">Dokumen audit</a><span>/</span><span>${esc(d.no)}</span></div>
-    <div class="ph"><div><h1>${esc(s.name)}</h1><p>Pilih layanan untuk mulai mengisi. Dua auditor bisa mengisi layanan berbeda bersamaan.</p></div>
+    <div class="ph"><div><h1>${esc(s.name)}</h1><p>${isHist(d) ? 'Hasil audit ' + fmtDate(d.date) + '. Hanya bisa dibaca.' : 'Pilih layanan untuk mulai mengisi. Dua auditor bisa mengisi layanan berbeda bersamaan.'}${isMdn(d) ? ' Langkah audit memakai SOP cabang Medan.' : ''}</p></div>
       <button class="btn" type="button" data-go="ringkasan">Lihat ringkasan</button></div>
     ${docHead()}
     <div class="parts">${cards}</div>`;
@@ -269,14 +278,14 @@ function segBtns(n, field, val, lock){
 }
 function stepCard(p, i, lock){
   const a = ansOf(p, i.n), pv = prevOf(i, p), s = site(S.D.doc.site), need = needsNote(a);
-  const prev = pv.g && pv.g !== 'P'
+  const prev = isHist(S.D.doc) ? '' : pv.g && pv.g !== 'P'
     ? `<div class="prev"><span>Audit ${esc(s.date)}:</span>${pv.d && pv.d !== 'P' ? `<span class="pill p-${pv.d}">Dok ${SHORT[pv.d]}</span>` : ''}<span class="pill p-${pv.g}">Lap ${SHORT[pv.g]}</span>${pv.f ? `<q>${esc(pv.f)}</q>` : ''}</div>`
     : `<div class="prev"><span class="pill p-P">Belum pernah diaudit</span></div>`;
   const open = a.f || a.a || (a.ph && a.ph.length) || need;
   return `<article class="card step ${isDone(a) ? 'done' : ''} ${need ? 'need' : ''}" id="st${i.n}">
     <div class="sh"><span class="num">${i.n}</span><div style="min-width:0"><div class="crit">${esc(i.c)}</div>
       <div class="sm"><span>PIC: ${esc(i.a)}</span><span>${esc(i.r)}</span><span>${CAT[i.k] || esc(i.k)}</span></div>
-      ${a.by && a.t ? `<div class="by">Diisi ${esc(String(a.by).split('@')[0])} · ${timeTxt(a.t)}</div>` : ''}</div></div>
+      ${a.by && a.t && !isHist(S.D.doc) ? `<div class="by">Diisi ${esc(String(a.by).split('@')[0])} · ${timeTxt(a.t)}</div>` : ''}</div></div>
     <div class="ans"><span>Dokumen</span>${segBtns(i.n, 'd', a.d, lock)}<span>Lapangan</span>${segBtns(i.n, 'g', a.g, lock)}</div>
     ${prev}
     <div class="extra" data-x="${i.n}" ${open ? '' : 'hidden'}>
@@ -359,7 +368,7 @@ function vSum(){
     ${docHead()}
     <div class="kpis">
       <div class="card"><small>Compliance lapangan</small><div class="big">${pctTxt(T.pct)}</div></div>
-      <div class="card"><small>Langkah lengkap</small><div class="big">${T.done}<span style="font-size:15px;color:var(--muted)">/${T.total}</span></div></div>
+      <div class="card"><small>${isHist(d) ? 'Langkah diaudit' : 'Langkah lengkap'}</small><div class="big">${isHist(d) ? T.C+T.NC+T.NA : T.done}<span style="font-size:15px;color:var(--muted)">/${T.total}</span></div></div>
       <div class="card"><small>NC lapangan</small><div class="big" style="color:var(--nc)">${T.NC}</div></div>
       <div class="card"><small>NC dokumen</small><div class="big" style="color:var(--nc)">${T.ncd}</div></div></div>
     <div class="card tbl"><table><thead><tr><th>Layanan</th><th class="r">Lengkap</th><th class="r">C</th><th class="r">NC</th><th class="r">N/A</th><th class="r">NC dok</th><th class="r">Comply</th></tr></thead><tbody>${rows}</tbody></table></div>
@@ -373,7 +382,7 @@ function vSum(){
   const lb = $('#lockBtn');
   if (lb) lb.onclick = () => { $('#lockBox').innerHTML = `<div class="card pad" style="display:flex;flex-direction:column;gap:12px">
       <b>Kunci ${esc(d.no)}?</b><span style="color:var(--muted)">Setelah dikunci, isian tidak bisa diubah oleh siapa pun.</span><div id="lkErr"></div>
-      <div class="row"><button class="btn ghost" id="lkNo" type="button">Batal</button><button class="btn pri" id="lkYes" type="button">Ya, kunci</button></div></div>`;
+      <div class="row"><button class="btn ghost" id="lkNo" type="button">Batal</button><button class="btn solid" id="lkYes" type="button">Ya, kunci</button></div></div>`;
     $('#lkNo').onclick = vSum;
     $('#lkYes').onclick = async () => { const b = $('#lkYes'); b.disabled = true; b.textContent = 'Mengunci…';
       try { await drain(); S.D = await API('apiLock', d.id); toast('Dokumen dikunci'); vSum(); }

@@ -1,6 +1,6 @@
 /* HANYA untuk pratinjau lokal/Artifact: meniru google.script.run (Code.gs) dengan penyimpanan browser. Tidak dipakai di Apps Script. */
 (function(){
-  const K = 'mkt-audit-preview-v1';
+  const K = 'mkt-audit-preview-v2';
   const T = {C:'COMPLY', NC:'NON-COMPLY', NA:'N/A'};
   let db = null; try { db = JSON.parse(localStorage.getItem(K)); } catch(e){}
   const save = () => { try { localStorage.setItem(K, JSON.stringify(db)); } catch(e){} };
@@ -17,9 +17,17 @@
     const d = {id: Math.random().toString(36).slice(2,10), no, site, date, lead: user.email, leadName: user.nama, partner, cy, full, status:'draft', created: Date.now(), upd: Date.now()};
     db.docs.push(d); db.res[d.id] = {}; return d; }
   if (!db){ db = {docs:[], res:{}, next:6};
-    const d = newDoc('JKT', '2026-12-08', '', false, false), r = db.res[d.id].EXPORT = {};
-    [[1,'C','C',''],[2,'C','C',''],[3,'C','NC','Jam tiba tidak dicatat di logbook pos'],[4,'C','C',''],[5,'NA','NA',''],[6,'C','C','']]
-      .forEach(([n,dd,g,f]) => r[n] = {d:dd, g, f, a:'', ph:[], t: Date.now(), by:'auditor2@kantor (contoh)'});
+    // sama dengan importHistory_() di Code.gs: hasil audit Agustus–September jadi dokumen final
+    DATA.sites.forEach(s => {
+      const cy = DATA.sheets.some(x => x.site === s.code && x.sheet === 'CY' && x.items.some(i => i.p.g && i.p.g !== 'P'));
+      const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s.date), when = m ? new Date(+m[1], +m[2]-1, +m[3], 12).getTime() : Date.now();
+      const d = {id: 'hist-' + s.code, no: s.audit_no, site: s.code, date: s.date, lead: '', leadName: s.lead || DATA.lead || '', partner: '',
+                 cy, full: false, status: 'final', created: when, upd: when, locked: when, lockedBy: 'impor data audit 2026'};
+      db.docs.push(d); const res = db.res[d.id] = {};
+      parts(d).forEach(p => items(d, p).forEach(i => { const u = p.key.split('|')[1], pv = u ? (i.p[u.toLowerCase()] || {}) : i.p;
+        if (!pv.g || pv.g === 'P') return;
+        (res[p.key] = res[p.key] || {})[i.n] = {d: pv.d || null, g: pv.g, f: pv.f || '', a: pv.aa || '', ph: [], t: when, by: 'impor data audit 2026'}; }));
+    });
     save(); }
   const clone = o => JSON.parse(JSON.stringify(o));
   const find = id => { const d = db.docs.find(x => x.id === id); if (!d) throw new Error('Dokumen tidak ditemukan.'); return d; };

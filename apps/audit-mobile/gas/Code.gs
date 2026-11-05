@@ -21,9 +21,13 @@ var CODE2TXT = { C: 'COMPLY', NC: 'NON-COMPLY', NA: 'N/A' };
 var TXT2CODE = { 'COMPLY': 'C', 'NON-COMPLY': 'NC', 'N/A': 'NA' };
 
 /* ================= web app ================= */
-function doGet() {
-  return HtmlService.createTemplateFromFile('Index').evaluate()
-    .setTitle(APP_TITLE)
+function doGet(e) {
+  var page = e && e.parameter && e.parameter.page;
+  var base = ScriptApp.getService().getUrl();
+  var t = HtmlService.createTemplateFromFile(page === 'alur' ? 'Alur' : 'Index');
+  t.appUrl = base; t.alurUrl = base + '?page=alur';
+  return t.evaluate()
+    .setTitle(page === 'alur' ? 'MKT Alur & Gap SOP' : APP_TITLE)
     .addMetaTag('viewport', 'width=device-width, initial-scale=1, viewport-fit=cover')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DEFAULT);
 }
@@ -51,6 +55,7 @@ function setup() {
   var emails = u.getLastRow() > 1 ? u.getRange(2, 1, u.getLastRow() - 1, 1).getValues().map(function (r) { return String(r[0]).toLowerCase(); }) : [];
   if (emails.indexOf(me.toLowerCase()) < 0) u.appendRow([me, 'Admin', 'admin', true]);
   writeMaster_(ss);
+  importHistory_(ss);
   Logger.log('Spreadsheet data: ' + ss.getUrl());
   Logger.log('Folder Drive: ' + DriveApp.getFolderById(p.getProperty('FOLDER_ID')).getUrl());
 }
@@ -68,6 +73,39 @@ function writeMaster_(ss) {
   var sh = ss.getSheetByName('MASTER_LANGKAH');
   if (sh.getLastRow() > 1) sh.getRange(2, 1, sh.getLastRow() - 1, COLS.MASTER_LANGKAH.length).clearContent();
   sh.getRange(2, 1, rows.length, COLS.MASTER_LANGKAH.length).setValues(rows);
+}
+
+/** Cek nama file di project. Jalankan dari editor bila muncul "No HTML file named ... was found". */
+function cekPemasangan() {
+  ['Index', 'App', 'Data', 'Alur'].forEach(function (n) {
+    try { HtmlService.createHtmlOutputFromFile(n); Logger.log('OK      ' + n + '.html'); }
+    catch (e) { Logger.log('HILANG  ' + n + '.html  -> buat file HTML bernama persis "' + n + '" (huruf besar-kecil berpengaruh, tanpa .html)'); }
+  });
+  var p = PropertiesService.getScriptProperties();
+  Logger.log('SS_ID: ' + (p.getProperty('SS_ID') || 'belum ada, jalankan setup()'));
+}
+
+/** Masukkan hasil audit Juli–September 2026 (FRM-OPS-001-0001 s.d. 0005) sebagai dokumen final. Aman diulang. */
+function importHistory_(ss) {
+  var D = getData_(), have = rows_('DOKUMEN').map(function (r) { return String(r.id); });
+  var shD = ss.getSheetByName('DOKUMEN'), shH = ss.getSheetByName('HASIL'), W = COLS.HASIL.length;
+  D.sites.forEach(function (s) {
+    var id = 'hist-' + s.code; if (have.indexOf(id) >= 0) return;
+    var cy = D.sheets.some(function (x) { return x.site === s.code && x.sheet === 'CY' && x.items.some(function (i) { return i.p.g && i.p.g !== 'P'; }); });
+    var doc = { id: id, site: s.code, cy: cy, full: false };
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s.date), when = m ? new Date(+m[1], +m[2] - 1, +m[3], 12) : new Date();
+    var rows = [];
+    partsOf_(doc).forEach(function (p) {
+      itemsOf_(doc, p).forEach(function (i) {
+        var pv = p.unit ? (i.p[p.unit.toLowerCase()] || {}) : i.p;
+        if (!pv.g || pv.g === 'P') return;
+        rows.push([id + '|' + p.key + '|' + i.n, id, s.audit_no, s.code, p.key, p.sheet, p.unit || '', i.s, i.n,
+                   CODE2TXT[pv.d] || '', CODE2TXT[pv.g] || '', pv.f || '', pv.aa || '', '', when, 'impor data audit 2026', '[]']);
+      });
+    });
+    shD.appendRow([id, s.audit_no, s.code, s.date, '', s.lead || D.lead || '', '', cy, false, 'final', when, when, when, 'impor data audit 2026']);
+    if (rows.length) shH.getRange(shH.getLastRow() + 1, 1, rows.length, W).setValues(rows);
+  });
 }
 
 /* ================= helper ================= */
