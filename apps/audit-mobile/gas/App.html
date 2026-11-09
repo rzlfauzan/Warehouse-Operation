@@ -2,7 +2,8 @@
 /* MKT Audit SOP — logika halaman. Server: Code.gs (google.script.run). DATA: Data.html. */
 const LBL = {C:'Comply', NC:'Non-comply', NA:'N/A', P:'Belum diaudit'};
 const SHORT = {C:'C', NC:'NC', NA:'N/A', P:'Pending'};
-const SHEETNAME = {TRUCKING:'Trucking Support', EXPORT:'Export', IMPORT:'Import', DC:'Distribution Center', CY:'CY Handling'};
+const SHEETNAME = {TRUCKING:'Trucking Support', EXPORT:'Export', IMPORT:'Import', DC:'Distribution Center', AREA:'Area Terbatas & NC Barang', CY:'CY Handling'};
+const UNITN = {'TJ PRIOK':'Tj. Priok', SEMPER:'Semper', MARCEN:'Marcen'};
 const CAT = {DOC:'Dokumen', OPS:'Operasional', SYS:'Sistem/WMS', COMP:'Kepatuhan'};
 const $ = s => document.querySelector(s);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -27,7 +28,7 @@ function parts(doc){
   for (const sh of s.sheets){
     if (sh === 'CY' && !doc.cy) continue;
     const units = (s.units || {})[sh];
-    if (units && units.length) units.forEach(u => out.push({key: sh + '|' + u, sheet: sh, unit: u, label: SHEETNAME[sh] + ' · ' + u}));
+    if (units && units.length) units.forEach(u => out.push({key: sh + '|' + u, sheet: sh, unit: u, label: SHEETNAME[sh] + ' · ' + (UNITN[u] || u)}));
     else out.push({key: sh, sheet: sh, unit: null, label: SHEETNAME[sh]});
   }
   return out;

@@ -8,6 +8,7 @@ Perubahan terhadap sumber (semuanya tercatat di README):
 - Sheet TRUCKING juga memuat draf penarikan full container (langkah 9-22, status PENDING) dari data/audit_dataset_jkt_v2.json.
 - 'Auditor: ...' di dalam finding dipisah menjadi field auditor_note.
 - JKT DC: status per lokasi {SEMPER, MARCEN} dari kolom genba, DOKUMEN dari kolom doc.
+- Sheet AREA (Area Terbatas & NC Barang) dari data/area_terbatas_source.json; JKT: status per lokasi {TJ PRIOK, SEMPER, MARCEN}.
 """
 import json
 from pathlib import Path
@@ -80,6 +81,37 @@ for site in SRC['sites']:
                 items=empty + full))
         sheets.append(dict(base, sections=sections, items=items))
 
+# sheet AREA TERBATAS & NC BARANG (SOP-OPS-007, SOP-OPS-008; Medan: SOP-OPS-005 Medan), dibaca dari Google Sheets
+AT = json.loads((ROOT / 'data/area_terbatas_source.json').read_text(encoding='utf-8'))
+ATC = {'C': 'COMPLY', 'N': 'NON-COMPLY', 'A': 'N/A'}
+AT_UNITS = AT['hasil']['JKT']['units']
+def area_sheet(code):
+    h, mdn = AT['hasil'][code], code == 'MDN'
+    T = AT['medan' if mdn else 'ho']
+    items = []
+    for x in T['langkah']:
+        n = x['no']
+        it = {k: x[k] for k in ('no', 'section', 'sop_ref', 'category', 'criterion', 'actor')}
+        it['method'] = x['method']
+        if code == 'JKT':
+            it['status'] = {u: ATC[h['genba'][u][n - 1]] for u in AT_UNITS}
+            it.update(finding='', finding_units={u: h['temuan'][u].get(str(n), '') for u in AT_UNITS}, auditor_note='')
+        else:
+            it.update(status=ATC[h['genba'][n - 1]], doc_status=ATC[h['doc'][n - 1]], finding=h['temuan'].get(str(n), ''),
+                      auditor_note=h.get('catatan_auditor', {}).get(str(n), ''))
+        it.update(qa_flag='', actor_actual=h.get('pelaksana', {}).get(str(n), ''), root_cause='')
+        items.append(it)
+    note = ('Sheet AREA TERBATAS MEDAN (SOP-OPS-005 Medan), 23 langkah; Medan tidak mengaudit NC Barang.' if mdn else
+            'Sheet AREA TERBATAS & NC BARANG: SOP-OPS-007 Area Terbatas Gudang (langkah 1-20) dan SOP-OPS-008 Penanganan Ketidaksesuaian Barang (21-28).') + \
+           ' Status resmi = status lapangan (genba). Sumber: Google Sheets, dibaca 2026-11-09.'
+    if code == 'JKT':
+        note += ' Jakarta diaudit di tiga lokasi: Tj. Priok, Semper, Marcen.'
+    return dict(site=code, sheet='AREA', template='MDN_TEMPLATE' if mdn else 'JKT_TEMPLATE', note=note, sop_refs=T['sop_refs'],
+                sections=[dict(x) for x in T['seksi']], items=items)
+for code in [x['code'] for x in SRC['sites']]:
+    if code in AT['hasil']:
+        sheets.append(area_sheet(code))
+
 # sheet CY Handling Medan (SOP-OPS-CY-001), dibaca dari Google Sheets
 MCY = {'COMPLY': 'COMPLY', 'NON-COMPLY': 'NON-COMPLY', 'N/A': 'N/A'}
 sheets.append(dict(site='MDN', sheet='CY', template='MDN_TEMPLATE',
@@ -116,6 +148,7 @@ sites = [{k: s[k] for k in ('code', 'name', 'audit_no', 'date', 'template') if k
 for x in sites:
     if x['code'] == 'JKT':
         x['lead_auditor'] = V2['meta']['lead_auditor']
+        x['units'] = dict(x['units'], AREA=AT_UNITS)
 out = {'meta': {k: v for k, v in SRC['meta'].items() if k != 'title'} | {'title': SRC['meta']['title'], 'lead_auditor': V2['meta']['lead_auditor'],
        'hq_sop_note': 'SOP Medan berbeda dan nanti disamakan alurnya dengan SOP Utama di Head Office (template Jakarta).'},
        'sites': sites, 'sheets': sheets}
@@ -127,7 +160,10 @@ def tally(its, key=lambda i: i['status']):
     for i in its: c[key(i)] += 1
     return c
 for s in sheets:
-    if s['site'] == 'JKT' and s['sheet'] == 'DC':
+    if s['site'] == 'JKT' and s['sheet'] == 'AREA':
+        for loc in AT_UNITS:
+            c = tally(s['items'], lambda i: i['status'][loc]); print(s['site'], s['sheet'], loc, c, f"{c['COMPLY']/max(1,c['COMPLY']+c['NON-COMPLY'])*100:.1f}%")
+    elif s['site'] == 'JKT' and s['sheet'] == 'DC':
         for loc in ('SEMPER', 'MARCEN', 'DOKUMEN'):
             c = tally(s['items'], lambda i: i['status'][loc]); print(s['site'], s['sheet'], loc, c, f"{c['COMPLY']/max(1,c['COMPLY']+c['NON-COMPLY'])*100:.1f}%")
     else:

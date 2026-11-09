@@ -89,8 +89,9 @@ function cekPemasangan() {
 function importHistory_(ss) {
   var D = getData_(), have = rows_('DOKUMEN').map(function (r) { return String(r.id); });
   var shD = ss.getSheetByName('DOKUMEN'), shH = ss.getSheetByName('HASIL'), W = COLS.HASIL.length;
+  var keys = {}; if (shH.getLastRow() > 1) shH.getRange(2, 1, shH.getLastRow() - 1, 1).getValues().forEach(function (r) { keys[r[0]] = true; });
   D.sites.forEach(function (s) {
-    var id = 'hist-' + s.code; if (have.indexOf(id) >= 0) return;
+    var id = 'hist-' + s.code, exists = have.indexOf(id) >= 0; // dokumen lama: hanya tambah langkah yang belum ada (mis. Area Terbatas)
     var cy = D.sheets.some(function (x) { return x.site === s.code && x.sheet === 'CY' && x.items.some(function (i) { return i.p.g && i.p.g !== 'P'; }); });
     var doc = { id: id, site: s.code, cy: cy, full: false };
     var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s.date), when = m ? new Date(+m[1], +m[2] - 1, +m[3], 12) : new Date();
@@ -98,12 +99,12 @@ function importHistory_(ss) {
     partsOf_(doc).forEach(function (p) {
       itemsOf_(doc, p).forEach(function (i) {
         var pv = p.unit ? (i.p[p.unit.toLowerCase()] || {}) : i.p;
-        if (!pv.g || pv.g === 'P') return;
+        if (!pv.g || pv.g === 'P' || keys[id + '|' + p.key + '|' + i.n]) return;
         rows.push([id + '|' + p.key + '|' + i.n, id, s.audit_no, s.code, p.key, p.sheet, p.unit || '', i.s, i.n,
                    CODE2TXT[pv.d] || '', CODE2TXT[pv.g] || '', pv.f || '', pv.aa || '', '', when, 'impor data audit 2026', '[]']);
       });
     });
-    shD.appendRow([id, s.audit_no, s.code, s.date, '', s.lead || D.lead || '', '', cy, false, 'final', when, when, when, 'impor data audit 2026']);
+    if (!exists) shD.appendRow([id, s.audit_no, s.code, s.date, '', s.lead || D.lead || '', '', cy, false, 'final', when, when, when, 'impor data audit 2026']);
     if (rows.length) shH.getRange(shH.getLastRow() + 1, 1, rows.length, W).setValues(rows);
   });
 }

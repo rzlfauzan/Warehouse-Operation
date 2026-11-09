@@ -141,3 +141,11 @@ README.md  ringkasan; HANDOFF.md  dokumen ini
 - Hasil audit Juli–September diimpor oleh `importHistory_()` (dipanggil dari `setup()`, aman diulang) sebagai dokumen final `hist-<cabang>`; total cocok 524 C / 207 NC / 103 N/A. Medan memakai template SOP Medan.
 - `gas/Alur.html` = halaman Alur/Peta/Gap bertema WMS (tanpa mode gelap), dilayani `doGet` dengan `?page=alur`.
 - Belum: deploy oleh pengguna, uji di HP sungguhan, impor JSON ekspor ke data repo / Gap Analysis, penggabungan dengan dashboard GAS (rencana setelah audit Desember).
+
+## Area Terbatas & NC Barang — ditambahkan 2026-11-09
+- Sumber: sheet `AREA TERBATAS & NC BARANG` (JKT, SUB, MKS, SRG) dan `AREA TERBATAS MEDAN` di file checklist audit per cabang (Google Drive, dibaca lewat Google Sheets MCP), disalin ke `data/area_terbatas_source.json` (id file ada di dalamnya).
+- Nomor SOP mengikuti cover checklist HO: **SOP-OPS-007 Area Terbatas Gudang** (langkah 1-20) dan **SOP-OPS-008 Penanganan Ketidaksesuaian Barang** (21-28). SOP-OPS-006 adalah Cycle Count & Stock Opname (sudah ada di DC/Export/Import). Medan: SOP-OPS-005 Area Terbatas Gudang Cabang Medan, 23 langkah, tanpa NC Barang.
+- Sheet aplikasi `AREA` (proses ke-5 di PROCS). Jakarta diaudit di tiga lokasi: status dict `{TJ PRIOK, SEMPER, MARCEN}` + `finding_units`; filter "Lokasi Jakarta" di header (Semua/Tj. Priok/Semper/Marcen; di Gap juga "Dokumen DC").
+- Hasil (status lapangan): JKT Tj. Priok 14 C/14 NC (50,0%), Semper 23/5 (82,1%), Marcen 17/11 (60,7%); SUB 19/8/1 N/A (70,4%); MKS 13/15 (46,4%); SRG 20/6/2 N/A (76,9%); MDN 12/11 (52,2%). Rekap SUB/MKS/SRG/MDN dicek otomatis terhadap rekap sheet (validate_data.py bagian 5).
+- Skrip: `make_dataset_v3.py` (area_sheet), `add_area_flow.py` (6 tahap alur di flows.json), `make_medan_mapping.py` (AREA: 16 sama, 6 mirip, 1 hanya di Medan), `make_xlsx_peta.py` (sheet Excel baru). Angka keseluruhan sekarang: 5 cabang, 26 sheet, 1006 langkah.
+- Form audit HP: AREA ikut sebagai layanan (JKT tiga lokasi). Arsip impor bertambah: 642 C / 277 NC / 106 N/A. `importHistory_()` sekarang menambah langkah yang belum ada pada dokumen arsip lama, jadi cukup jalankan `setup` ulang setelah menempel Data.html baru.

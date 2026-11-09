@@ -1401,6 +1401,238 @@
    ]
   },
   {
+   "key": "AREA",
+   "label": "Area Terbatas & NC Barang",
+   "note": "SOP-OPS-007 Area Terbatas Gudang dan SOP-OPS-008 Penanganan Ketidaksesuaian Barang, berlaku untuk semua departemen. Jakarta diaudit di tiga lokasi (Tj. Priok, Semper, Marcen). Medan memakai SOP-OPS-005 Area Terbatas Gudang Cabang Medan (23 langkah, tanpa NC Barang).",
+   "phases": [
+    {
+     "name": "Area terbatas gudang (SOP-OPS-007)",
+     "stages": [
+      {
+       "id": "AREA-1",
+       "no": 1,
+       "name": "Pemeriksaan kendaraan masuk",
+       "cond": "",
+       "pic": [
+        "Security"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-007 6.1",
+       "sheet": "AREA",
+       "from": 1,
+       "to": 4,
+       "in": [
+        {
+         "t": "STNK & SIM pengemudi",
+         "sig": 0
+        },
+        {
+         "t": "Surat Jalan (kendaraan logistik)",
+         "sig": 0
+        },
+        {
+         "t": "Kartu identitas tamu",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "Kartu pengunjung (ID Visitor)",
+         "sig": 0
+        },
+        {
+         "t": "Laporan barang mencurigakan ke Manajemen",
+         "sig": 0
+        }
+       ],
+       "sys": "Pemeriksaan fisik dengan kaca cembung dan metal detector",
+       "pending": false
+      },
+      {
+       "id": "AREA-2",
+       "no": 2,
+       "name": "Lalu lintas & kendaraan keluar",
+       "cond": "",
+       "pic": [
+        "Security"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-007 6.2-6.3",
+       "sheet": "AREA",
+       "from": 5,
+       "to": 9,
+       "in": [
+        {
+         "t": "Surat Jalan",
+         "sig": 0
+        },
+        {
+         "t": "Kartu pengunjung",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "Catatan pelanggaran lalu lintas ke Manajemen",
+         "sig": 0
+        },
+        {
+         "t": "Kartu identitas dikembalikan ke tamu",
+         "sig": 0
+        }
+       ],
+       "sys": "Traffic Management System",
+       "pending": false
+      },
+      {
+       "id": "AREA-3",
+       "no": 3,
+       "name": "Akses keluar masuk gudang",
+       "cond": "Body checking karyawan dan tamu saat keluar masuk",
+       "pic": [
+        "Security"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-007 6.4",
+       "sheet": "AREA",
+       "from": 10,
+       "to": 14,
+       "in": [
+        {
+         "t": "Kartu pengunjung",
+         "sig": 0
+        },
+        {
+         "t": "ID Card karyawan",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "Buku catatan tamu di Pos Security",
+         "sig": 0
+        }
+       ],
+       "sys": "",
+       "pending": false
+      },
+      {
+       "id": "AREA-4",
+       "no": 4,
+       "name": "Pengawasan bongkar muat & CCTV",
+       "cond": "",
+       "pic": [
+        "Security",
+        "Management"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-007 6.5-6.6",
+       "sheet": "AREA",
+       "from": 15,
+       "to": 20,
+       "in": [
+        {
+         "t": "Izin akses CCTV dari Operation Department Head",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "Rekaman CCTV (simpan minimal 90 hari)",
+         "sig": 0
+        }
+       ],
+       "sys": "CCTV 24 jam mencakup seluruh area gudang",
+       "pending": false
+      }
+     ]
+    },
+    {
+     "name": "Ketidaksesuaian barang (SOP-OPS-008)",
+     "stages": [
+      {
+       "id": "AREA-5",
+       "no": 5,
+       "name": "Identifikasi, pemisahan & dokumentasi",
+       "cond": "Barang cair: di atas spill pallet, bagian bocor menghadap ke atas",
+       "pic": [
+        "Operasional"
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-008 6.1",
+       "sheet": "AREA",
+       "from": 21,
+       "to": 24,
+       "in": [
+        {
+         "t": "Temuan barang tidak sesuai (rusak, kurang/lebih)",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "Laporan ke Manajemen",
+         "sig": 0
+        },
+        {
+         "t": "Foto & video kondisi barang",
+         "sig": 0
+        }
+       ],
+       "sys": "",
+       "pending": false
+      },
+      {
+       "id": "AREA-6",
+       "no": 6,
+       "name": "Berita Acara & tindakan perbaikan",
+       "cond": "Bahan kimia berbahaya yang tidak tertangani: prosedur darurat",
+       "pic": [
+        "Operasional",
+        "QHSE",
+        "Management Rep."
+       ],
+       "areas": [
+        "G"
+       ],
+       "sop": "SOP-OPS-008 6.1",
+       "sheet": "AREA",
+       "from": 25,
+       "to": 28,
+       "in": [
+        {
+         "t": "Foto & video kondisi barang",
+         "sig": 0
+        }
+       ],
+       "out": [
+        {
+         "t": "Berita Acara ketidaksesuaian ke pelanggan (1x24 jam)",
+         "sig": 0
+        },
+        {
+         "t": "Form Tindakan Perbaikan & Pencegahan",
+         "sig": 0
+        }
+       ],
+       "sys": "",
+       "pending": false
+      }
+     ]
+    }
+   ]
+  },
+  {
    "key": "CY",
    "label": "CY Handling",
    "note": "Draf berasal dari pemetaan proses CY area MKT Medan (Google Sheets). Tahap bertanda \"usulan\" belum ada di SOP-OPS-CY-001. Langkah audit hanya ada untuk Medan (27 langkah); 8 langkah audit di luar area MKT (penarikan dari pelabuhan, order truck) tidak dipetakan ke tahap.",

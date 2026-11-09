@@ -1,0 +1,730 @@
+{
+ "catatan": "Sheet AREA TERBATAS & NC BARANG (cabang HO) dan AREA TERBATAS MEDAN dari file checklist audit per cabang di Google Drive, dibaca 2026-11-09 lewat Google Sheets MCP. Status kode: C = COMPLY, N = NON-COMPLY, A = N/A. \"genba\" = status lapangan (resmi), \"doc\" = kolom status pertama (Status Dokumen di SUB, self assessment di MKS/SRG/MDN). Nomor SOP mengikuti cover checklist HO: SOP-OPS-007 Area Terbatas Gudang R.00 (18-Mar-2025), SOP-OPS-008 Penanganan Ketidaksesuaian Barang R.00 (07-Jul-2025). Medan: SOP-OPS-005 Area Terbatas Gudang Cabang Medan R.01 (16-Apr-2025); baris di sheet Medan menulis \"SOP-OPS-007 §6.x\" tetapi cover dan judul sheet menyebut SOP-OPS-005 Medan. Medan tidak punya bagian NC Barang.",
+ "file": {
+  "JKT": "1SSuMdYI-aUTwqtRkeZWAQrEmvRj3oglR869rD9IchaM",
+  "SUB": "1a-mnsdLyFsqFw42v8dgiHz6fzAZTbS0uKQuTyw7YkxU",
+  "MKS": "1cuSGhdRglNL9V2-ks8zx_kMUSfILm3E7aX9AOsFE8n0",
+  "SRG": "1CZpVzzZ7ynuVlIFpeAa_T0QuiHIPy-gLdoMggpQ6o7g",
+  "MDN": "1PDrWSS3LQVwGZnCQg1s6hac9vlTruYpIThOMVMNU9Mg"
+ },
+ "ho": {
+  "sop_refs": [
+   "SOP-OPS-007 Area Terbatas Gudang (R.00)",
+   "SOP-OPS-008 Penanganan Ketidaksesuaian Barang (R.00)"
+  ],
+  "seksi": [
+   {
+    "id": "A1",
+    "name": "Pemeriksaan Kendaraan Masuk",
+    "sop": "SOP-OPS-007 6.1",
+    "from_no": 1,
+    "to_no": 4
+   },
+   {
+    "id": "A2",
+    "name": "Pengamanan Lalu Lintas & Pemeriksaan Kendaraan Keluar",
+    "sop": "SOP-OPS-007 6.2-6.3",
+    "from_no": 5,
+    "to_no": 9
+   },
+   {
+    "id": "A3",
+    "name": "Pemeriksaan Akses Keluar Masuk Gudang",
+    "sop": "SOP-OPS-007 6.4",
+    "from_no": 10,
+    "to_no": 14
+   },
+   {
+    "id": "A4",
+    "name": "Pengawasan Bongkar Muat & Pengelolaan CCTV",
+    "sop": "SOP-OPS-007 6.5-6.6",
+    "from_no": 15,
+    "to_no": 20
+   },
+   {
+    "id": "A5",
+    "name": "Penanganan Ketidaksesuaian Barang",
+    "sop": "SOP-OPS-008 6.1",
+    "from_no": 21,
+    "to_no": 28
+   }
+  ],
+  "langkah": [
+   {
+    "no": 1,
+    "section": "A1",
+    "sop_ref": "SOP-OPS-007 6.1",
+    "category": "COMP",
+    "criterion": "Setiap kendaraan masuk wajib dilakukan pemeriksaan fisik (bawah, kabin, bagasi) menggunakan kaca cembung & metal detector.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 2,
+    "section": "A1",
+    "sop_ref": "SOP-OPS-007 6.1",
+    "category": "COMP",
+    "criterion": "Kendaraan Tamu/Logistik: Security melakukan pemeriksaan administrasi (STNK, SIM, Surat Jalan jika diperlukan).",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 3,
+    "section": "A1",
+    "sop_ref": "SOP-OPS-007 6.1",
+    "category": "COMP",
+    "criterion": "Tamu/kendaraan logistik melakukan registrasi kepada Security dan menerima kartu pengunjung.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 4,
+    "section": "A1",
+    "sop_ref": "SOP-OPS-007 6.1",
+    "category": "COMP",
+    "criterion": "Jika ditemukan ketidaksesuaian/barang mencurigakan, Security segera mengamankan dan melaporkan ke Manajemen.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 5,
+    "section": "A2",
+    "sop_ref": "SOP-OPS-007 6.2-6.3",
+    "category": "COMP",
+    "criterion": "Setiap kendaraan di area gudang mematuhi aturan lalu lintas sesuai Traffic Management System yang berlaku.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 6,
+    "section": "A2",
+    "sop_ref": "SOP-OPS-007 6.2-6.3",
+    "category": "DOC",
+    "criterion": "Ketidaksesuaian lalu lintas dicatat dan dilaporkan ke Manajemen.",
+    "method": "Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 7,
+    "section": "A2",
+    "sop_ref": "SOP-OPS-007 6.2-6.3",
+    "category": "COMP",
+    "criterion": "Setiap kendaraan keluar wajib dilakukan pemeriksaan fisik (bawah, kabin, bagasi).",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 8,
+    "section": "A2",
+    "sop_ref": "SOP-OPS-007 6.2-6.3",
+    "category": "COMP",
+    "criterion": "Kendaraan logistik: Security memeriksa kesesuaian surat jalan dengan kargo yang dibawa.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 9,
+    "section": "A2",
+    "sop_ref": "SOP-OPS-007 6.2-6.3",
+    "category": "COMP",
+    "criterion": "Tamu wajib mengembalikan kartu pengunjung dan ditukarkan dengan kartu identitas asli saat keluar.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 10,
+    "section": "A3",
+    "sop_ref": "SOP-OPS-007 6.4",
+    "category": "COMP",
+    "criterion": "Area Gudang merupakan area terbatas; hanya personel berkepentingan yang diperbolehkan masuk.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 11,
+    "section": "A3",
+    "sop_ref": "SOP-OPS-007 6.4",
+    "category": "COMP",
+    "criterion": "Tamu wajib sudah teregistrasi dan membawa kartu identitas pengunjung sebelum masuk ke dalam Gudang.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 12,
+    "section": "A3",
+    "sop_ref": "SOP-OPS-007 6.4",
+    "category": "COMP",
+    "criterion": "Karyawan wajib menggunakan kartu identitas karyawan saat keluar masuk Gudang.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 13,
+    "section": "A3",
+    "sop_ref": "SOP-OPS-007 6.4",
+    "category": "DOC",
+    "criterion": "Tamu yang keluar masuk Gudang wajib mengisi buku catatan di Pos Security.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 14,
+    "section": "A3",
+    "sop_ref": "SOP-OPS-007 6.4",
+    "category": "COMP",
+    "criterion": "Karyawan/Tamu wajib dilakukan body checking saat keluar masuk Gudang.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 15,
+    "section": "A4",
+    "sop_ref": "SOP-OPS-007 6.5-6.6",
+    "category": "COMP",
+    "criterion": "Setiap aktivitas bongkar/muat di Gudang wajib diawasi langsung oleh Security.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 16,
+    "section": "A4",
+    "sop_ref": "SOP-OPS-007 6.5-6.6",
+    "category": "COMP",
+    "criterion": "Personel tidak berkepentingan dilarang memasuki area bongkar/muat tanpa izin Manajemen.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 17,
+    "section": "A4",
+    "sop_ref": "SOP-OPS-007 6.5-6.6",
+    "category": "COMP",
+    "criterion": "Area Gudang dilengkapi CCTV yang mencakup keseluruhan area; operasional berjalan 24 jam otomatis.",
+    "method": "Observasi",
+    "actor": "Security/Management"
+   },
+   {
+    "no": 18,
+    "section": "A4",
+    "sop_ref": "SOP-OPS-007 6.5-6.6",
+    "category": "COMP",
+    "criterion": "Periode rekaman CCTV mampu menyimpan data minimal 90 hari.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security/Management"
+   },
+   {
+    "no": 19,
+    "section": "A4",
+    "sop_ref": "SOP-OPS-007 6.5-6.6",
+    "category": "COMP",
+    "criterion": "Izin akses CCTV hanya diberikan oleh Operation Department Head (Manager Gudang).",
+    "method": "Dokumen",
+    "actor": "Management"
+   },
+   {
+    "no": 20,
+    "section": "A4",
+    "sop_ref": "SOP-OPS-007 6.5-6.6",
+    "category": "COMP",
+    "criterion": "Dilarang mengubah, menghapus, atau menyebarkan rekaman CCTV tanpa seizin Manajemen.",
+    "method": "Wawancara",
+    "actor": "Security/Management"
+   },
+   {
+    "no": 21,
+    "section": "A5",
+    "sop_ref": "SOP-OPS-008 6.1",
+    "category": "COMP",
+    "criterion": "Temuan ketidaksesuaian barang (kerusakan, kurang/lebih) segera diidentifikasi dan dilaporkan ke Manajemen.",
+    "method": "Observasi + Dokumen",
+    "actor": "Operasional"
+   },
+   {
+    "no": 22,
+    "section": "A5",
+    "sop_ref": "SOP-OPS-008 6.1",
+    "category": "COMP",
+    "criterion": "Penanganan awal: barang ketidaksesuaian dipisahkan dari barang lain dan diletakkan di atas pallet.",
+    "method": "Observasi",
+    "actor": "Operasional"
+   },
+   {
+    "no": 23,
+    "section": "A5",
+    "sop_ref": "SOP-OPS-008 6.1",
+    "category": "COMP",
+    "criterion": "Barang rusak berupa cairan disimpan di atas spill pallet dengan bagian bocor menghadap ke atas.",
+    "method": "Observasi",
+    "actor": "Operasional"
+   },
+   {
+    "no": 24,
+    "section": "A5",
+    "sop_ref": "SOP-OPS-008 6.1",
+    "category": "DOC",
+    "criterion": "Kondisi barang rusak dan proses penanganannya didokumentasikan berupa foto dan video.",
+    "method": "Observasi + Dokumen",
+    "actor": "Operasional"
+   },
+   {
+    "no": 25,
+    "section": "A5",
+    "sop_ref": "SOP-OPS-008 6.1",
+    "category": "COMP",
+    "criterion": "Berita Acara ketidaksesuaian barang dilaporkan ke Pelanggan & pihak berkepentingan dalam 1x24 jam.",
+    "method": "Dokumen",
+    "actor": "Operasional"
+   },
+   {
+    "no": 26,
+    "section": "A5",
+    "sop_ref": "SOP-OPS-008 6.1",
+    "category": "DOC",
+    "criterion": "Tim Operasional & QHSE menyusun Form Tindakan Perbaikan & Pencegahan.",
+    "method": "Dokumen",
+    "actor": "Operasional & QHSE"
+   },
+   {
+    "no": 27,
+    "section": "A5",
+    "sop_ref": "SOP-OPS-008 6.1",
+    "category": "COMP",
+    "criterion": "Management Representative memonitor tindak lanjut tindakan perbaikan dan pencegahan.",
+    "method": "Dokumen",
+    "actor": "Management Rep."
+   },
+   {
+    "no": 28,
+    "section": "A5",
+    "sop_ref": "SOP-OPS-008 6.1",
+    "category": "COMP",
+    "criterion": "Jika barang rusak adalah bahan kimia berbahaya yang tidak dapat ditangani, prosedur darurat diaktifkan.",
+    "method": "Wawancara + Dokumen",
+    "actor": "Operasional & QHSE"
+   }
+  ]
+ },
+ "medan": {
+  "sop_refs": [
+   "SOP-OPS-005 Area Terbatas Gudang Cabang Medan (R.01)"
+  ],
+  "seksi": [
+   {
+    "id": "MA1",
+    "name": "Pemeriksaan Kendaraan Masuk di Area Gudang",
+    "sop": "SOP-OPS-005 (Medan) 6.1",
+    "from_no": 1,
+    "to_no": 4
+   },
+   {
+    "id": "MA2",
+    "name": "Pengamanan Lalu Lintas di Area Gudang",
+    "sop": "SOP-OPS-005 (Medan) 6.2",
+    "from_no": 5,
+    "to_no": 6
+   },
+   {
+    "id": "MA3",
+    "name": "Pemeriksaan Kendaraan Keluar di Area Gudang",
+    "sop": "SOP-OPS-005 (Medan) 6.3",
+    "from_no": 7,
+    "to_no": 9
+   },
+   {
+    "id": "MA4",
+    "name": "Pemeriksaan Akses Keluar Masuk Gudang",
+    "sop": "SOP-OPS-005 (Medan) 6.4",
+    "from_no": 10,
+    "to_no": 14
+   },
+   {
+    "id": "MA5",
+    "name": "Pengawasan Aktivitas Bongkar Muat di Gudang",
+    "sop": "SOP-OPS-005 (Medan) 6.5",
+    "from_no": 15,
+    "to_no": 18
+   },
+   {
+    "id": "MA6",
+    "name": "Pengelolaan CCTV",
+    "sop": "SOP-OPS-005 (Medan) 6.6",
+    "from_no": 19,
+    "to_no": 23
+   }
+  ],
+  "langkah": [
+   {
+    "no": 1,
+    "section": "MA1",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.1",
+    "category": "COMP",
+    "criterion": "Setiap kendaraan yang masuk ke area gudang wajib dilakukan pemeriksaan fisik (bagian bawah kendaraan, kabin, dan bagasi) menggunakan kaca cembung dan metal detector.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 2,
+    "section": "MA1",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.1",
+    "category": "COMP",
+    "criterion": "Khusus tamu/kendaraan logistik: Security melakukan pemeriksaan administrasi (STNK, SIM, Surat Jalan jika diperlukan) dan pemeriksaan fisik kendaraan.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 3,
+    "section": "MA1",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.1",
+    "category": "COMP",
+    "criterion": "Tamu/kendaraan logistik melakukan registrasi kepada Security dengan menukarkan kartu identitas untuk mendapatkan kartu pengunjung.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 4,
+    "section": "MA1",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.1",
+    "category": "COMP",
+    "criterion": "Apabila ditemukan ketidaksesuaian/barang mencurigakan yang berpotensi merugikan Perusahaan, Security wajib segera mengamankan dan melaporkan kepada Manajemen Perusahaan.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 5,
+    "section": "MA2",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.2",
+    "category": "COMP",
+    "criterion": "Setiap kendaraan yang memasuki area gudang wajib mematuhi aturan lalu lintas yang berlaku sesuai Traffic Management System.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 6,
+    "section": "MA2",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.2",
+    "category": "DOC",
+    "criterion": "Ketidaksesuaian/pelanggaran lalu lintas di area gudang dicatat dan dilaporkan kepada Manajemen Perusahaan melalui Berita Acara.",
+    "method": "Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 7,
+    "section": "MA3",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.3",
+    "category": "COMP",
+    "criterion": "Setiap kendaraan yang keluar dari area gudang wajib dilakukan pemeriksaan fisik kendaraan (bagian bawah kendaraan, kabin, dan bagasi).",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 8,
+    "section": "MA3",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.3",
+    "category": "COMP",
+    "criterion": "Tamu/kendaraan logistik mengembalikan kartu pengunjung kepada Security untuk ditukarkan dengan kartu identitas yang diserahkan sebelumnya.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 9,
+    "section": "MA3",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.3",
+    "category": "COMP",
+    "criterion": "Khusus kendaraan logistik, Security memeriksa kesesuaian surat jalan dengan kargo yang dibawa; apabila ada temuan, Security melaporkan kepada Manajemen.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 10,
+    "section": "MA4",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.4",
+    "category": "COMP",
+    "criterion": "Area Gudang merupakan area terbatas yang tidak dapat dilalui oleh siapapun yang tidak berkepentingan.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 11,
+    "section": "MA4",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.4",
+    "category": "COMP",
+    "criterion": "Tamu yang akan masuk ke dalam Gudang wajib sudah teregistrasi dan membawa kartu identitas pengunjung.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 12,
+    "section": "MA4",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.4",
+    "category": "COMP",
+    "criterion": "Karyawan wajib menggunakan kartu identitas karyawan saat keluar masuk Gudang.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 13,
+    "section": "MA4",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.4",
+    "category": "DOC",
+    "criterion": "Tamu yang keluar masuk Gudang wajib mengisi buku catatan yang tersedia di Pos Security Gudang.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 14,
+    "section": "MA4",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.4",
+    "category": "COMP",
+    "criterion": "Karyawan/Tamu wajib dilakukan pemeriksaan badan (body checking) saat keluar masuk Gudang untuk memastikan tidak ada benda yang mencurigakan.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 15,
+    "section": "MA5",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.5",
+    "category": "COMP",
+    "criterion": "Setiap aktivitas bongkar/muat di Gudang wajib diawasi langsung oleh Security.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 16,
+    "section": "MA5",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.5",
+    "category": "COMP",
+    "criterion": "Area bongkar/muat merupakan area terbatas; hanya personel berkepentingan yang diperbolehkan masuk (Branch Head, Warehouse Dept Head, Sec Head, Tally/Checker, Operator Forklift, TKBM, Security, PIC QHSE, Pengemudi Truck atas izin Manajemen, Perwakilan Pelanggan atas izin Manajemen).",
+    "method": "Observasi",
+    "actor": "Security/Management"
+   },
+   {
+    "no": 17,
+    "section": "MA5",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.5",
+    "category": "COMP",
+    "criterion": "Karyawan/Tamu yang tidak berkepentingan dilarang memasuki area bongkar/muat tanpa seizin Manajemen Perusahaan.",
+    "method": "Observasi",
+    "actor": "Security"
+   },
+   {
+    "no": 18,
+    "section": "MA5",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.5",
+    "category": "DOC",
+    "criterion": "Ketidaksesuaian yang ditemukan saat kegiatan bongkar/muat didokumentasikan dan dilaporkan kepada Manajemen.",
+    "method": "Dokumen",
+    "actor": "Security"
+   },
+   {
+    "no": 19,
+    "section": "MA6",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.6",
+    "category": "COMP",
+    "criterion": "Area Gudang dilengkapi dengan CCTV yang mencakup keseluruhan area; operasional CCTV berjalan 24 jam secara otomatis.",
+    "method": "Observasi",
+    "actor": "Security/Management"
+   },
+   {
+    "no": 20,
+    "section": "MA6",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.6",
+    "category": "COMP",
+    "criterion": "Periode rekaman CCTV mampu menyimpan data minimal 90 hari.",
+    "method": "Observasi + Dokumen",
+    "actor": "Security/Management"
+   },
+   {
+    "no": 21,
+    "section": "MA6",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.6",
+    "category": "COMP",
+    "criterion": "Persetujuan izin akses CCTV hanya diberikan oleh Manager Gudang (Operation Department Head) melalui email.",
+    "method": "Dokumen",
+    "actor": "Management"
+   },
+   {
+    "no": 22,
+    "section": "MA6",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.6",
+    "category": "COMP",
+    "criterion": "Control room CCTV dilengkapi dengan CCTV pada ruangan tersebut; dilarang menginformasikan/menyebarkan rekaman CCTV kepada pihak yang tidak berkepentingan tanpa seizin Manajemen.",
+    "method": "Wawancara",
+    "actor": "Security/Management"
+   },
+   {
+    "no": 23,
+    "section": "MA6",
+    "sop_ref": "SOP-OPS-005 (Medan) 6.6",
+    "category": "COMP",
+    "criterion": "Dilarang mengubah, menghapus, atau mengatur data yang ada pada rekaman CCTV.",
+    "method": "Wawancara",
+    "actor": "Security/Management"
+   }
+  ]
+ },
+ "hasil": {
+  "JKT": {
+   "units": [
+    "TJ PRIOK",
+    "SEMPER",
+    "MARCEN"
+   ],
+   "tanggal_sheet": "2026-08-04",
+   "genba": {
+    "TJ PRIOK": "NNNCCCNNNCNNCNCCCNNNCNCCCCNC",
+    "SEMPER": "NCCCCCCCCCNNCNNCCCCCCCCCCCCC",
+    "MARCEN": "NNNCCCCCNCCNNNNCCNCCCCCCCNNC"
+   },
+   "temuan": {
+    "TJ PRIOK": {
+     "1": "Pemeriksaan fisik masih belum konsisten dilakukan oleh Primanata",
+     "2": "pengecekan SIM/STNK tidak dilakukan",
+     "3": "Driver tidak mendapatkan ID Visitor",
+     "7": "Tidak dilakukan pemeriksaan fisik kendaraan pada saat gate out",
+     "8": "Security tidak memeriksa Surat Jalan dan hanya menggunakan barcode gate in/out",
+     "9": "Driver tidak mendapatkan ID Visitor",
+     "11": "Tamu belum diberikan ID Visitor pada saat masuk gudang, ditemukan tidak ada security pada saat masuk gudang",
+     "12": "Ditemukan karyawan MKT tidak menggunakan ID Card",
+     "14": "Karyawan maupun tamu tidak dilakukan body checking pada saat keluar masuk gudang",
+     "18": "Data hanya menyimpan selama 60 hari",
+     "19": "belum mendapatkan akses CCTV Primanata",
+     "20": "belum mendapatkan akses CCTV Primanata",
+     "22": "hanya dikasih remarks pada 1 partai",
+     "27": "perlu disign dari sisi Management Representative"
+    },
+    "SEMPER": {
+     "1": "Pemeriksaan kendaraan tidak menggunakan kaca cembung dan metal detector",
+     "11": "Ditemukan security tidak ditempat dan pagar terbuka",
+     "12": "Ditemukan karyawan MKT tidak menggunakan ID Card",
+     "14": "Security ditemukan tidak ditempat, sehingga body checking tidak dilakukan",
+     "15": "Ditemukan security tidak mengawasi aktivitas bongkar/muat"
+    },
+    "MARCEN": {
+     "1": "Pemeriksaan tidak dilakukan menggunakan metal detector",
+     "2": "pengecekan SIM/STNK tidak dilakukan",
+     "3": "Driver tidak mendapatkan ID Visitor",
+     "8": "tidak membawa dokumen hanya ditanya kebutuhan bertemu siapa",
+     "9": "Driver tidak mendapatkan ID Visitor",
+     "11": "supir tidak masuk area terbatas",
+     "12": "Ditemukan karyawan MKT tidak menggunakan ID Card",
+     "13": "Tamu yang keluar masuk belum konsisten dicatat pada logbook",
+     "14": "Karyawan maupun tamu tidak dilakukan body checking pada saat keluar masuk gudang",
+     "15": "Security tidak mengawasi aktivitas bongkar/muat",
+     "18": "Data hanya menyimpan selama 30 hari",
+     "24": "Foto",
+     "26": "Tidak dilaporkan semua kondisi ke QHSE",
+     "27": "Tidak dilaporkan semua kondisi ke QHSE"
+    }
+   }
+  },
+  "SUB": {
+   "tanggal_sheet": "2026-07-08",
+   "doc": "NNNCCCCCCCCACNCCNNCCCNNCCCCC",
+   "genba": "NNNCCCCCCCCACNCCNNCCCNNCCCCC",
+   "temuan": {
+    "1": "1 orang security, kaca cembung dan metal detector belum ada.",
+    "2": "inbound dilakukan check tanpa form. driver belum pakai visitor id. KTP perlu disimpan sampai selesai bongkar/muat. penambahan kolom id visitor",
+    "3": "driver belum dikasih id visitor",
+    "4": "tamu atau driver tidak diizinkan masuk area terbatas. kecuali ada izin",
+    "6": "ketika parkiran penuh, diarahkan ke B11 jika masih penuh dilakukan eskalasi untuk parkir sementara diluar area gudang",
+    "14": "body check wajib dilakukan utk karyawan/tamu. jam masuk / jam keluar",
+    "15": "surat jalan harus dipastikan di sign oleh admin whs",
+    "17": "gudang 1 area tinting mushola blm tercover. (tinting,k1,k2, j1, j2, h1, h2, g1, g2). gudang 2 belum ada cctv 1 titik. gudang 11 belum ada cctv 2 titik",
+    "18": "belum nambah kapasitas hardisk cctv",
+    "21": "BA spv belum dilakukan sign (ada perwaklilan management)",
+    "23": "pisah depan tinting utk hampel, belum ada spill pallet"
+   },
+   "catatan_auditor": {
+    "1": "Cek tim HSE"
+   }
+  },
+  "MKS": {
+   "tanggal_sheet": "2026-08-19",
+   "doc": "CCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+   "genba": "NCNNNCCCNCNNCNNCCCCCCCNNNNNN",
+   "pelaksana": {
+    "1": "Checker",
+    "2": "Checker",
+    "3": "Checker",
+    "4": "Checker"
+   },
+   "temuan": {
+    "1": "Tidak terdapat kaca cembung dan metal detector untuk melakukan pemeriksaan fisik",
+    "3": "Dilakukan oleh checker dan pengunjung belum memakai ID Card",
+    "4": "Tidak ada security",
+    "5": "Lalu lintas diatur oleh checker",
+    "6": "Akses hanya 1 pintu keluar/masuk",
+    "7": "Dilakukan oleh checker",
+    "8": "Tidak ada security yang mengecek surat jalan cargo, dilakukan oleh checker/admin",
+    "9": "Tidak ID Card yang dipegang oleh pengunjung",
+    "11": "Tamu sudah mengisi logbook, tetapi visitor tidak digunakan sampai ke driver",
+    "12": "Ditemukan ID Card Karyawan tidak digunakan di lingkungan kerja",
+    "14": "Tidak ada body checking pada saat keluar masuk gudang",
+    "15": "Aktivitas bongkar muat hanya diawasi oleh checker, tidak tersedia security",
+    "23": "Tidak ada spill pallet di gudang",
+    "24": "Kondisi barang rusak karena handling tidak dilakukan dokumentasi",
+    "25": "Berita Acara belum dilakukan langsung ketika kejadian berlangsung",
+    "26": "QHSE belum dilibatkan ketika terjadi ketidaksesuaian di area gudang",
+    "27": "Setiap ketidaksesuaian belum dimonitor sampai ke management representative",
+    "28": "Ops belum mengetahui prosedur darurat"
+   }
+  },
+  "SRG": {
+   "tanggal_sheet": "2026-08-06",
+   "doc": "CCCCNCNNCCCNCCNCCNCCCCNCCCCC",
+   "genba": "CNCCCCCCCCCNCNNCCNCCCCACCCNA",
+   "temuan": {
+    "2": "STNK tidak dilakukan pengecekan pada security",
+    "12": "karyawan MKT belum memakai ID card di lingkungan kerja",
+    "14": "Security saat ini hanya 1 dan fokus pada gate in/out",
+    "15": "Aktivitas bongkar/muat belum diawasi oleh security",
+    "18": "kapasitas penyimpanan saat ini hanya 50 hari",
+    "23": "spil pallet belum ada, sudah ada spill kit",
+    "26": "CAPA disesuaikan dengan format HSE dan perlu melibatkan QHSE",
+    "27": "tindak lanjut CAPA belum melibatkan QHSE"
+   }
+  },
+  "MDN": {
+   "tanggal_sheet": "2026-09-01",
+   "doc": "CCCNCNCCCCCCCCCCCNCNNNN",
+   "genba": "NCNCCCNNCCCNNCNCCCNNCNN",
+   "temuan": {
+    "1": "pemeriksaan kabin belum dilakukan menggunakan form",
+    "3": "Driver tidak diberikan ID Visitor",
+    "4": "dilaporkan melalui WAG",
+    "7": "pemeriksaan kabin belum dilakukan menggunakan form",
+    "8": "ID Visitor tidak ditukar dengan kartu identitas yang disimpan di security",
+    "12": "karyawan MKT belum memakai identitas pada saat beraktivitas di gudang",
+    "13": "Logbook security hanya mengisi logbook yang berada di receptionist",
+    "15": "Aktivitas bongkar muat di area Gudang tidak semua diawasi langsung oleh Security",
+    "19": "Masih ada area yang belum tercover CCTV, butuh penambahan titik dan relayout lokasi",
+    "20": "Periode rekaman CCTV yang saat ini berjalan belum semua titik CCTV dapat menyimpan data 90 hari, ada beberapa titik yang masih 30 hari",
+    "21": "Warehouse Manager, Facility Manager dan QHSE",
+    "22": "Belum ada instruksi atau poster panduan di Ruang CCTV",
+    "23": "Belum ada instruksi atau poster panduan di Ruang CCTV"
+   }
+  }
+ },
+ "rekap_sheet": {
+  "SUB": {
+   "C": 19,
+   "NC": 8,
+   "NA": 1
+  },
+  "MKS": {
+   "C": 13,
+   "NC": 15,
+   "NA": 0
+  },
+  "SRG": {
+   "C": 20,
+   "NC": 6,
+   "NA": 2
+  },
+  "MDN": {
+   "C": 12,
+   "NC": 11,
+   "NA": 0
+  }
+ }
+}

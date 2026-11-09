@@ -4,10 +4,13 @@ const PL=JSON.parse($('payload').textContent);
 const DATA=PL.audit, FL=PL.flows, GC=PL.gap;
 
 /* ===================== INTI BERSAMA ===================== */
-const LOCS=['SEMPER','MARCEN','DOKUMEN'],LOCN={SEMPER:'Semper',MARCEN:'Marcen',DOKUMEN:'Dokumen'};
-const PROCS=['EXPORT','IMPORT','TRUCKING','DC','CY'];
-const PROCN={EXPORT:'Export',IMPORT:'Import',TRUCKING:'Trucking Support',DC:'DC (Distribution Center)',CY:'CY Handling'};
-const SHN={EXPORT:'Export',IMPORT:'Import',DC:'DC',TRUCKING:'Trucking',CY:'CY Handling'};
+const LOCS=['SEMPER','MARCEN','DOKUMEN'],LOCN={SEMPER:'Semper',MARCEN:'Marcen',DOKUMEN:'Dokumen','TJ PRIOK':'Tj. Priok'};
+/* lokasi audit Jakarta per proses: DC (Semper, Marcen + kolom Dokumen), Area Terbatas (Tj. Priok, Semper, Marcen) */
+const UNITS={DC:LOCS,AREA:['TJ PRIOK','SEMPER','MARCEN']};
+const multiLoc=(site,sh)=>site==='JKT'&&!!UNITS[sh];
+const PROCS=['EXPORT','IMPORT','TRUCKING','DC','AREA','CY'];
+const PROCN={EXPORT:'Export',IMPORT:'Import',TRUCKING:'Trucking Support',DC:'DC (Distribution Center)',AREA:'Area Terbatas & NC Barang',CY:'CY Handling'};
+const SHN={EXPORT:'Export',IMPORT:'Import',DC:'DC',TRUCKING:'Trucking',AREA:'Area Terbatas & NC Barang',CY:'CY Handling'};
 const CLS={'COMPLY':'ok','NON-COMPLY':'nc','N/A':'na','PENDING':'pe'};
 const CATN=GC.CATN, FLAGTXT=GC.FLAGTXT, AREAS=FL.areas, FORCE=new Set(GC.FORCE), RCN=GC.RCN;
 const SITES=DATA.sites;
@@ -27,7 +30,8 @@ DATA.sheets.forEach(s=>{
   const secs=Object.fromEntries(s.sections.map(x=>[x.id,x])),tpl=s.template==='MDN_TEMPLATE'?'MDN':'HO';
   s.items.forEach(it=>{
     const mk=(raw,loc,finding,doc)=>OBS.push({site:s.site,tpl,sheet:s.sheet,no:it.no,loc,sec:it.section,secName:secs[it.section].name,actor:it.actor,actual:it.actor_actual||'',cat:it.category,sop:it.sop_ref,crit:it.criterion,raw,doc:doc??null,flag:it.qa_flag||'',finding:finding||'',note:it.auditor_note||'',orig:it.orig_no?`Export ${it.orig_no}`:'',root:it.root_cause||''});
-    if(s.site==='JKT'&&s.sheet==='DC'){
+    if(s.site==='JKT'&&s.sheet==='AREA')UNITS.AREA.forEach(u=>mk(it.status[u],u,(it.finding_units||{})[u]||'',null));
+    else if(s.site==='JKT'&&s.sheet==='DC'){
       mk(it.status.SEMPER,'SEMPER',it.finding_semper,it.status.DOKUMEN);
       mk(it.status.MARCEN,'MARCEN',it.finding_marcen,it.status.DOKUMEN);
       mk(it.status.DOKUMEN,'DOKUMEN',it.finding,null);
@@ -99,9 +103,12 @@ function renderHeader(){
   mkSeg($('siteSeg'),(multi?[['ALL','Semua cabang']]:[]).concat(SITES.map(s=>[s.code,s.name])),S.site,v=>{setSite(v);render()});
   [...$('viewSeg').children].forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.view)));
   const hasJkt=S.site==='JKT'||S.site==='ALL';
-  const showLoc=hasJkt&&(S.tab==='gap'||S.proc==='DC');
+  const showLoc=hasJkt&&(S.tab==='gap'||S.proc==='DC'||S.proc==='AREA');
   $('locSeg').hidden=!showLoc;$('locLab').hidden=!showLoc;
-  mkSeg($('locSeg'),[['ALL','Semper + Marcen'],['SEMPER','Semper'],['MARCEN','Marcen'],['DOKUMEN','Dokumen']],S.dcloc,v=>{S.dcloc=v;render()});
+  const lopt=S.tab==='gap'?[['ALL','Semua lokasi'],['TJ PRIOK','Tj. Priok'],['SEMPER','Semper'],['MARCEN','Marcen'],['DOKUMEN','Dokumen DC']]:
+    S.proc==='AREA'?[['ALL','Semua lokasi'],['TJ PRIOK','Tj. Priok'],['SEMPER','Semper'],['MARCEN','Marcen']]:[['ALL','Semper + Marcen'],['SEMPER','Semper'],['MARCEN','Marcen'],['DOKUMEN','Dokumen']];
+  if(showLoc&&!lopt.some(o=>o[0]===S.dcloc))S.dcloc='ALL';
+  mkSeg($('locSeg'),lopt,S.dcloc,v=>{S.dcloc=v;render()});
   [...$('tabs').children].forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===S.tab)));
   ['alur','peta','gap'].forEach(t=>$('panel-'+t).hidden=t!==S.tab);
   const si=S.site==='ALL'?null:siteInfo(S.site);
@@ -144,6 +151,7 @@ function ncBadge(st){
     const per=S.site==='ALL'?SITES.filter(s=>tplOfSite(s.code)==='HO').map(s=>{const k=sub.filter(o=>o.site===s.code);return k.length?`${s.name} ${k.filter(o=>eff(o)==='NON-COMPLY').length}`:''}).filter(Boolean).join(' · '):'';
     return `<button type="button" class="ncb${n?'':' z'}" data-gap="${st.id}"${loc?` data-loc="${loc}"`:''} title="${esc(per||'Lihat temuan di Gap Analysis')}">${lab?lab+' ':''}${n} NC</button>`};
   if(st.sheet==='DC'&&S.dcloc==='ALL'&&S.site==='JKT')return ['SEMPER','MARCEN'].map(l=>mk(os.filter(o=>o.loc===l),LOCN[l],l)).join('');
+  if(st.sheet==='AREA'&&S.dcloc==='ALL'&&S.site==='JKT')return UNITS.AREA.map(l=>mk(os.filter(o=>o.loc===l),LOCN[l],l)).join('');
   return mk(os,'','')+med;
 }
 function docs(list){return list.map(d=>`<li>${esc(d.t)}${d.sig?' <span class="sg" title="Memerlukan tanda tangan">✎ TTD</span>':''}</li>`).join('')}
@@ -199,7 +207,7 @@ function itemEff(sh,no){
 function itemFinding(sh,no){
   const os=itemObs(sh,no).filter(locOk);
   if(!os.length)return '';
-  if(S.site==='JKT'&&sh==='DC'&&os.length>1)return os.filter(o=>o.finding).map(o=>`${LOCN[o.loc]}: ${o.finding}`).join(' | ');
+  if(multiLoc(S.site,sh)&&os.length>1)return os.filter(o=>o.finding).map(o=>`${LOCN[o.loc]}: ${o.finding}`).join(' | ');
   return os[0].finding;
 }
 const NW=150,NH=68,PX=34,LANEH=90,LABW=132,GAP=22;
@@ -217,7 +225,7 @@ function renderPeta(){
   const rep=tally(os,o=>o.raw),adj=tally(os,adjStatus);
   const pr=pct(rep.c,rep.n),pa=pct(adj.c,adj.n),cov=rep.c+rep.n+rep.na?(rep.c+rep.n)/(rep.c+rep.n+rep.na)*100:null;
   const nflag=sh.items.filter(i=>i.qa_flag).length,nconf=sh.items.filter(i=>i.qa_flag.startsWith('status_conflict')).length;
-  const lc=S.site==='JKT'&&S.proc==='DC'?' · '+(S.dcloc==='ALL'?'Semper + Marcen':LOCN[S.dcloc]):'';
+  const lc=multiLoc(S.site,S.proc)?' · '+(S.dcloc==='ALL'?(S.proc==='DC'?'Semper + Marcen':'semua lokasi'):LOCN[S.dcloc]):'';
   $('peta-kpis').innerHTML=`<div class="kpi"><div class="v">${sh.items.length}</div><div class="l">langkah SOP${esc(lc)}</div></div>`+
    (pr==null?'':`<div class="kpi pair"><div class="v">${fmt(pr)}<small>${rep.c} C · ${rep.n} NC · ${rep.na} N/A</small></div><div class="l">Compliance resmi (as reported)</div></div>
    <div class="kpi pair"><div class="v">${fmt(pa)}<small>${adj.c} C · ${adj.n} NC · ${adj.na} N/A</small></div><div class="l">Adjusted (${nconf} status_conflict dihitung ulang)${pa!==pr?` <span class="arrow">▼ ${(pr-pa).toFixed(1).replace('.',',')} poin</span>`:''}</div></div>
@@ -259,7 +267,7 @@ function renderPeta(){
       n.style.cssText=`left:${x}px;top:${y}px`;n.dataset.no=it.no;n.setAttribute('aria-label',`Langkah ${it.no}, ${s}, ${it.criterion}`);
       n.innerHTML=`<span class="no">#${it.no} · ${esc(it.category)}</span><span class="t">${esc(it.criterion)}</span>`+(isDev(it.qa_flag)?'<span class="dev" title="Menyimpang dari SOP">!</span>':'')+(risky?'<span class="rk" title="Risiko integritas dilaporkan auditor">⚠</span>':'')+
         (other?'<span class="oth">dikerjakan pihak lain</span>':act?`<span class="oth act" title="Pelaksana aktual berbeda dari SOP">↔ ${esc(it.actor_actual)}</span>`:'')+
-        (S.site==='JKT'&&S.proc==='DC'?`<span class="dots">${LOCS.map(l=>{const o=itemObs('DC',it.no).find(q=>q.loc===l);return `<i class="${CLS[eff(o)]}" title="${LOCN[l]}"></i>`}).join('')}</span>`:'');
+        (multiLoc(S.site,S.proc)?`<span class="dots">${UNITS[S.proc].map(l=>{const o=itemObs(S.proc,it.no).find(q=>q.loc===l);return `<i class="${CLS[eff(o)]}" title="${LOCN[l]}"></i>`}).join('')}</span>`:'');
       n.onmouseenter=e=>showTip(e,it);n.onmousemove=moveTip;n.onmouseleave=()=>{$('tip').hidden=true};
       n.onfocus=e=>showTip(e,it,true);n.onblur=()=>{$('tip').hidden=true};
       n.onclick=()=>{S.peta.sel=it.no;renderPeta()};
@@ -293,7 +301,7 @@ function renderDrawer(sh){
   const st=S.proc==='CY'?cyStage(it.no,tpl):tpl==='HO'?stageOf(S.proc,it.no):(mp&&mp.ho[0]?stageOf(mp.ho[0].sheet,mp.ho[0].no):null);
   const gt=os.map(gtype).find(Boolean),themes=GC.THEMES.filter(t=>os.some(o=>themeHit(t,o)));
   let right='';
-  if(S.site==='JKT'&&S.proc==='DC'){
+  if(multiLoc(S.site,S.proc)){
     right+='<div class="locs">'+os.map(o=>`<div>${pill(eff(o))} <b>${LOCN[o.loc]}</b>${o.finding?': '+esc(o.finding):''}</div>`).join('')+'</div>';
   }else{
     const o=os[0],s=eff(o);
@@ -330,6 +338,7 @@ function renderCmp(){
     const rows=[];
     DATA.sheets.filter(s=>s.site===code).sort((x,y)=>PROCS.indexOf(x.sheet)-PROCS.indexOf(y.sheet)).forEach(s=>{
       if(code==='JKT'&&s.sheet==='DC')['SEMPER','MARCEN','DOKUMEN'].forEach(l=>rows.push({label:'DC '+LOCN[l],f:o=>o.sheet==='DC'&&o.loc===l}));
+      else if(code==='JKT'&&s.sheet==='AREA')UNITS.AREA.forEach(l=>rows.push({label:'Area Terbatas '+LOCN[l],f:o=>o.sheet==='AREA'&&o.loc===l}));
       else if(s.sheet==='TRUCKING'){rows.push({label:'Trucking: penarikan empty',f:o=>o.sheet==='TRUCKING'&&o.sec==='T1'});if(S.site!=='ALL')rows.push({label:'Trucking: penarikan full',f:o=>o.sheet==='TRUCKING'&&o.sec==='T2'})}
       else if(s.sheet==='CY'&&S.site==='ALL'&&s.items.every(i=>i.status==='PENDING'))return;
       else rows.push({label:SHN[s.sheet]==='DC'?'DC':SHN[s.sheet],f:o=>o.sheet===s.sheet&&o.loc!=='DOKUMEN'});
@@ -383,7 +392,7 @@ function mxCell(site,sheet,no){
 }
 function renderMx(){
   const mx=S.gap.mx,hoSites=SITES.filter(s=>tplOfSite(s.code)==='HO');
-  mkSeg($('gap-mx-sheet'),['EXPORT','IMPORT','DC','TRUCKING'].map(c=>[c,PROCN[c].replace(' (Distribution Center)','')]),mx.sheet,v=>{mx.sheet=v;renderMx()});
+  mkSeg($('gap-mx-sheet'),['EXPORT','IMPORT','DC','TRUCKING','AREA'].map(c=>[c,PROCN[c].replace(' (Distribution Center)','')]),mx.sheet,v=>{mx.sheet=v;renderMx()});
   $('gap-mx-opt').innerHTML=`<label class="chk"><input type="checkbox" id="mx-nc" ${mx.onlyNc?'checked':''}> Hanya langkah ber-NC</label><label class="chk"><input type="checkbox" id="mx-sort" ${mx.sort?'checked':''}> Urutkan dari NC terbanyak</label>`;
   $('mx-nc').onchange=e=>{mx.onlyNc=e.target.checked;renderMx()};$('mx-sort').onchange=e=>{mx.sort=e.target.checked;renderMx()};
   const base=DATA.sheets.find(s=>s.sheet===mx.sheet&&s.site==='JKT');
@@ -422,7 +431,7 @@ function renderMap(){
   const covered=sh=>new Set(MAP.flatMap(m=>m.ho.filter(h=>h.sheet===sh).map(h=>h.no)));
   const hoOnly=[];
   $('gap-map2').innerHTML='<thead><tr><th>Proses SOP HO</th><th class="n">Langkah HO</th><th class="n">Ada di SOP Medan</th><th class="n">Tidak ada di SOP Medan</th></tr></thead><tbody>'+
-    ['EXPORT','IMPORT','DC','TRUCKING'].map(sh=>{const its=hoItems(sh),cv=covered(sh),un=its.filter(i=>!cv.has(i.no));un.forEach(i=>hoOnly.push({sh,i}));
+    ['EXPORT','IMPORT','DC','TRUCKING','AREA'].map(sh=>{const its=hoItems(sh),cv=covered(sh),un=its.filter(i=>!cv.has(i.no));un.forEach(i=>hoOnly.push({sh,i}));
       return `<tr><td>${PROCN[sh].replace(' (Distribution Center)','')}</td><td class="n">${its.length}</td><td class="n">${its.length-un.length}</td><td class="n">${un.length}</td></tr>`}).join('')+'</tbody>';
   const mOnly=MAP.filter(m=>m.rel==='M');
   const crit=(site,sh,no)=>{const it=(DATA.sheets.find(s=>s.site===site&&s.sheet===sh)||{items:[]}).items.find(i=>i.no===no);return it?it.criterion:''};
@@ -436,12 +445,12 @@ function renderMap(){
 /* heatmap tahap x status */
 function renderHm(){
   const v=vis(),tpls=scopeTpls();
-  const groups=[['EXPORT','HO'],['IMPORT','HO'],['DC','HO'],['TRUCKING','HO'],['CY','HO'],['EXPORT','MDN'],['IMPORT','MDN'],['DC','MDN'],['CY','MDN']].filter(([sh,tp])=>tpls.has(tp));
+  const groups=[['EXPORT','HO'],['IMPORT','HO'],['DC','HO'],['TRUCKING','HO'],['AREA','HO'],['CY','HO'],['EXPORT','MDN'],['IMPORT','MDN'],['DC','MDN'],['AREA','MDN'],['CY','MDN']].filter(([sh,tp])=>tpls.has(tp));
   let h='<thead><tr><th>Tahap</th><th class="n">COMPLY</th><th class="n">NON-COMPLY</th><th class="n">N/A</th><th class="n">Belum diaudit</th><th class="n">NC %</th></tr></thead><tbody>';
   groups.forEach(([sh,tp])=>{
     const sheet=DATA.sheets.find(s=>s.sheet===sh&&(s.template==='MDN_TEMPLATE'?'MDN':'HO')===tp);if(!sheet)return;
     if(tp==='MDN'&&tpls.has('HO')&&sh==='EXPORT')h+='<tr class="sh med"><td colspan="6">Medan: SOP berbeda, di luar template HO</td></tr>';
-    h+=`<tr class="sh"><td colspan="6">${SHN[sh]}${tp==='MDN'?' · Medan':''}${sh==='DC'&&tp==='HO'&&S.dcloc!=='ALL'?' · '+LOCN[S.dcloc]:''}</td></tr>`;
+    h+=`<tr class="sh"><td colspan="6">${SHN[sh]}${tp==='MDN'?' · Medan':''}${multiLoc('JKT',sh)&&tp==='HO'&&S.dcloc!=='ALL'?' · '+LOCN[S.dcloc]:''}</td></tr>`;
     sheet.sections.forEach(sec=>{
       const os=v.filter(o=>o.sheet===sh&&o.tpl===tp&&o.sec===sec.id),n=os.length,c={};os.forEach(o=>{const s=eff(o);c[s]=(c[s]||0)+1});
       if(!n)return;

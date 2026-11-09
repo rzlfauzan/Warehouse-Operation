@@ -11,7 +11,7 @@
    "S": "sedang",
    "R": "rendah"
   },
-  "note": "Medan memakai SOP-OPS-DC-002, EXP-003, IMP-004; acuan HO adalah SOP Utama (template Jakarta). T1-T8 = penarikan empty (asal Export 37-44), T9-T18 = penarikan full (draf Rev.02)."
+  "note": "Medan memakai SOP-OPS-DC-002, EXP-003, IMP-004; acuan HO adalah SOP Utama (template Jakarta). T1-T8 = penarikan empty (asal Export 37-44), T9-T18 = penarikan full (draf Rev.02). AREA: Medan SOP-OPS-005 Medan ke HO SOP-OPS-007."
  },
  "map": [
   {
@@ -2206,6 +2206,300 @@
    "rel": "S",
    "conf": "T",
    "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 1,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 1
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 2,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 2
+    }
+   ],
+   "rel": "P",
+   "conf": "T",
+   "note": "Medan juga memeriksa fisik kendaraan di langkah ini"
+  },
+  {
+   "sheet": "AREA",
+   "no": 3,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 3
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": "Medan: kartu identitas ditukar dengan kartu pengunjung"
+  },
+  {
+   "sheet": "AREA",
+   "no": 4,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 4
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 5,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 5
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 6,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 6
+    }
+   ],
+   "rel": "P",
+   "conf": "T",
+   "note": "Medan mewajibkan Berita Acara"
+  },
+  {
+   "sheet": "AREA",
+   "no": 7,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 7
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 8,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 9
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 9,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 8
+    }
+   ],
+   "rel": "P",
+   "conf": "T",
+   "note": "Medan menambah pelaporan temuan ke Manajemen"
+  },
+  {
+   "sheet": "AREA",
+   "no": 10,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 10
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 11,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 11
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 12,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 12
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 13,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 13
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 14,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 14
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 15,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 15
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 16,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 16
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Medan merinci personel yang boleh masuk area bongkar/muat"
+  },
+  {
+   "sheet": "AREA",
+   "no": 17,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 16
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 18,
+   "ho": [],
+   "rel": "M",
+   "conf": "S",
+   "note": "Dokumentasi ketidaksesuaian saat bongkar/muat oleh Security tidak ada di SOP-OPS-007 HO"
+  },
+  {
+   "sheet": "AREA",
+   "no": 19,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 17
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 20,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 18
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": ""
+  },
+  {
+   "sheet": "AREA",
+   "no": 21,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 19
+    }
+   ],
+   "rel": "P",
+   "conf": "T",
+   "note": "Medan: persetujuan lewat email"
+  },
+  {
+   "sheet": "AREA",
+   "no": 22,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 20
+    }
+   ],
+   "rel": "P",
+   "conf": "S",
+   "note": "Medan menambah CCTV di control room dan larangan menyebarkan rekaman"
+  },
+  {
+   "sheet": "AREA",
+   "no": 23,
+   "ho": [
+    {
+     "sheet": "AREA",
+     "no": 20
+    }
+   ],
+   "rel": "S",
+   "conf": "T",
+   "note": "Larangan mengubah atau menghapus rekaman"
   }
  ]
 }

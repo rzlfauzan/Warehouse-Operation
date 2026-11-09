@@ -49,16 +49,24 @@ for m in MP:
         errs.append(f"pemetaan Medan {m['sheet']} {m['no']}: relasi M harus tanpa padanan, dan sebaliknya")
 
 # 3. jumlah baris sumber = jumlah langkah terisi (JKT DC dua unit; langkah PENDING bukan dari sumber)
-n_app = sum(len(s['items']) * (2 if s['site'] == 'JKT' and s['sheet'] == 'DC' else 1) for s in D['sheets'] if s['sheet'] != 'CY') \
-    - sum(1 for s in D['sheets'] if s['sheet'] != 'CY' for i in s['items'] if i['status'] == 'PENDING')
+n_app = sum(len(s['items']) * (2 if s['site'] == 'JKT' and s['sheet'] == 'DC' else 1) for s in D['sheets'] if s['sheet'] not in ('CY', 'AREA')) \
+    - sum(1 for s in D['sheets'] if s['sheet'] not in ('CY', 'AREA') for i in s['items'] if i['status'] == 'PENDING')
 if n_app != len(SRC['results']):
     errs.append(f"baris aplikasi {n_app} != baris sumber {len(SRC['results'])}")
 
 # 4. setiap site punya sheet sesuai daftar sumber
 for st in SRC['sites']:
-    got = {s['sheet'] for s in D['sheets'] if s['site'] == st['code']} - {'TRUCKING', 'CY'}
+    got = {s['sheet'] for s in D['sheets'] if s['site'] == st['code']} - {'TRUCKING', 'CY', 'AREA'}
     if got != set(st['sheets']):
         errs.append(f"{st['code']}: sheet {sorted(got)} != {sorted(st['sheets'])}")
+
+# 5. Area Terbatas & NC Barang: rekap status lapangan sama dengan rekap di sheet sumber
+AT = json.loads((ROOT / 'data/area_terbatas_source.json').read_text(encoding='utf-8'))
+for code, r in AT['rekap_sheet'].items():
+    s = next(x for x in D['sheets'] if x['site'] == code and x['sheet'] == 'AREA')
+    got = {k: sum(1 for i in s['items'] if i['status'] == v) for k, v in (('C', 'COMPLY'), ('NC', 'NON-COMPLY'), ('NA', 'N/A'))}
+    if got != r:
+        errs.append(f'AREA {code}: rekap {got} != sumber {r}')
 
 print(f"{len(D['sites'])} cabang, {len(D['sheets'])} sheet, {sum(len(s['items']) for s in D['sheets'])} langkah, {len(GC['THEMES'])} tema")
 print('OK' if not errs else '\n'.join(errs))

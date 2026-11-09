@@ -19,9 +19,10 @@ for s in d['sheets']:
     items = []
     for i in s['items']:
         st = i['status']
-        if isinstance(st, dict):  # DC Jakarta: status per lokasi, DOKUMEN = status dokumen
-            prev = {u.lower(): {'g':ab(st.get(u)),'d':ab(st.get('DOKUMEN')),'f':i.get('finding_'+u.lower(),'') or i.get('finding',''),
-                                'aa':i.get('actor_actual','')} for u in ('SEMPER','MARCEN')}
+        if isinstance(st, dict):  # Jakarta per lokasi: DC (Semper, Marcen; DOKUMEN = status dokumen), Area Terbatas (Tj. Priok, Semper, Marcen)
+            fu = i.get('finding_units') or {}
+            prev = {u.lower(): {'g':ab(st.get(u)),'d':ab(st.get('DOKUMEN')),'f':fu.get(u) or i.get('finding_'+u.lower(),'') or i.get('finding',''),
+                                'aa':i.get('actor_actual','')} for u in st if u != 'DOKUMEN'}
         else:
             prev = {'g':ab(st),'d':ab(i.get('doc_status')),'f':i.get('finding',''),'aa':i.get('actor_actual','')}
         items.append({'n':i['no'],'s':i['section'],'k':i['category'],'c':i['criterion'],'a':i['actor'],'r':i['sop_ref'],'p':prev})

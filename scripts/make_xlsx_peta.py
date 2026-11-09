@@ -33,8 +33,8 @@ rows=stage_rows(FLOWS)
 F='Arial'
 SHEETS={s['sheet']:s for s in D['sheets'] if s['site']=='JKT'}
 SHEETS['CY_MDN']=next(s for s in D['sheets'] if s['site']=='MDN' and s['sheet']=='CY')  # CY Handling Medan (27 langkah audit asli)
-PROC=[('Export','EXPORT'),('Import','IMPORT'),('Trucking Support','TRUCKING'),('DC','DC'),('CY Handling','CY'),('CY Medan','CY_MDN')]
-FLOWN={'Export':'Export','Import':'Import','Trucking Support':'Trucking Support','DC':'DC (Distribution Center)','CY Handling':'CY Handling','CY Medan':'CY Handling'}
+PROC=[('Export','EXPORT'),('Import','IMPORT'),('Trucking Support','TRUCKING'),('DC','DC'),('Area Terbatas & NC Barang','AREA'),('CY Handling','CY'),('CY Medan','CY_MDN')]
+FLOWN={'Export':'Export','Import':'Import','Trucking Support':'Trucking Support','DC':'DC (Distribution Center)','Area Terbatas & NC Barang':'Area Terbatas & NC Barang','CY Handling':'CY Handling','CY Medan':'CY Handling'}
 hf=Font(name=F,size=10,bold=True,color='FFFFFF'); navy=PatternFill('solid',fgColor='0B4A6F'); brown=PatternFill('solid',fgColor='7A5C00')
 yel=PatternFill('solid',fgColor='FFF9C4'); stagef=PatternFill('solid',fgColor='E9EEF3')
 areaf={'Gudang MKT':'DCE8F7','Port / Pelayaran':'D3F0F0','Depo':'FBE3D4','Bea Cukai':'F6D5E8'}
@@ -128,7 +128,7 @@ dv=DataValidation(type='list',formula1='"Ya,Tidak,Perlu cek"',allow_blank=True);
 REL=MAPJ['meta']['rel'];CONF=MAPJ['meta']['conf']
 mdn={(x['sheet'],i['no']):(i,x) for x in V3['sheets'] if x['site']=='MDN' for i in x['items']}
 ho={(x['sheet'],i['no']):(i,x) for x in V3['sheets'] if x['site']=='JKT' and x['sheet']!='CY' for i in x['items']}
-SHN={'EXPORT':'Export','IMPORT':'Import','DC':'DC','TRUCKING':'Trucking'}
+SHN={'EXPORT':'Export','IMPORT':'Import','DC':'DC','TRUCKING':'Trucking','AREA':'Area Terbatas'}
 wm=wb.create_sheet('Pemetaan Medan-HO')
 hm=['Proses Medan','No','Seksi','Aktor Medan','Langkah SOP Medan','Sama dengan di SOP HO','Langkah SOP HO','Hubungan','Kecocokan','Catatan','Setuju?','Langkah HO menurut reviewer','Catatan reviewer','Reviewer']
 wm.append(hm)
@@ -154,7 +154,7 @@ covered={(h['sheet'],h['no']) for m in MAPJ['map'] for h in m['ho']}
 wo=wb.create_sheet('HO tidak ada di Medan')
 ho2=['Proses HO','No','Seksi','Aktor HO','Langkah SOP HO','Catatan reviewer','Perlu ada di SOP Medan?','Reviewer']
 wo.append(ho2)
-for (sh,no),(it,_) in sorted(ho.items(),key=lambda kv:(['EXPORT','IMPORT','DC','TRUCKING'].index(kv[0][0]),kv[0][1])):
+for (sh,no),(it,_) in sorted(ho.items(),key=lambda kv:(['EXPORT','IMPORT','DC','TRUCKING','AREA'].index(kv[0][0]),kv[0][1])):
     if (sh,no) not in covered:wo.append([SHN[sh],no,it['section'],it['actor'],it['criterion'],'','',''])
 W4=[12,6,8,22,60,36,20,14]
 for c in range(1,len(ho2)+1):

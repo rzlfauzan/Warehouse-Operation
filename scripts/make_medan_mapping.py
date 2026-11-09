@@ -3,7 +3,7 @@
 
 Ini DRAF usulan. Dibuat dengan membaca bunyi langkah dan aktor kedua template; belum dikonfirmasi pemilik SOP.
 Spesifikasi ringkas per langkah Medan:  nomor: (langkah HO, relasi, keyakinan, catatan)
-  langkah HO : 'E3,E4' (E=EXPORT, I=IMPORT, D=DC, T=TRUCKING; T1-T8 penarikan empty, T9-T18 full), kosong = tidak ada
+  langkah HO : 'E3,E4' (E=EXPORT, I=IMPORT, D=DC, T=TRUCKING, A=AREA; T1-T8 penarikan empty, T9-T18 full), kosong = tidak ada
   relasi     : S sama (kegiatan sama), P mirip (sebagian sama atau beda rincian/aktor), M hanya di Medan
   keyakinan  : T tinggi, S sedang, R rendah
 """
@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SH = {'E': 'EXPORT', 'I': 'IMPORT', 'D': 'DC', 'T': 'TRUCKING'}
+SH = {'E': 'EXPORT', 'I': 'IMPORT', 'D': 'DC', 'T': 'TRUCKING', 'A': 'AREA'}
 
 def rng(a, b, ho_start, rel='S', conf='T', note=''):
     return {a + k: (f'{ho_start[0]}{int(ho_start[1:]) + k}', rel, conf, note) for k in range(b - a + 1)}
@@ -142,9 +142,22 @@ DC.update({
 DC.update(rng(38, 44, 'D36'))
 DC.update(rng(45, 55, 'D43'))
 
+# Area Terbatas: Medan SOP-OPS-005 Medan (23 langkah) -> HO SOP-OPS-007 (langkah 1-20). HO 21-28 (SOP-OPS-008, NC Barang) tidak ada di Medan.
+AREA = {
+ 1: ('A1', 'S', 'T', ''), 2: ('A2', 'P', 'T', 'Medan juga memeriksa fisik kendaraan di langkah ini'),
+ 3: ('A3', 'S', 'T', 'Medan: kartu identitas ditukar dengan kartu pengunjung'), 4: ('A4', 'S', 'T', ''),
+ 5: ('A5', 'S', 'T', ''), 6: ('A6', 'P', 'T', 'Medan mewajibkan Berita Acara'),
+ 7: ('A7', 'S', 'T', ''), 8: ('A9', 'S', 'T', ''), 9: ('A8', 'P', 'T', 'Medan menambah pelaporan temuan ke Manajemen'),
+ 10: ('A10', 'S', 'T', ''), 11: ('A11', 'S', 'T', ''), 12: ('A12', 'S', 'T', ''), 13: ('A13', 'S', 'T', ''), 14: ('A14', 'S', 'T', ''),
+ 15: ('A15', 'S', 'T', ''), 16: ('A16', 'P', 'S', 'Medan merinci personel yang boleh masuk area bongkar/muat'), 17: ('A16', 'S', 'T', ''),
+ 18: ('', 'M', 'S', 'Dokumentasi ketidaksesuaian saat bongkar/muat oleh Security tidak ada di SOP-OPS-007 HO'),
+ 19: ('A17', 'S', 'T', ''), 20: ('A18', 'S', 'T', ''), 21: ('A19', 'P', 'T', 'Medan: persetujuan lewat email'),
+ 22: ('A20', 'P', 'S', 'Medan menambah CCTV di control room dan larangan menyebarkan rekaman'), 23: ('A20', 'S', 'T', 'Larangan mengubah atau menghapus rekaman'),
+}
+
 def build():
     out = []
-    for sheet, spec in (('EXPORT', EXPORT), ('IMPORT', IMPORT), ('DC', DC)):
+    for sheet, spec in (('EXPORT', EXPORT), ('IMPORT', IMPORT), ('DC', DC), ('AREA', AREA)):
         for no in sorted(spec):
             ho, rel, conf, note = spec[no]
             refs = [{'sheet': SH[r[0]], 'no': int(r[1:])} for r in ho.split(',') if r]
@@ -155,9 +168,9 @@ if __name__ == '__main__':
     m = build()
     meta = {'status': 'draf usulan, belum dikonfirmasi pemilik SOP',
             'rel': {'S': 'sama', 'P': 'mirip', 'M': 'hanya di Medan'}, 'conf': {'T': 'tinggi', 'S': 'sedang', 'R': 'rendah'},
-            'note': 'Medan memakai SOP-OPS-DC-002, EXP-003, IMP-004; acuan HO adalah SOP Utama (template Jakarta). T1-T8 = penarikan empty (asal Export 37-44), T9-T18 = penarikan full (draf Rev.02).'}
+            'note': 'Medan memakai SOP-OPS-DC-002, EXP-003, IMP-004; acuan HO adalah SOP Utama (template Jakarta). T1-T8 = penarikan empty (asal Export 37-44), T9-T18 = penarikan full (draf Rev.02). AREA: Medan SOP-OPS-005 Medan ke HO SOP-OPS-007.'}
     (ROOT / 'data/medan_ho_mapping.json').write_text(json.dumps({'meta': meta, 'map': m}, ensure_ascii=False, indent=1), encoding='utf-8')
     from collections import Counter
-    for sh in ('EXPORT', 'IMPORT', 'DC'):
+    for sh in ('EXPORT', 'IMPORT', 'DC', 'AREA'):
         c = Counter(x['rel'] for x in m if x['sheet'] == sh)
         print(sh, len([x for x in m if x['sheet'] == sh]), dict(c))
